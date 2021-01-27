@@ -130,35 +130,35 @@
 <pre><code>配置文件位置 /etc/nginx/conf.d/default.conf
 </code></pre>
 <pre><code>server {
-listen 80;
-server_name www.moyrn.com;
-location / {
-root /usr/share/nginx/webmonitor;
-index index.html;
-}
+    listen 80;
+    server_name www.moyrn.com;
+    location / {
+        root /usr/share/nginx/webmonitor;
+        index index.html;
+    }
 }
 </code></pre><h4 id="通过不同的域名将80端口的消息转发到其他端口">通过不同的域名，将80端口的消息转发到其他端口</h4>
 <pre><code>server {
-listen  80;
-server_name go.moyrn.com;
-location / {
-proxy_pass http://127.0.0.1:8080;
-}
+    listen  80;
+    server_name go.moyrn.com;
+    location / {
+        proxy_pass http://127.0.0.1:8080;
+    }
 }
 
 server {
-listen 80;
-server_name moyrn.com;
-location / {
-proxy_pass http://127.0.0.1:8086;
-}
+    listen 80;
+    server_name moyrn.com;
+    location / {
+        proxy_pass http://127.0.0.1:8086;
+    }
 }
 server {
-listen 80;
-server_name www.moyrn.com;
-location / {
-proxy_pass http://127.0.0.1:8086;
-}
+    listen 80;
+    server_name www.moyrn.com;
+    location / {
+        proxy_pass http://127.0.0.1:8086;
+    }
 }
 </code></pre></div>
         <div class="post-footer">
