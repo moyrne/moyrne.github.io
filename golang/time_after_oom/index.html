@@ -51,7 +51,7 @@
     
     <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="time.After() 导致内存暴涨"/>
-<meta name="twitter:description" content="select &#43; time.After 导致内存暴涨 func Function(notRun notRun) { for { after.Reset(afterTime) select { case &lt;-notRun.notRun: // 大多数情况都是有notRun的输入  case &lt;-time.After(time.Minute): log.Printf(&#34;[ ConversationDeadline dead ]&#34;) notRun.Close() return case &lt;-notRun.run: log.Printf(&#34;[ ConversationDeadline run ]&#34;) notRun.Close() return } } }  notRun 发送消息频率过快，而每次select都会调用到time.After，而time.After又会NewTimer，而每次NewTimer都必须在1分钟后才能释放。 当notRun的频率很高时，会在内存中堆积非常多的无用的Timer。导致内存暴涨。  解决方法 func Function(notRun notRun) { afterTime := time.Minute after := time.NewTimer(afterTime) defer after.Stop() for { after.Reset(afterTime) select { case &lt;-notRun.notRun: case &lt;-after.C: log.Printf(&#34;[ ConversationDeadline dead ]&#34;) notRun.Close() return case &lt;-notRun."/>
+<meta name="twitter:description" content="select &#43; time.After 导致内存暴涨 func Function(notRun notRun) { for { select { case &lt;-notRun.notRun: // 大多数情况都是有notRun的输入 	case &lt;-time.After(time.Minute): notRun.Close() continue case &lt;-notRun.run: notRun.Close() return } } }  notRun 发送消息频率过快，而每次select都会调用到time.After，而time.After又会NewTimer，而每次NewTimer都必须在1分钟后才能释放。 当notRun的频率很高时，会在内存中堆积非常多的无用的Timer。导致内存暴涨。  解决方法 func Function(notRun notRun) { afterTime := time.Minute after := time.NewTimer(afterTime) defer after.Stop() for { after.Reset(afterTime) select { case &lt;-notRun.notRun: case &lt;-after.C: notRun.Close() continue case &lt;-notRun.run: notRun.Close() return } } }  自己 NewTimer 在每次 select 之前 reset，使 timer 重新计时，从而避免每次都 new timer。  "/>
 
 </head>
 <body><div class="sidebar animated fadeInDown ">
@@ -127,47 +127,42 @@
             </div>
 
             <h1 id="select--timeafter-导致内存暴涨">select + time.After 导致内存暴涨</h1>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">    <span style="color:#66d9ef">func</span> <span style="color:#a6e22e">Function</span>(<span style="color:#a6e22e">notRun</span> <span style="color:#a6e22e">notRun</span>) {
-    	<span style="color:#66d9ef">for</span> {
-    		<span style="color:#a6e22e">after</span>.<span style="color:#a6e22e">Reset</span>(<span style="color:#a6e22e">afterTime</span>)
-    		<span style="color:#66d9ef">select</span> {
-    		<span style="color:#66d9ef">case</span> <span style="color:#f92672">&lt;-</span><span style="color:#a6e22e">notRun</span>.<span style="color:#a6e22e">notRun</span>:
-    		<span style="color:#75715e">// 大多数情况都是有notRun的输入
-</span><span style="color:#75715e"></span>    		<span style="color:#66d9ef">case</span> <span style="color:#f92672">&lt;-</span><span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">After</span>(<span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Minute</span>):
-    			<span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;[ ConversationDeadline dead ]&#34;</span>)
-    			<span style="color:#a6e22e">notRun</span>.<span style="color:#a6e22e">Close</span>()
-    			<span style="color:#66d9ef">return</span>
-    		<span style="color:#66d9ef">case</span> <span style="color:#f92672">&lt;-</span><span style="color:#a6e22e">notRun</span>.<span style="color:#a6e22e">run</span>:
-    			<span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;[ ConversationDeadline run ]&#34;</span>)
-    			<span style="color:#a6e22e">notRun</span>.<span style="color:#a6e22e">Close</span>()
-    			<span style="color:#66d9ef">return</span>
-    		}
-    	}
-    }
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">Function</span>(<span style="color:#a6e22e">notRun</span> <span style="color:#a6e22e">notRun</span>) {
+	<span style="color:#66d9ef">for</span> {
+		<span style="color:#66d9ef">select</span> {
+		<span style="color:#66d9ef">case</span> <span style="color:#f92672">&lt;-</span><span style="color:#a6e22e">notRun</span>.<span style="color:#a6e22e">notRun</span>:
+		<span style="color:#75715e">// 大多数情况都是有notRun的输入
+</span><span style="color:#75715e"></span>		<span style="color:#66d9ef">case</span> <span style="color:#f92672">&lt;-</span><span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">After</span>(<span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Minute</span>):
+			<span style="color:#a6e22e">notRun</span>.<span style="color:#a6e22e">Close</span>()
+			<span style="color:#66d9ef">continue</span>
+		<span style="color:#66d9ef">case</span> <span style="color:#f92672">&lt;-</span><span style="color:#a6e22e">notRun</span>.<span style="color:#a6e22e">run</span>:
+			<span style="color:#a6e22e">notRun</span>.<span style="color:#a6e22e">Close</span>()
+			<span style="color:#66d9ef">return</span>
+		}
+	}
+}
 </code></pre></div><ul>
 <li>notRun 发送消息频率过快，而每次select都会调用到time.After，而time.After又会NewTimer，而每次NewTimer都必须在1分钟后才能释放。</li>
 <li>当notRun的频率很高时，会在内存中堆积非常多的无用的Timer。导致内存暴涨。</li>
 </ul>
 <h1 id="解决方法">解决方法</h1>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">    <span style="color:#66d9ef">func</span> <span style="color:#a6e22e">Function</span>(<span style="color:#a6e22e">notRun</span> <span style="color:#a6e22e">notRun</span>) {
-    	<span style="color:#a6e22e">afterTime</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Minute</span>
-    	<span style="color:#a6e22e">after</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">NewTimer</span>(<span style="color:#a6e22e">afterTime</span>)
-    	<span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">after</span>.<span style="color:#a6e22e">Stop</span>()
-    	<span style="color:#66d9ef">for</span> {
-    		<span style="color:#a6e22e">after</span>.<span style="color:#a6e22e">Reset</span>(<span style="color:#a6e22e">afterTime</span>)
-    		<span style="color:#66d9ef">select</span> {
-    		<span style="color:#66d9ef">case</span> <span style="color:#f92672">&lt;-</span><span style="color:#a6e22e">notRun</span>.<span style="color:#a6e22e">notRun</span>:
-    		<span style="color:#66d9ef">case</span> <span style="color:#f92672">&lt;-</span><span style="color:#a6e22e">after</span>.<span style="color:#a6e22e">C</span>:
-    			<span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;[ ConversationDeadline dead ]&#34;</span>)
-    			<span style="color:#a6e22e">notRun</span>.<span style="color:#a6e22e">Close</span>()
-    			<span style="color:#66d9ef">return</span>
-    		<span style="color:#66d9ef">case</span> <span style="color:#f92672">&lt;-</span><span style="color:#a6e22e">notRun</span>.<span style="color:#a6e22e">run</span>:
-    			<span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;[ ConversationDeadline run ]&#34;</span>)
-    			<span style="color:#a6e22e">notRun</span>.<span style="color:#a6e22e">Close</span>()
-    			<span style="color:#66d9ef">return</span>
-    		}
-    	}
-    }
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">Function</span>(<span style="color:#a6e22e">notRun</span> <span style="color:#a6e22e">notRun</span>) {
+	<span style="color:#a6e22e">afterTime</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Minute</span>
+	<span style="color:#a6e22e">after</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">NewTimer</span>(<span style="color:#a6e22e">afterTime</span>)
+	<span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">after</span>.<span style="color:#a6e22e">Stop</span>()
+	<span style="color:#66d9ef">for</span> {
+		<span style="color:#a6e22e">after</span>.<span style="color:#a6e22e">Reset</span>(<span style="color:#a6e22e">afterTime</span>)
+		<span style="color:#66d9ef">select</span> {
+		<span style="color:#66d9ef">case</span> <span style="color:#f92672">&lt;-</span><span style="color:#a6e22e">notRun</span>.<span style="color:#a6e22e">notRun</span>:
+		<span style="color:#66d9ef">case</span> <span style="color:#f92672">&lt;-</span><span style="color:#a6e22e">after</span>.<span style="color:#a6e22e">C</span>:
+			<span style="color:#a6e22e">notRun</span>.<span style="color:#a6e22e">Close</span>()
+			<span style="color:#66d9ef">continue</span>
+		<span style="color:#66d9ef">case</span> <span style="color:#f92672">&lt;-</span><span style="color:#a6e22e">notRun</span>.<span style="color:#a6e22e">run</span>:
+			<span style="color:#a6e22e">notRun</span>.<span style="color:#a6e22e">Close</span>()
+			<span style="color:#66d9ef">return</span>
+		}
+	}
+}
 </code></pre></div><ul>
 <li>自己 NewTimer 在每次 select 之前 reset，使 timer 重新计时，从而避免每次都 new timer。</li>
 </ul>
