@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" data-theme=""><head>
-    <title> Moyrne | Moyrne Blog </title>
+    <title> Moyrne | Golang HTTP包传输文件 </title>
 
     
     <meta charset="utf-8"><meta name="generator" content="Hugo 0.80.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
@@ -29,10 +29,9 @@
     <link rel="icon" type="image/png" sizes="32x32" href="https://moyrne.github.io/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="https://moyrne.github.io/favicon-16x16.png">
 
-    <link rel="canonical" href="https://moyrne.github.io/">
+    <link rel="canonical" href="https://moyrne.github.io/golang/http_file/">
 
     
-    <link rel="alternate" type="application/rss+xml" href="https://moyrne.github.io/index.xml" title="Moyrne Blog" />
     
     
     
@@ -51,8 +50,8 @@
                 crossorigin="anonymous"></script>
     
     <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="Moyrne Blog"/>
-<meta name="twitter:description" content="一个正在成长的菜鸟"/>
+<meta name="twitter:title" content="Golang HTTP包传输文件"/>
+<meta name="twitter:description" content="文件传输 Content-Type http://tool.oschina.net/commons?type=22013-05-17 multipart/form-data： 既可以提交普通键值对，也可以提交(多个)文件键值对。 application/octet-stream： 只能提交二进制，而且只能提交一个二进制，如果提交文件的话，只能提交一个文件,后台接收参数只能有一个，而且只能是流（或者字节数组） application/x-www-form-urlencoded 不属于http content-type规范，通常用于浏览器表单提交，数据组织格式:name1=value1&amp;name2=value2,post时会放入http body，get时，显示在在地址栏。  // golang 实现  W.Header().Add(&#34;Content-Type&#34;,&#34;application/octet-stream&#34;) W.Header().Add(&#34;Content-Disposition&#34;,fmt.Sprintf(&#34;attachment; filename=\&#34;%s\&#34;&#34;, fileName)) "/>
 
 </head>
 <body><div class="sidebar animated fadeInDown ">
@@ -83,7 +82,7 @@
         
         
             
-            <li><a class="current"
+            <li><a 
                    href="/"
                         
                    title="">主页</a></li>
@@ -119,91 +118,37 @@
 
     <div class="autopagerize_page_element">
         <div class="content">
-
     <div class="post  animated fadeInDown ">
-        
+        <div class="post-content">
+            
+            <div class="post-title">
+                <h3>Golang HTTP包传输文件</h3>
+                
+            </div>
+
+            <h1 id="文件传输">文件传输</h1>
+<pre><code>Content-Type  http://tool.oschina.net/commons?type=22013-05-17
+multipart/form-data：
+    既可以提交普通键值对，也可以提交(多个)文件键值对。
+application/octet-stream：
+    只能提交二进制，而且只能提交一个二进制，如果提交文件的话，只能提交一个文件,后台接收参数只能有一个，而且只能是流（或者字节数组）
+application/x-www-form-urlencoded
+    不属于http content-type规范，通常用于浏览器表单提交，数据组织格式:name1=value1&amp;name2=value2,post时会放入http body，get时，显示在在地址栏。
+</code></pre>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">    <span style="color:#75715e">// golang 实现
+</span><span style="color:#75715e"></span>    <span style="color:#a6e22e">W</span>.<span style="color:#a6e22e">Header</span>().<span style="color:#a6e22e">Add</span>(<span style="color:#e6db74">&#34;Content-Type&#34;</span>,<span style="color:#e6db74">&#34;application/octet-stream&#34;</span>)
+    <span style="color:#a6e22e">W</span>.<span style="color:#a6e22e">Header</span>().<span style="color:#a6e22e">Add</span>(<span style="color:#e6db74">&#34;Content-Disposition&#34;</span>,<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Sprintf</span>(<span style="color:#e6db74">&#34;attachment; filename=\&#34;%s\&#34;&#34;</span>, <span style="color:#a6e22e">fileName</span>))
+</code></pre></div></div>
+        <div class="post-footer">
+            <div class="info">
+                
+                
+            </div>
+        </div>
+
         
     </div>
 
-    
-    
-
-        <div class="post  animated fadeInDown ">
-            
-            <div class="post-title">
-                <h3><a href="/golang/time_after_oom/">time.After() 导致内存暴涨</a>
-                </h3>
-            </div>
-            <div class="post-content">
-                <div class="p_part"><p>select + time.After 导致内存暴涨 func Function(notRun notRun) { for { after.Reset(afterTime) select { case &lt;-notRun.notRun: // 大多数情况都是有notRun的输入  case &lt;-time.After(time.Minute): log.Printf(&#34;[ ConversationDeadline dead ]&#34;) notRun.Close() return case &lt;-notRun.run: log.Printf(&#34;[ ConversationDeadline run ]&#34;) notRun.Close() return } } }  notRun 发送消息频率过快，而每次select都会调用到time.After，而time.After又会NewTimer，而每次NewTimer都必须在1分钟后才能释放。 当notRun的频率很高时，会在内存中堆积非常多的无用的Timer。导致内存暴涨。  解决方法 func Function(notRun notRun) { afterTime := time.Minute after := time.NewTimer(afterTime) defer after.Stop() for { after.Reset(afterTime) select { case &lt;-notRun.notRun: case &lt;-after.C: log.Printf(&#34;[ ConversationDeadline dead ]&#34;) notRun.Close() return case &lt;-notRun.</p></div>
-            </div>
-            <div class="post-footer">
-                <div class="meta">
-                    <div class="info">
-                        <em class="fas fa-calendar-day"></em>
-                            <span class="date"> 
-                                                 Wed, 2021-01-27 
-                                             </span>
-                        
-                        
-                    </div>
-                </div>
-            </div>
-        </div>
-    
-
-        <div class="post  animated fadeInDown ">
-            
-            <div class="post-title">
-                <h3><a href="/golang/http_file/">Golang HTTP包传输文件</a>
-                </h3>
-            </div>
-            <div class="post-content">
-                <div class="p_part"><p>文件传输 Content-Type http://tool.oschina.net/commons?type=22013-05-17 multipart/form-data： 既可以提交普通键值对，也可以提交(多个)文件键值对。 application/octet-stream： 只能提交二进制，而且只能提交一个二进制，如果提交文件的话，只能提交一个文件,后台接收参数只能有一个，而且只能是流（或者字节数组） application/x-www-form-urlencoded 不属于http content-type规范，通常用于浏览器表单提交，数据组织格式:name1=value1&amp;name2=value2,post时会放入http body，get时，显示在在地址栏。  // golang 实现  W.Header().Add(&#34;Content-Type&#34;,&#34;application/octet-stream&#34;) W.Header().Add(&#34;Content-Disposition&#34;,fmt.Sprintf(&#34;attachment; filename=\&#34;%s\&#34;&#34;, fileName)) </p></div>
-            </div>
-            <div class="post-footer">
-                <div class="meta">
-                    <div class="info">
-                        <em class="fas fa-calendar-day"></em>
-                            <span class="date"> 
-                                                 Wed, 2021-01-27 
-                                             </span>
-                        
-                        
-                    </div>
-                </div>
-            </div>
-        </div>
-    
-
-        <div class="post  animated fadeInDown ">
-            
-            <div class="post-title">
-                <h3><a href="/golang/build/">Golang 编译</a>
-                </h3>
-            </div>
-            <div class="post-content">
-                <div class="p_part"><p>编译 编译其他系统 CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build # 不能复制空格 set CGO_ENABLED=0 set GOOS=linux set GOARCH=amd64 go build  图标制作 第一步： Windows 下载MinGW 第二步： 新建一个.rc文件，加入文件名为 demo.rc 输入内容 IDI_ICON1 ICON &quot;cefclient.ico&quot; 其中 cefclient.ico 是你的ico的地址 第三步: MinGW 执行 windres -o demo.syso demo.rc 第四步: 将生成的demo.syso 放到项目目录下 go build  隐藏命令行 go build -i -ldflags=&quot;-H windowsgui&quot; </p></div>
-            </div>
-            <div class="post-footer">
-                <div class="meta">
-                    <div class="info">
-                        <em class="fas fa-calendar-day"></em>
-                            <span class="date"> 
-                                                 Wed, 2021-01-27 
-                                             </span>
-                        
-                        
-                    </div>
-                </div>
-            </div>
-        </div>
-    
-    <div class="pagination">
-        
-
-
-    </div>
 
         </div>
     </div>

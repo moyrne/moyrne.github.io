@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Databases on Moyrne Blog</title>
+    <link>https://moyrne.github.io/database/</link>
+    <description>Recent content in Databases on Moyrne Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Wed, 27 Jan 2021 11:53:34 +0800</lastBuildDate><atom:link href="https://moyrne.github.io/database/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>GORM 使用</title>
+      <link>https://moyrne.github.io/database/gorm/</link>
+      <pubDate>Wed, 27 Jan 2021 11:53:34 +0800</pubDate>
+      
+      <guid>https://moyrne.github.io/database/gorm/</guid>
+      <description>MYSQL 悲观锁 tx := db.DB.Begin() if err := tx.Set(&amp;quot;gorm:query_option&amp;quot;, &amp;quot;FOR UPDATE&amp;quot;). Where(&amp;quot;`xx` = ? and `xxx` = ?&amp;quot;, xx, xxx). First(&amp;amp;xx).Error; err != nil { tx.Rollback() return } 在事务中使用 Set(&amp;quot;gorm:query_option&amp;quot;, &amp;quot;FOR UPDATE&amp;quot;) + first 能将查询的这条记录锁住； 在事务 rollback 或 commit 后会 unlock。   创建复合主键(当主键涉及自增时) gorm:&amp;quot;primary_key;AUTO_INCREMENT:false&amp;quot;  连接数据库 步骤分析  引入mysql数据库驱动 引入gorm包 读取配置文件中的数据库信息 将读取的数据生成为Open()需要的字符串  代码示例 package base import ( _ &amp;quot;github.com/go-sql-driver/mysql&amp;quot; _ &amp;quot;github.com/jinzhu/gorm/dialects/mysql&amp;quot; &amp;quot;github.com/jinzhu/gorm&amp;quot; &amp;quot;fmt&amp;quot; &amp;quot;log&amp;quot; ) func DBConnect() { user := &amp;quot;user&amp;quot; password := &amp;quot;password&amp;quot; dbname := &amp;quot;dbname&amp;quot; address := &amp;quot;address&amp;quot; port := &amp;quot;port&amp;quot; str := fmt.</description>
+    </item>
+    
+  </channel>
+</rss>

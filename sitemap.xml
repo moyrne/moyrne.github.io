@@ -3,17 +3,47 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://moyrne.github.io/golang/</loc>
+    <lastmod>2021-01-27T13:04:41+08:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://moyrne.github.io/</loc>
+    <lastmod>2021-01-27T13:04:41+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://moyrne.github.io/golang/time_after_oom/</loc>
+    <lastmod>2021-01-27T13:04:41+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://moyrne.github.io/golang/http_file/</loc>
+    <lastmod>2021-01-27T13:02:39+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://moyrne.github.io/golang/build/</loc>
+    <lastmod>2021-01-27T12:04:51+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://moyrne.github.io/database/</loc>
+    <lastmod>2021-01-27T11:53:34+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://moyrne.github.io/database/gorm/</loc>
+    <lastmod>2021-01-27T11:53:34+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://moyrne.github.io/tools/</loc>
     <lastmod>2021-01-27T10:01:06+08:00</lastmod>
   </url>
   
   <url>
-    <loc>https://moyrne.github.io/post/</loc>
-    <lastmod>2021-01-27T10:01:06+08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://moyrne.github.io/post/vscode/</loc>
+    <loc>https://moyrne.github.io/tools/vscode/</loc>
     <lastmod>2021-01-27T10:01:06+08:00</lastmod>
   </url>
   

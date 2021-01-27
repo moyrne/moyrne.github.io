@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Moyrne Blog</title>
-    <link>https://moyrne.github.io/</link>
-    <description>Recent content on Moyrne Blog</description>
+    <title>Golangs on Moyrne Blog</title>
+    <link>https://moyrne.github.io/golang/</link>
+    <description>Recent content in Golangs on Moyrne Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Wed, 27 Jan 2021 13:04:41 +0800</lastBuildDate><atom:link href="https://moyrne.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 27 Jan 2021 13:04:41 +0800</lastBuildDate><atom:link href="https://moyrne.github.io/golang/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>time.After() 导致内存暴涨</title>
       <link>https://moyrne.github.io/golang/time_after_oom/</link>
@@ -32,24 +32,6 @@
       
       <guid>https://moyrne.github.io/golang/build/</guid>
       <description>编译 编译其他系统 CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build # 不能复制空格 set CGO_ENABLED=0 set GOOS=linux set GOARCH=amd64 go build  图标制作 第一步： Windows 下载MinGW 第二步： 新建一个.rc文件，加入文件名为 demo.rc 输入内容 IDI_ICON1 ICON &amp;quot;cefclient.ico&amp;quot; 其中 cefclient.ico 是你的ico的地址 第三步: MinGW 执行 windres -o demo.syso demo.rc 第四步: 将生成的demo.syso 放到项目目录下 go build  隐藏命令行 go build -i -ldflags=&amp;quot;-H windowsgui&amp;quot; </description>
-    </item>
-    
-    <item>
-      <title>GORM 使用</title>
-      <link>https://moyrne.github.io/database/gorm/</link>
-      <pubDate>Wed, 27 Jan 2021 11:53:34 +0800</pubDate>
-      
-      <guid>https://moyrne.github.io/database/gorm/</guid>
-      <description>MYSQL 悲观锁 tx := db.DB.Begin() if err := tx.Set(&amp;quot;gorm:query_option&amp;quot;, &amp;quot;FOR UPDATE&amp;quot;). Where(&amp;quot;`xx` = ? and `xxx` = ?&amp;quot;, xx, xxx). First(&amp;amp;xx).Error; err != nil { tx.Rollback() return } 在事务中使用 Set(&amp;quot;gorm:query_option&amp;quot;, &amp;quot;FOR UPDATE&amp;quot;) + first 能将查询的这条记录锁住； 在事务 rollback 或 commit 后会 unlock。   创建复合主键(当主键涉及自增时) gorm:&amp;quot;primary_key;AUTO_INCREMENT:false&amp;quot;  连接数据库 步骤分析  引入mysql数据库驱动 引入gorm包 读取配置文件中的数据库信息 将读取的数据生成为Open()需要的字符串  代码示例 package base import ( _ &amp;quot;github.com/go-sql-driver/mysql&amp;quot; _ &amp;quot;github.com/jinzhu/gorm/dialects/mysql&amp;quot; &amp;quot;github.com/jinzhu/gorm&amp;quot; &amp;quot;fmt&amp;quot; &amp;quot;log&amp;quot; ) func DBConnect() { user := &amp;quot;user&amp;quot; password := &amp;quot;password&amp;quot; dbname := &amp;quot;dbname&amp;quot; address := &amp;quot;address&amp;quot; port := &amp;quot;port&amp;quot; str := fmt.</description>
-    </item>
-    
-    <item>
-      <title>Vscode</title>
-      <link>https://moyrne.github.io/tools/vscode/</link>
-      <pubDate>Wed, 27 Jan 2021 10:01:06 +0800</pubDate>
-      
-      <guid>https://moyrne.github.io/tools/vscode/</guid>
-      <description>VSCode 用户代码片段 Golang { &amp;quot;main&amp;quot;: { &amp;quot;prefix&amp;quot;: &amp;quot;main&amp;quot;, &amp;quot;body&amp;quot;: [ &amp;quot;func main() {&amp;quot;, &amp;quot;\t$0&amp;quot;, &amp;quot;}&amp;quot; ], &amp;quot;description&amp;quot;: &amp;quot;func main() {}&amp;quot; }, &amp;quot;init&amp;quot;: { &amp;quot;prefix&amp;quot;: &amp;quot;init&amp;quot;, &amp;quot;body&amp;quot;: [ &amp;quot;func init() {&amp;quot;, &amp;quot;\t$0&amp;quot;, &amp;quot;}&amp;quot; ], &amp;quot;description&amp;quot;: &amp;quot;func init() {}&amp;quot; }, &amp;quot;for range&amp;quot;: { &amp;quot;prefix&amp;quot;: &amp;quot;forr&amp;quot;, &amp;quot;body&amp;quot;: [ &amp;quot;for ${1:i},${2:v} := range $3 {&amp;quot;, &amp;quot;\t$0&amp;quot;, &amp;quot;}&amp;quot; ], &amp;quot;description&amp;quot;: &amp;quot;for range&amp;quot; }, &amp;quot;for index&amp;quot; : { &amp;quot;prefix&amp;quot;: &amp;quot;fori&amp;quot;, &amp;quot;body&amp;quot;: [ &amp;quot;for ${1:i}:=${2:0};${1:i}${3:&amp;lt;}${4:n};${1:i}${5:++} {&amp;quot;, &amp;quot;\t$0&amp;quot;, &amp;quot;}&amp;quot; ], &amp;quot;description&amp;quot;: &amp;quot;for index&amp;quot; }, &amp;quot;if err := xxx();err !</description>
     </item>
     
   </channel>
