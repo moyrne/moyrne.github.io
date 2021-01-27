@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Posts on Moyrne Blog</title>
+    <link>https://moyrne.github.io/post/</link>
+    <description>Recent content in Posts on Moyrne Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Wed, 27 Jan 2021 10:01:06 +0800</lastBuildDate><atom:link href="https://moyrne.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Vscode</title>
+      <link>https://moyrne.github.io/post/vscode/</link>
+      <pubDate>Wed, 27 Jan 2021 10:01:06 +0800</pubDate>
+      
+      <guid>https://moyrne.github.io/post/vscode/</guid>
+      <description>VSCode 用户代码片段 Golang { &amp;#34;main&amp;#34;: { &amp;#34;prefix&amp;#34;: &amp;#34;main&amp;#34;, &amp;#34;body&amp;#34;: [ &amp;#34;func main() {&amp;#34;, &amp;#34;\t$0&amp;#34;, &amp;#34;}&amp;#34; ], &amp;#34;description&amp;#34;: &amp;#34;func main() {}&amp;#34; }, &amp;#34;init&amp;#34;: { &amp;#34;prefix&amp;#34;: &amp;#34;init&amp;#34;, &amp;#34;body&amp;#34;: [ &amp;#34;func init() {&amp;#34;, &amp;#34;\t$0&amp;#34;, &amp;#34;}&amp;#34; ], &amp;#34;description&amp;#34;: &amp;#34;func init() {}&amp;#34; }, &amp;#34;for range&amp;#34;: { &amp;#34;prefix&amp;#34;: &amp;#34;forr&amp;#34;, &amp;#34;body&amp;#34;: [ &amp;#34;for ${1:i},${2:v} := range $3 {&amp;#34;, &amp;#34;\t$0&amp;#34;, &amp;#34;}&amp;#34; ], &amp;#34;description&amp;#34;: &amp;#34;for range&amp;#34; }, &amp;#34;for index&amp;#34; : { &amp;#34;prefix&amp;#34;: &amp;#34;fori&amp;#34;, &amp;#34;body&amp;#34;: [ &amp;#34;for ${1:i}:=${2:0};${1:i}${3:&amp;lt;}${4:n};${1:i}${5:++} {&amp;#34;, &amp;#34;\t$0&amp;#34;, &amp;#34;}&amp;#34; ], &amp;#34;description&amp;#34;: &amp;#34;for index&amp;#34; }, &amp;#34;if err := xxx();err !</description>
+    </item>
+    
+  </channel>
+</rss>
