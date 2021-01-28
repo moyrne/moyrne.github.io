@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en" data-theme=""><head>
+    <title> Moyrne | 字符串拼接性能测试 </title>
+
+    
+    <meta charset="utf-8"><meta name="generator" content="Hugo 0.80.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+    <meta name="description" content="一个正在成长的菜鸟">
+    
+    <link rel="stylesheet"
+          href="https://moyrne.github.io/css/style.min.bb7146835efb4da60bec03e4c446c3a3b94260c78c8bdb82057b37dab9c8768e.css"
+          integrity="sha256-u3FGg177TaYL7APkxEbDo7lCYMeMi9uCBXs32rnIdo4="
+          crossorigin="anonymous"
+          type="text/css">
+    
+    <link rel="stylesheet"
+        href="https://moyrne.github.io/css/markupHighlight.min.9755453ffb7bc4cd220f86ebb5922107b49f193cc62fc17e9785d27b33a8bf5b.css"
+        integrity="sha256-l1VFP/t7xM0iD4brtZIhB7SfGTzGL8F&#43;l4XSezOov1s="
+        crossorigin="anonymous"
+        type="text/css">
+    
+    <link rel="stylesheet" 
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" 
+    integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" 
+    crossorigin="anonymous" />
+
+    
+    <link rel="shortcut icon" href="https://moyrne.github.io/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" sizes="180x180" href="https://moyrne.github.io/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://moyrne.github.io/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://moyrne.github.io/favicon-16x16.png">
+
+    <link rel="canonical" href="https://moyrne.github.io/golang/string_join_benchmark/">
+
+    
+    
+    
+    
+    <script type="text/javascript"
+            src="https://moyrne.github.io/js/anatole-header.min.d8599ee07b7d3f11bafbac30657ccc591e8d7fd36a9f580cd4c09e24e0e4a971.js"
+            integrity="sha256-2Fme4Ht9PxG6&#43;6wwZXzMWR6Nf9Nqn1gM1MCeJODkqXE="
+            crossorigin="anonymous"></script>
+
+
+    
+        
+        
+        <script type="text/javascript"
+                src="https://moyrne.github.io/js/anatole-theme-switcher.min.e289e9ebb2a4e7a7f895859c8a2b0da2de1ec73f22cea58d8475aa0597023837.js"
+                integrity="sha256-4onp67Kk56f4lYWciisNot4exz8izqWNhHWqBZcCODc="
+                crossorigin="anonymous"></script>
+    
+    <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="字符串拼接性能测试"/>
+<meta name="twitter:description" content="字符串拼接 性能测试 // splicing_test.go package splicing import ( &#34;strconv&#34; &#34;strings&#34; &#34;testing&#34; ) func Str(str []string) string { var rst string for _, s := range str { rst &#43;= s } return rst } func BuilderStr(str []string) string { var builder strings.Builder for _, s := range str { builder.WriteString(s) } return builder.String() } func BenchmarkStr(b *testing.B) { srcStr := make([]string, 0, 100000) b.Run(&#34;Append-10000&#34;, func(b *testing.B) { for i := 0; i &lt; 10000; i&#43;&#43; { srcStr = append(srcStr, strconv."/>
+
+</head>
+<body><div class="sidebar animated fadeInDown ">
+    <div class="logo-title">
+        <div class="title">
+            <img src="https://moyrne.github.io/images/profile.jpg" alt="profile picture">
+            <h3 title=""><a href="/">Moyrne</a></h3>
+            <div class="description">
+                <p>一个正在成长的菜鸟</p>
+            </div>
+        </div>
+    </div>
+    <ul class="social-links">
+        
+    </ul>
+    <div class="footer">
+        <div class="by_farbox">&copy; Moyrne  2021 </div>
+    </div>
+</div>
+<div class="main">
+    <div class="page-top  animated fadeInDown ">
+    <a role="button" class="navbar-burger" data-target="navMenu" aria-label="menu" aria-expanded="false">
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+    </a>
+    <ul class="nav" id="navMenu">
+        
+        
+            
+            <li><a 
+                   href="/"
+                        
+                   title="">主页</a></li>
+        
+            
+            <li><a 
+                   href="/golang/"
+                        
+                   title="">Golang</a></li>
+        
+            
+            <li><a 
+                   href="/database/"
+                        
+                   title="">数据库</a></li>
+        
+            
+            <li><a 
+                   href="/tools/"
+                        
+                   title="">实用工具</a></li>
+        
+        
+        
+            <li class="theme-switch-item">
+                <a class="theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+    </ul>
+</div>
+
+    <div class="autopagerize_page_element">
+        <div class="content">
+    <div class="post  animated fadeInDown ">
+        <div class="post-content">
+            
+            <div class="post-title">
+                <h3>字符串拼接性能测试</h3>
+                
+            </div>
+
+            <h1 id="字符串拼接-性能测试">字符串拼接 性能测试</h1>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">// splicing_test.go
+</span><span style="color:#75715e"></span><span style="color:#f92672">package</span> <span style="color:#a6e22e">splicing</span>
+
+<span style="color:#f92672">import</span> (
+	<span style="color:#e6db74">&#34;strconv&#34;</span>
+	<span style="color:#e6db74">&#34;strings&#34;</span>
+	<span style="color:#e6db74">&#34;testing&#34;</span>
+)
+
+<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">Str</span>(<span style="color:#a6e22e">str</span> []<span style="color:#66d9ef">string</span>) <span style="color:#66d9ef">string</span> {
+	<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">rst</span> <span style="color:#66d9ef">string</span>
+	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">s</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">range</span> <span style="color:#a6e22e">str</span> {
+		<span style="color:#a6e22e">rst</span> <span style="color:#f92672">+=</span> <span style="color:#a6e22e">s</span>
+	}
+	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">rst</span>
+}
+
+<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">BuilderStr</span>(<span style="color:#a6e22e">str</span> []<span style="color:#66d9ef">string</span>) <span style="color:#66d9ef">string</span> {
+	<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">builder</span> <span style="color:#a6e22e">strings</span>.<span style="color:#a6e22e">Builder</span>
+	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">s</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">range</span> <span style="color:#a6e22e">str</span> {
+		<span style="color:#a6e22e">builder</span>.<span style="color:#a6e22e">WriteString</span>(<span style="color:#a6e22e">s</span>)
+	}
+	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">builder</span>.<span style="color:#a6e22e">String</span>()
+}
+
+<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">BenchmarkStr</span>(<span style="color:#a6e22e">b</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">testing</span>.<span style="color:#a6e22e">B</span>) {
+	<span style="color:#a6e22e">srcStr</span> <span style="color:#f92672">:=</span> make([]<span style="color:#66d9ef">string</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">100000</span>)
+
+	<span style="color:#a6e22e">b</span>.<span style="color:#a6e22e">Run</span>(<span style="color:#e6db74">&#34;Append-10000&#34;</span>, <span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">b</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">testing</span>.<span style="color:#a6e22e">B</span>) {
+		<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">0</span>; <span style="color:#a6e22e">i</span> &lt; <span style="color:#ae81ff">10000</span>; <span style="color:#a6e22e">i</span><span style="color:#f92672">++</span> {
+			<span style="color:#a6e22e">srcStr</span> = append(<span style="color:#a6e22e">srcStr</span>, <span style="color:#a6e22e">strconv</span>.<span style="color:#a6e22e">Itoa</span>(<span style="color:#a6e22e">i</span><span style="color:#f92672">%</span><span style="color:#ae81ff">10</span>))
+		}
+	})
+
+	<span style="color:#a6e22e">b</span>.<span style="color:#a6e22e">Run</span>(<span style="color:#e6db74">&#34;Str-10000&#34;</span>, <span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">b</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">testing</span>.<span style="color:#a6e22e">B</span>) {
+		<span style="color:#a6e22e">Str</span>(<span style="color:#a6e22e">srcStr</span>)
+	})
+
+	<span style="color:#a6e22e">b</span>.<span style="color:#a6e22e">Run</span>(<span style="color:#e6db74">&#34;BuilderStr-10000&#34;</span>, <span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">b</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">testing</span>.<span style="color:#a6e22e">B</span>) {
+		<span style="color:#a6e22e">BuilderStr</span>(<span style="color:#a6e22e">srcStr</span>)
+	})
+
+	<span style="color:#a6e22e">b</span>.<span style="color:#a6e22e">Run</span>(<span style="color:#e6db74">&#34;Append-100000&#34;</span>, <span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">b</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">testing</span>.<span style="color:#a6e22e">B</span>) {
+		<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">0</span>; <span style="color:#a6e22e">i</span> &lt; <span style="color:#ae81ff">90000</span>; <span style="color:#a6e22e">i</span><span style="color:#f92672">++</span> {
+			<span style="color:#a6e22e">srcStr</span> = append(<span style="color:#a6e22e">srcStr</span>, <span style="color:#a6e22e">strconv</span>.<span style="color:#a6e22e">Itoa</span>(<span style="color:#a6e22e">i</span><span style="color:#f92672">%</span><span style="color:#ae81ff">10</span>))
+		}
+	})
+
+	<span style="color:#a6e22e">b</span>.<span style="color:#a6e22e">Run</span>(<span style="color:#e6db74">&#34;Str-100000&#34;</span>, <span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">b</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">testing</span>.<span style="color:#a6e22e">B</span>) {
+		<span style="color:#a6e22e">Str</span>(<span style="color:#a6e22e">srcStr</span>)
+	})
+
+	<span style="color:#a6e22e">b</span>.<span style="color:#a6e22e">Run</span>(<span style="color:#e6db74">&#34;BuilderStr-100000&#34;</span>, <span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">b</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">testing</span>.<span style="color:#a6e22e">B</span>) {
+		<span style="color:#a6e22e">BuilderStr</span>(<span style="color:#a6e22e">srcStr</span>)
+	})
+
+}
+</code></pre></div><h2 id="测试结果">测试结果</h2>
+<pre><code>$ go test -bench=BenchmarkStr  -benchmem -memprofile=mem.prof -cpuprofile=cpu.prof
+goos: linux
+goarch: amd64
+pkg: demo/splicing
+BenchmarkStr/Append-10000-12            1000000000               0.000039 ns/op        0 B/op          0 allocs/op
+BenchmarkStr/Str-10000-12               1000000000               0.177 ns/op           1 B/op          0 allocs/op
+BenchmarkStr/BuilderStr-10000-12        1000000000               0.000242 ns/op        0 B/op          0 allocs/op
+BenchmarkStr/Append-100000-12           1000000000               0.000333 ns/op        0 B/op          0 allocs/op
+BenchmarkStr/Str-100000-12                     1        20121850900 ns/op       182358231216 B/op         600145 allocs/op
+BenchmarkStr/BuilderStr-100000-12       1000000000               0.00258 ns/op         0 B/op          0 allocs/op
+BenchmarkStrOnly-12                     1000000000               0.500 ns/op           5 B/op          0 allocs/op
+PASS
+ok      demo/splicing   35.097s
+</code></pre><h2 id="内存消耗">内存消耗</h2>
+<pre><code>demo/splicing.Str
+/mnt/d/go/src/demo/splicing/splicing.go
+
+  Total:    633.77GB   633.77GB (flat, cum) 199.94%
+      1            .          .           package splicing 
+      2            .          .            
+      3            .          .           import &quot;strings&quot; 
+      4            .          .            
+      5            .          .           func Str(str []string) string { 
+      6            .          .           	var rst string 
+      7            .          .           	for _, s := range str { 
+      8     633.77GB   633.77GB           		rst += s 
+      9            .          .           	} 
+     10            .          .           	return rst 
+     11            .          .           } 
+     12            .          .            
+     13            .          .           func BuilderStr(str []string) string { 
+     14            .          .           	var builder strings.Builder 
+     15            .          .           	for _, s := range str { 
+demo/splicing.BenchmarkStr.func4
+/mnt/d/go/src/demo/splicing/splicing_test.go
+
+  Total:     76.35MB    76.35MB (flat, cum) 0.024%
+     20            .          .            
+     21            .          .           	b.Run(&quot;BuilderStr-10000&quot;, func(b *testing.B) { 
+     22            .          .           		BuilderStr(srcStr) 
+     23            .          .           	}) 
+     24            .          .            
+     25            .          .           	b.Run(&quot;Append-100000&quot;, func(b *testing.B) { 
+     26            .          .           		for i := 0; i &lt; 90000; i++ { 
+     27      76.35MB    76.35MB           			srcStr = append(srcStr, strconv.Itoa(i%10)) 
+     28            .          .           		} 
+     29            .          .           	}) 
+     30            .          .            
+     31            .          .           	b.Run(&quot;Str-100000&quot;, func(b *testing.B) { 
+     32            .          .           		Str(srcStr) 
+</code></pre><ul>
+<li>从结果中可以看出，使用+=进行字符串拼接，会申请大量内存，并且速度非常慢。</li>
+</ul>
+<h2 id="原因分析">原因分析</h2>
+<ul>
+<li>使用 + 进行字符串拼接时，当 拼接 A 和 B 两个字符串时，需要申请另一个为A+B长度的空间C，每次都是如此。</li>
+<li>使用 strings.Builder 进行拼接时，内部实际上是使用的 []byte 存储，使用append操作，每次扩容是翻倍的。</li>
+<li>(bytes.Builder 与 strings.Builder 的差异)
+<ul>
+<li>bytes.Buffer
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">b</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Buffer</span>) <span style="color:#a6e22e">String</span>() <span style="color:#66d9ef">string</span> {
+    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">b</span> <span style="color:#f92672">==</span> <span style="color:#66d9ef">nil</span> {
+        <span style="color:#75715e">// Special case, useful in debugging.
+</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">return</span> <span style="color:#e6db74">&#34;&lt;nil&gt;&#34;</span>
+    }
+    <span style="color:#66d9ef">return</span> string(<span style="color:#a6e22e">b</span>.<span style="color:#a6e22e">buf</span>[<span style="color:#a6e22e">b</span>.<span style="color:#a6e22e">off</span>:])
+}
+</code></pre></div></li>
+<li>strings.Builder
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">// 会使用原buf的数据，而不会拷贝一份数据到返回值的字符串里面
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">b</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Builder</span>) <span style="color:#a6e22e">String</span>() <span style="color:#66d9ef">string</span> {
+    <span style="color:#66d9ef">return</span> <span style="color:#f92672">*</span>(<span style="color:#f92672">*</span><span style="color:#66d9ef">string</span>)(<span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span>(<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">b</span>.<span style="color:#a6e22e">buf</span>))
+}
+</code></pre></div></li>
+</ul>
+</li>
+</ul>
+</div>
+        <div class="post-footer">
+            <div class="info">
+                
+                
+            </div>
+        </div>
+
+        
+    </div>
+
+
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript"
+        src="https://moyrne.github.io/js/jquery.min.86b1e8f819ee2d9099a783e50b49dff24282545fc40773861f9126b921532e4c.js"
+        integrity="sha256-hrHo&#43;BnuLZCZp4PlC0nf8kKCVF/EB3OGH5EmuSFTLkw="
+        crossorigin="anonymous"></script>
+
+
+
+
+<script type="text/javascript"
+        src="https://moyrne.github.io/js/bundle.min.0f9c74cb78f13d1f15f33daff4037c70354f98acfbb97a6f61708966675c3cae.js"
+        integrity="sha256-D5x0y3jxPR8V8z2v9AN8cDVPmKz7uXpvYXCJZmdcPK4="
+        crossorigin="anonymous"></script>
+
+<script type="text/javascript"
+        src="https://moyrne.github.io/js/medium-zoom.min.92f21c856129f84aeb719459b3e6ac621a3032fd7b180a18c04e1d12083f8aba.js"
+        integrity="sha256-kvIchWEp&#43;ErrcZRZs&#43;asYhowMv17GAoYwE4dEgg/iro="
+        crossorigin="anonymous"></script>
+</body>
+
+</html>

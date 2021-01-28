@@ -131,6 +131,30 @@
         <div class="post  animated fadeInDown ">
             
             <div class="post-title">
+                <h3><a href="/golang/string_join_benchmark/">字符串拼接性能测试</a>
+                </h3>
+            </div>
+            <div class="post-content">
+                <div class="p_part"><p>字符串拼接 性能测试 // splicing_test.go package splicing import ( &#34;strconv&#34; &#34;strings&#34; &#34;testing&#34; ) func Str(str []string) string { var rst string for _, s := range str { rst += s } return rst } func BuilderStr(str []string) string { var builder strings.Builder for _, s := range str { builder.WriteString(s) } return builder.String() } func BenchmarkStr(b *testing.B) { srcStr := make([]string, 0, 100000) b.Run(&#34;Append-10000&#34;, func(b *testing.B) { for i := 0; i &lt; 10000; i++ { srcStr = append(srcStr, strconv.</p></div>
+            </div>
+            <div class="post-footer">
+                <div class="meta">
+                    <div class="info">
+                        <em class="fas fa-calendar-day"></em>
+                            <span class="date"> 
+                                                 Thu, 2021-01-28 
+                                             </span>
+                        
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+
+        <div class="post  animated fadeInDown ">
+            
+            <div class="post-title">
                 <h3><a href="/golang/time_after_oom/">time.After() 导致内存暴涨</a>
                 </h3>
             </div>

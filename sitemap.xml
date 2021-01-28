@@ -3,8 +3,18 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://moyrne.github.io/golang/</loc>
+    <lastmod>2021-01-28T13:31:45+08:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://moyrne.github.io/</loc>
-    <lastmod>2021-01-27T13:34:41+08:00</lastmod>
+    <lastmod>2021-01-28T13:31:45+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://moyrne.github.io/golang/string_join_benchmark/</loc>
+    <lastmod>2021-01-28T13:31:45+08:00</lastmod>
   </url>
   
   <url>
@@ -15,11 +25,6 @@
   <url>
     <loc>https://moyrne.github.io/tools/</loc>
     <lastmod>2021-01-27T13:34:41+08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://moyrne.github.io/golang/</loc>
-    <lastmod>2021-01-27T13:04:41+08:00</lastmod>
   </url>
   
   <url>
