@@ -51,7 +51,7 @@
     
     <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="字符串拼接性能测试"/>
-<meta name="twitter:description" content="字符串拼接 性能测试 // splicing_test.go package splicing import ( &#34;strconv&#34; &#34;strings&#34; &#34;testing&#34; ) func Str(str []string) string { var rst string for _, s := range str { rst &#43;= s } return rst } func BuilderStr(str []string) string { var builder strings.Builder for _, s := range str { builder.WriteString(s) } return builder.String() } func BenchmarkStr(b *testing.B) { srcStr := make([]string, 0, 100000) b.Run(&#34;Append-10000&#34;, func(b *testing.B) { for i := 0; i &lt; 10000; i&#43;&#43; { srcStr = append(srcStr, strconv."/>
+<meta name="twitter:description" content="// splicing_test.go package splicing import ( &#34;strconv&#34; &#34;strings&#34; &#34;testing&#34; ) func Str(str []string) string { var rst string for _, s := range str { rst &#43;= s } return rst } func BuilderStr(str []string) string { var builder strings.Builder for _, s := range str { builder.WriteString(s) } return builder.String() } func BenchmarkStr(b *testing.B) { srcStr := make([]string, 0, 100000) b.Run(&#34;Append-10000&#34;, func(b *testing.B) { for i := 0; i &lt; 10000; i&#43;&#43; { srcStr = append(srcStr, strconv."/>
 
 </head>
 <body><div class="sidebar animated fadeInDown ">
@@ -126,8 +126,7 @@
                 
             </div>
 
-            <h1 id="字符串拼接-性能测试">字符串拼接 性能测试</h1>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">// splicing_test.go
+            <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">// splicing_test.go
 </span><span style="color:#75715e"></span><span style="color:#f92672">package</span> <span style="color:#a6e22e">splicing</span>
 
 <span style="color:#f92672">import</span> (
