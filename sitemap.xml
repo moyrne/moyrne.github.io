@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://moyrne.github.io/about/</loc>
+    <lastmod>2021-01-29T13:20:15+08:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://moyrne.github.io/golang/</loc>
     <lastmod>2021-01-28T13:31:45+08:00</lastmod>
   </url>

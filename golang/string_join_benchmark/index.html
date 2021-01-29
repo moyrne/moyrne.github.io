@@ -105,6 +105,12 @@
                         
                    title="">实用工具</a></li>
         
+            
+            <li><a 
+                   href="/about"
+                        
+                   title="">关于我</a></li>
+        
         
         
             <li class="theme-switch-item">
@@ -241,7 +247,7 @@ demo/splicing.BenchmarkStr.func4
 <ul>
 <li>使用 + 进行字符串拼接时，当 拼接 A 和 B 两个字符串时，需要申请另一个为A+B长度的空间C，每次都是如此。</li>
 <li>使用 strings.Builder 进行拼接时，内部实际上是使用的 []byte 存储，使用append操作，每次扩容是翻倍的。</li>
-<li>(bytes.Builder 与 strings.Builder 的差异)
+<li>(bytes.Buffer 与 strings.Builder 的差异)
 <ul>
 <li>bytes.Buffer
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">b</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Buffer</span>) <span style="color:#a6e22e">String</span>() <span style="color:#66d9ef">string</span> {
