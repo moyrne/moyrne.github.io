@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Kubernetes on Moyrne Blog</title>
+    <link>https://blog.moyrn.com/kubernetes/</link>
+    <description>Recent content in Kubernetes on Moyrne Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Sun, 07 Feb 2021 13:56:54 +0800</lastBuildDate><atom:link href="https://blog.moyrn.com/kubernetes/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Kubeadm 搭建K8s集群</title>
+      <link>https://blog.moyrn.com/kubernetes/kubeadm_start/</link>
+      <pubDate>Sun, 07 Feb 2021 13:56:54 +0800</pubDate>
+      
+      <guid>https://blog.moyrn.com/kubernetes/kubeadm_start/</guid>
+      <description>前置操作 (每台机器上都需要操作)  使用系统 Centos 7  cat /etc/redhat-release CentOS Linux release 7.9.2009 (Core)  关闭防火墙  systemctl stop firewalld &amp;amp;&amp;amp; systemctl disable firewalld  禁用SELINUX  vim /etc/selinux/config # 或者修改/etc/sysconfig/selinux SELINUX=disabled  修改 k8s.conf  cat &amp;lt;&amp;lt;EOF &amp;gt; /etc/sysctl.d/k8s.conf net.bridge.bridge-nf-call-ip6tables = 1 net.bridge.bridge-nf-call-iptables = 1 EOF sysctl --system  关闭 swap  swapoff -a vim /etc/fstab # 注释掉以下字段 /dev/mapper/cl-swap swap swap defaults 0 0 reboot  使用yum安装 docker-ce docker-ce-selinux  # step 1: 安装必要的一些系统工具 sudo yum install -y yum-utils device-mapper-persistent-data lvm2 # Step 2: 添加软件源信息 sudo yum-config-manager --add-repo http://mirrors.</description>
+    </item>
+    
+    <item>
+      <title>Kubernetes入门-基础</title>
+      <link>https://blog.moyrn.com/kubernetes/before_start/</link>
+      <pubDate>Sat, 06 Feb 2021 10:13:46 +0800</pubDate>
+      
+      <guid>https://blog.moyrn.com/kubernetes/before_start/</guid>
+      <description> CPU CGroup 设置cpu可使用时间  文件系统隔离 Mount NameSpace + mount(&amp;quot;none&amp;quot;,&amp;quot;/tmp&amp;quot;,&amp;quot;tmpfs&amp;quot;,0,&amp;quot;&amp;quot;)   </description>
+    </item>
+    
+  </channel>
+</rss>
