@@ -22,7 +22,7 @@
       <pubDate>Sat, 06 Feb 2021 10:13:46 +0800</pubDate>
       
       <guid>https://blog.moyrn.com/kubernetes/before_start/</guid>
-      <description> CPU CGroup 设置cpu可使用时间  文件系统隔离 Mount NameSpace + mount(&amp;quot;none&amp;quot;,&amp;quot;/tmp&amp;quot;,&amp;quot;tmpfs&amp;quot;,0,&amp;quot;&amp;quot;)   </description>
+      <description>CPU CGroup 设置cpu可使用时间  文件系统隔离 Mount NameSpace + mount(&amp;quot;none&amp;quot;,&amp;quot;/tmp&amp;quot;,&amp;quot;tmpfs&amp;quot;,0,&amp;quot;&amp;quot;)   还在学习的路上 。。。。。。</description>
     </item>
     
   </channel>
