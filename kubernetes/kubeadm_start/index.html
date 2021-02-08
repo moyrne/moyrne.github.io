@@ -301,6 +301,10 @@ kube-system   kube-proxy-cxphf                 1/1     Running   1          22h 
 kube-system   kube-proxy-hzh4k                 1/1     Running   1          22h   192.168.111.129   node1    &lt;none&gt;           &lt;none&gt;
 kube-system   kube-proxy-kktrf                 1/1     Running   1          22h   192.168.111.128   master   &lt;none&gt;           &lt;none&gt;
 kube-system   kube-scheduler-master            1/1     Running   1          22h   192.168.111.128   master   &lt;none&gt;           &lt;none&gt;
+</code></pre></div><ul>
+<li>为 Master 打上污点 禁止其它Pod在Master上启动</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">kubectl taint nodes node1 foo<span style="color:#f92672">=</span>bar:NoSchedule
 </code></pre></div></div>
         <div class="post-footer">
             <div class="info">
