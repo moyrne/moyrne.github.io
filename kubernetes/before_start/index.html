@@ -51,7 +51,10 @@
     
     <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Kubernetes入门-基础"/>
-<meta name="twitter:description" content="CPU CGroup 设置cpu可使用时间  文件系统隔离 Mount NameSpace &#43; mount(&quot;none&quot;,&quot;/tmp&quot;,&quot;tmpfs&quot;,0,&quot;&quot;)   还在学习的路上 。。。。。。"/>
+<meta name="twitter:description" content="CPU
+CGroup 设置cpu可使用时间   文件系统隔离
+Mount NameSpace &#43; mount(&quot;none&quot;,&quot;/tmp&quot;,&quot;tmpfs&quot;,0,&quot;&quot;)   为 结点 打上污点 禁止其它Pod在结点上启动
+  kubectl taint nodes node1 foo=bar:NoSchedule 还在学习的路上 。。。。。。"/>
 
 </head>
 <body><div class="sidebar animated fadeInDown ">
@@ -139,14 +142,20 @@
             </div>
 
             <ul>
-<li>CPU
+<li>
+<p>CPU</p>
 <pre><code>CGroup 设置cpu可使用时间
 </code></pre></li>
-<li>文件系统隔离
+<li>
+<p>文件系统隔离</p>
 <pre><code>Mount NameSpace + mount(&quot;none&quot;,&quot;/tmp&quot;,&quot;tmpfs&quot;,0,&quot;&quot;)
 </code></pre></li>
+<li>
+<p>为 结点 打上污点 禁止其它Pod在结点上启动</p>
+</li>
 </ul>
-<p>还在学习的路上 。。。。。。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">kubectl taint nodes node1 foo<span style="color:#f92672">=</span>bar:NoSchedule
+</code></pre></div><p>还在学习的路上 。。。。。。</p>
 </div>
         <div class="post-footer">
             <div class="info">
