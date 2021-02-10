@@ -26,7 +26,7 @@
 CGroup 设置cpu可使用时间   文件系统隔离
 Mount NameSpace + mount(&amp;#34;none&amp;#34;,&amp;#34;/tmp&amp;#34;,&amp;#34;tmpfs&amp;#34;,0,&amp;#34;&amp;#34;)   为 结点 打上污点 禁止其它Pod在结点上启动
 kubectl taint nodes node1 foo=bar:NoSchedule   rook 安装 按顺序执行以下命令
-$ kubectl apply -f https://raw.githubusercontent.com/rook/rook/master/cluster/examples/kubernetes/ceph/common.yaml $ kubectl apply -f https://raw.githubusercontent.com/rook/rook/master/cluster/examples/kubernetes/ceph/operator.yaml # 在 apply cluster.yaml 之前, 需要先apply crds.yaml, 否则会报错 no matches for kind &amp;#34;CephCluster&amp;#34; in version &amp;#34;ceph.rook.io/v1&amp;#34; $ kubectl apply -f https://raw.githubusercontent.com/rook/rook/master/cluster/examples/kubernetes/ceph/crds.yaml $ kubectl apply -f https://raw.githubusercontent.com/rook/rook/master/cluster/examples/kubernetes/ceph/cluster.yaml   docker 多阶段构建,减小体积（示例）
+$ kubectl apply -f https://raw.githubusercontent.com/rook/rook/master/cluster/examples/kubernetes/ceph/common.yaml $ kubectl apply -f https://raw.githubusercontent.com/rook/rook/master/cluster/examples/kubernetes/ceph/operator.yaml # 在 apply cluster.yaml 之前, 需要先apply crds.yaml, 否则会报错 no matches for kind &amp;#34;CephCluster&amp;#34; in version &amp;#34;ceph.rook.io/v1&amp;#34; $ kubectl apply -f https://raw.githubusercontent.com/rook/rook/master/cluster/examples/kubernetes/ceph/crds.yaml $ kubectl apply -f https://raw.githubusercontent.com/rook/rook/master/cluster/examples/kubernetes/ceph/cluster.yaml   [20210211] docker 多阶段构建,减小体积（示例）
 FROMgolang:1.15 ENV GOPROXY=https://goproxy.</description>
     </item>
     

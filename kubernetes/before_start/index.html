@@ -55,7 +55,7 @@
 CGroup 设置cpu可使用时间   文件系统隔离
 Mount NameSpace &#43; mount(&#34;none&#34;,&#34;/tmp&#34;,&#34;tmpfs&#34;,0,&#34;&#34;)   为 结点 打上污点 禁止其它Pod在结点上启动
 kubectl taint nodes node1 foo=bar:NoSchedule   rook 安装 按顺序执行以下命令
-$ kubectl apply -f https://raw.githubusercontent.com/rook/rook/master/cluster/examples/kubernetes/ceph/common.yaml $ kubectl apply -f https://raw.githubusercontent.com/rook/rook/master/cluster/examples/kubernetes/ceph/operator.yaml # 在 apply cluster.yaml 之前, 需要先apply crds.yaml, 否则会报错 no matches for kind &#34;CephCluster&#34; in version &#34;ceph.rook.io/v1&#34; $ kubectl apply -f https://raw.githubusercontent.com/rook/rook/master/cluster/examples/kubernetes/ceph/crds.yaml $ kubectl apply -f https://raw.githubusercontent.com/rook/rook/master/cluster/examples/kubernetes/ceph/cluster.yaml   docker 多阶段构建,减小体积（示例）
+$ kubectl apply -f https://raw.githubusercontent.com/rook/rook/master/cluster/examples/kubernetes/ceph/common.yaml $ kubectl apply -f https://raw.githubusercontent.com/rook/rook/master/cluster/examples/kubernetes/ceph/operator.yaml # 在 apply cluster.yaml 之前, 需要先apply crds.yaml, 否则会报错 no matches for kind &#34;CephCluster&#34; in version &#34;ceph.rook.io/v1&#34; $ kubectl apply -f https://raw.githubusercontent.com/rook/rook/master/cluster/examples/kubernetes/ceph/crds.yaml $ kubectl apply -f https://raw.githubusercontent.com/rook/rook/master/cluster/examples/kubernetes/ceph/cluster.yaml   [20210211] docker 多阶段构建,减小体积（示例）
 FROMgolang:1.15 ENV GOPROXY=https://goproxy."/>
 
 </head>
@@ -167,7 +167,7 @@ $ kubectl apply -f https://raw.githubusercontent.com/rook/rook/master/cluster/ex
 $ kubectl apply -f https://raw.githubusercontent.com/rook/rook/master/cluster/examples/kubernetes/ceph/cluster.yaml
 </code></pre></div></li>
 <li>
-<p>docker 多阶段构建,减小体积（示例）</p>
+<p>[20210211] docker 多阶段构建,减小体积（示例）</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-dockerfile" data-lang="dockerfile"><span style="color:#66d9ef">FROM</span><span style="color:#e6db74"> golang:1.15</span><span style="color:#960050;background-color:#1e0010">
 </span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#960050;background-color:#1e0010">
 </span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">ENV</span> GOPROXY<span style="color:#f92672">=</span>https://goproxy.cn,direct <span style="color:#ae81ff">\
@@ -191,7 +191,36 @@ $ kubectl apply -f https://raw.githubusercontent.com/rook/rook/master/cluster/ex
 </span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">EXPOSE</span><span style="color:#e6db74"> 8080</span><span style="color:#960050;background-color:#1e0010">
 </span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#960050;background-color:#1e0010">
 </span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">ENTRYPOINT</span> [<span style="color:#e6db74">&#34;./beego&#34;</span>]<span style="color:#960050;background-color:#1e0010">
-</span></code></pre></div><p>还在学习的路上 。。。。。。</p>
+</span></code></pre></div></li>
+<li>
+<p>设置 volume</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#f92672">apiVersion</span>: <span style="color:#ae81ff">apps/v1</span>
+<span style="color:#f92672">kind</span>: <span style="color:#ae81ff">Deployment</span>
+<span style="color:#f92672">metadata</span>:
+  <span style="color:#f92672">name</span>: <span style="color:#ae81ff">beego-demo</span>
+<span style="color:#f92672">spec</span>:
+  <span style="color:#f92672">selector</span>:
+    <span style="color:#f92672">matchLabels</span>:
+      <span style="color:#f92672">app</span>: <span style="color:#ae81ff">beego-demo</span>
+  <span style="color:#f92672">replicas</span>: <span style="color:#ae81ff">2</span>
+  <span style="color:#f92672">template</span>:
+    <span style="color:#f92672">metadata</span>:
+      <span style="color:#f92672">labels</span>:
+        <span style="color:#f92672">app</span>: <span style="color:#ae81ff">beego-demo</span>
+    <span style="color:#f92672">spec</span>:
+      <span style="color:#f92672">containers</span>:
+      - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">beego</span>
+        <span style="color:#f92672">image</span>: <span style="color:#ae81ff">master:5000/beego</span>
+        <span style="color:#f92672">ports</span>:
+          - <span style="color:#f92672">containerPort</span>: <span style="color:#ae81ff">8080</span>
+        <span style="color:#f92672">volumeMounts</span>:
+          - <span style="color:#f92672">mountPath</span>: <span style="color:#e6db74">&#34;/app/views&#34;</span>
+            <span style="color:#f92672">name</span>: <span style="color:#ae81ff">beego-index</span>
+      <span style="color:#f92672">volumes</span>:
+        - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">beego-index</span>
+          <span style="color:#f92672">hostPath</span>:
+            <span style="color:#f92672">path</span>: <span style="color:#e6db74">&#34;/var/data/beego/views&#34;</span>
+</code></pre></div><p>还在学习的路上 。。。。。。</p>
 </li>
 </ul>
 </div>
