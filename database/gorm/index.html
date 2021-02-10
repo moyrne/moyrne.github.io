@@ -7,14 +7,14 @@
     <meta name="description" content="一个正在成长的菜鸟">
     
     <link rel="stylesheet"
-          href="https://blog.moyrn.com/css/style.min.bb7146835efb4da60bec03e4c446c3a3b94260c78c8bdb82057b37dab9c8768e.css"
-          integrity="sha256-u3FGg177TaYL7APkxEbDo7lCYMeMi9uCBXs32rnIdo4="
+          href="https://blog.moyrn.com/css/style.min.9a6700e4461b50dccdddfc4f81dc65d77e7fca22c35665e398a0c36568db59c7.css"
+          integrity="sha256-mmcA5EYbUNzN3fxPgdxl135/yiLDVmXjmKDDZWjbWcc="
           crossorigin="anonymous"
           type="text/css">
     
     <link rel="stylesheet"
-        href="https://blog.moyrn.com/css/markupHighlight.min.9755453ffb7bc4cd220f86ebb5922107b49f193cc62fc17e9785d27b33a8bf5b.css"
-        integrity="sha256-l1VFP/t7xM0iD4brtZIhB7SfGTzGL8F&#43;l4XSezOov1s="
+        href="https://blog.moyrn.com/css/markupHighlight.min.cc84ed683057cc175ddfa738ea6ba2d5c882b95cb64f50bf9be918cb3791887b.css"
+        integrity="sha256-zITtaDBXzBdd36c46mui1ciCuVy2T1C/m&#43;kYyzeRiHs="
         crossorigin="anonymous"
         type="text/css">
     
@@ -51,7 +51,7 @@
     
     <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="GORM 使用"/>
-<meta name="twitter:description" content="MYSQL 悲观锁 tx := db.DB.Begin() if err := tx.Set(&quot;gorm:query_option&quot;, &quot;FOR UPDATE&quot;). Where(&quot;`xx` = ? and `xxx` = ?&quot;, xx, xxx). First(&amp;xx).Error; err != nil { tx.Rollback() return } 在事务中使用 Set(&quot;gorm:query_option&quot;, &quot;FOR UPDATE&quot;) &#43; first 能将查询的这条记录锁住； 在事务 rollback 或 commit 后会 unlock。   创建复合主键(当主键涉及自增时) gorm:&quot;primary_key;AUTO_INCREMENT:false&quot;  连接数据库 步骤分析  引入mysql数据库驱动 引入gorm包 读取配置文件中的数据库信息 将读取的数据生成为Open()需要的字符串  代码示例 package base import ( _ &quot;github.com/go-sql-driver/mysql&quot; _ &quot;github.com/jinzhu/gorm/dialects/mysql&quot; &quot;github.com/jinzhu/gorm&quot; &quot;fmt&quot; &quot;log&quot; ) func DBConnect() { user := &quot;user&quot; password := &quot;password&quot; dbname := &quot;dbname&quot; address := &quot;address&quot; port := &quot;port&quot; str := fmt."/>
+<meta name="twitter:description" content="MYSQL 悲观锁 tx := db.DB.Begin()if err := tx.Set(&quot;gorm:query_option&quot;, &quot;FOR UPDATE&quot;).Where(&quot;`xx` = ? and `xxx` = ?&quot;, xx, xxx).First(&amp;xx).Error; err != nil {tx.Rollback()return}在事务中使用 Set(&quot;gorm:query_option&quot;, &quot;FOR UPDATE&quot;) &#43; first 能将查询的这条记录锁住；在事务 rollback 或 commit 后会 unlock。  创建复合主键(当主键涉及自增时) gorm:&quot;primary_key;AUTO_INCREMENT:false&quot; 连接数据库 步骤分析  引入mysql数据库驱动 引入gorm包 读取配置文件中的数据库信息 将读取的数据生成为Open()需要的字符串  代码示例 package baseimport (_ &quot;github.com/go-sql-driver/mysql&quot;_ &quot;github.com/jinzhu/gorm/dialects/mysql&quot;&quot;github.com/jinzhu/gorm&quot;&quot;fmt&quot;&quot;log&quot;)func DBConnect() {user := &quot;user&quot;password := &quot;password&quot;dbname := &quot;dbname&quot;address := &quot;address&quot;port := &quot;port&quot;str := fmt."/>
 
 </head>
 <body><div class="sidebar animated fadeInDown ">

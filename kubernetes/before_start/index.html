@@ -7,14 +7,14 @@
     <meta name="description" content="一个正在成长的菜鸟">
     
     <link rel="stylesheet"
-          href="https://blog.moyrn.com/css/style.min.bb7146835efb4da60bec03e4c446c3a3b94260c78c8bdb82057b37dab9c8768e.css"
-          integrity="sha256-u3FGg177TaYL7APkxEbDo7lCYMeMi9uCBXs32rnIdo4="
+          href="https://blog.moyrn.com/css/style.min.9a6700e4461b50dccdddfc4f81dc65d77e7fca22c35665e398a0c36568db59c7.css"
+          integrity="sha256-mmcA5EYbUNzN3fxPgdxl135/yiLDVmXjmKDDZWjbWcc="
           crossorigin="anonymous"
           type="text/css">
     
     <link rel="stylesheet"
-        href="https://blog.moyrn.com/css/markupHighlight.min.9755453ffb7bc4cd220f86ebb5922107b49f193cc62fc17e9785d27b33a8bf5b.css"
-        integrity="sha256-l1VFP/t7xM0iD4brtZIhB7SfGTzGL8F&#43;l4XSezOov1s="
+        href="https://blog.moyrn.com/css/markupHighlight.min.cc84ed683057cc175ddfa738ea6ba2d5c882b95cb64f50bf9be918cb3791887b.css"
+        integrity="sha256-zITtaDBXzBdd36c46mui1ciCuVy2T1C/m&#43;kYyzeRiHs="
         crossorigin="anonymous"
         type="text/css">
     
@@ -53,8 +53,10 @@
 <meta name="twitter:title" content="Kubernetes入门-基础"/>
 <meta name="twitter:description" content="CPU
 CGroup 设置cpu可使用时间   文件系统隔离
-Mount NameSpace &#43; mount(&quot;none&quot;,&quot;/tmp&quot;,&quot;tmpfs&quot;,0,&quot;&quot;)   为 结点 打上污点 禁止其它Pod在结点上启动
-  kubectl taint nodes node1 foo=bar:NoSchedule 还在学习的路上 。。。。。。"/>
+Mount NameSpace &#43; mount(&#34;none&#34;,&#34;/tmp&#34;,&#34;tmpfs&#34;,0,&#34;&#34;)   为 结点 打上污点 禁止其它Pod在结点上启动
+kubectl taint nodes node1 foo=bar:NoSchedule   rook 安装 按顺序执行以下命令
+$ kubectl apply -f https://raw.githubusercontent.com/rook/rook/master/cluster/examples/kubernetes/ceph/common.yaml $ kubectl apply -f https://raw.githubusercontent.com/rook/rook/master/cluster/examples/kubernetes/ceph/operator.yaml # 在 apply cluster.yaml 之前, 需要先apply crds.yaml, 否则会报错 no matches for kind &#34;CephCluster&#34; in version &#34;ceph.rook.io/v1&#34; $ kubectl apply -f https://raw.githubusercontent.com/rook/rook/master/cluster/examples/kubernetes/ceph/crds.yaml $ kubectl apply -f https://raw.githubusercontent.com/rook/rook/master/cluster/examples/kubernetes/ceph/cluster.yaml   docker 多阶段构建,减小体积（示例）
+FROMgolang:1.15 ENV GOPROXY=https://goproxy."/>
 
 </head>
 <body><div class="sidebar animated fadeInDown ">
@@ -144,18 +146,54 @@ Mount NameSpace &#43; mount(&quot;none&quot;,&quot;/tmp&quot;,&quot;tmpfs&quot;,
             <ul>
 <li>
 <p>CPU</p>
-<pre><code>CGroup 设置cpu可使用时间
-</code></pre></li>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-text" data-lang="text">CGroup 设置cpu可使用时间
+</code></pre></div></li>
 <li>
 <p>文件系统隔离</p>
-<pre><code>Mount NameSpace + mount(&quot;none&quot;,&quot;/tmp&quot;,&quot;tmpfs&quot;,0,&quot;&quot;)
-</code></pre></li>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-text" data-lang="text">Mount NameSpace + mount(&#34;none&#34;,&#34;/tmp&#34;,&#34;tmpfs&#34;,0,&#34;&#34;)
+</code></pre></div></li>
 <li>
 <p>为 结点 打上污点 禁止其它Pod在结点上启动</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">kubectl taint nodes node1 foo<span style="color:#f92672">=</span>bar:NoSchedule
+</code></pre></div></li>
+<li>
+<p>rook 安装 按顺序执行以下命令</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ kubectl apply -f https://raw.githubusercontent.com/rook/rook/master/cluster/examples/kubernetes/ceph/common.yaml
+$ kubectl apply -f https://raw.githubusercontent.com/rook/rook/master/cluster/examples/kubernetes/ceph/operator.yaml
+  
+<span style="color:#75715e"># 在 apply cluster.yaml 之前, 需要先apply crds.yaml, 否则会报错 no matches for kind &#34;CephCluster&#34; in version &#34;ceph.rook.io/v1&#34;</span>
+$ kubectl apply -f https://raw.githubusercontent.com/rook/rook/master/cluster/examples/kubernetes/ceph/crds.yaml
+  
+$ kubectl apply -f https://raw.githubusercontent.com/rook/rook/master/cluster/examples/kubernetes/ceph/cluster.yaml
+</code></pre></div></li>
+<li>
+<p>docker 多阶段构建,减小体积（示例）</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-dockerfile" data-lang="dockerfile"><span style="color:#66d9ef">FROM</span><span style="color:#e6db74"> golang:1.15</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">ENV</span> GOPROXY<span style="color:#f92672">=</span>https://goproxy.cn,direct <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    GO111MODULE<span style="color:#f92672">=</span>on<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">WORKDIR</span><span style="color:#e6db74"> /app</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">COPY</span> . .<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">RUN</span> go build<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">FROM</span><span style="color:#e6db74"> ubuntu:20.04</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">ENV</span> PORT<span style="color:#f92672">=</span><span style="color:#ae81ff">8080</span>
+  
+<span style="color:#66d9ef">WORKDIR</span><span style="color:#e6db74"> /app</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#75715e"># --from=0 表示从第一阶段中获取 文件</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">COPY</span> --from<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span> /app .<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">EXPOSE</span><span style="color:#e6db74"> 8080</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">ENTRYPOINT</span> [<span style="color:#e6db74">&#34;./beego&#34;</span>]<span style="color:#960050;background-color:#1e0010">
+</span></code></pre></div><p>还在学习的路上 。。。。。。</p>
 </li>
 </ul>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">kubectl taint nodes node1 foo<span style="color:#f92672">=</span>bar:NoSchedule
-</code></pre></div><p>还在学习的路上 。。。。。。</p>
 </div>
         <div class="post-footer">
             <div class="info">

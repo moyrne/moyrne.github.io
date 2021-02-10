@@ -24,8 +24,10 @@
       <guid>https://blog.moyrn.com/kubernetes/before_start/</guid>
       <description>CPU
 CGroup 设置cpu可使用时间   文件系统隔离
-Mount NameSpace + mount(&amp;quot;none&amp;quot;,&amp;quot;/tmp&amp;quot;,&amp;quot;tmpfs&amp;quot;,0,&amp;quot;&amp;quot;)   为 结点 打上污点 禁止其它Pod在结点上启动
-  kubectl taint nodes node1 foo=bar:NoSchedule 还在学习的路上 。。。。。。</description>
+Mount NameSpace + mount(&amp;#34;none&amp;#34;,&amp;#34;/tmp&amp;#34;,&amp;#34;tmpfs&amp;#34;,0,&amp;#34;&amp;#34;)   为 结点 打上污点 禁止其它Pod在结点上启动
+kubectl taint nodes node1 foo=bar:NoSchedule   rook 安装 按顺序执行以下命令
+$ kubectl apply -f https://raw.githubusercontent.com/rook/rook/master/cluster/examples/kubernetes/ceph/common.yaml $ kubectl apply -f https://raw.githubusercontent.com/rook/rook/master/cluster/examples/kubernetes/ceph/operator.yaml # 在 apply cluster.yaml 之前, 需要先apply crds.yaml, 否则会报错 no matches for kind &amp;#34;CephCluster&amp;#34; in version &amp;#34;ceph.rook.io/v1&amp;#34; $ kubectl apply -f https://raw.githubusercontent.com/rook/rook/master/cluster/examples/kubernetes/ceph/crds.yaml $ kubectl apply -f https://raw.githubusercontent.com/rook/rook/master/cluster/examples/kubernetes/ceph/cluster.yaml   docker 多阶段构建,减小体积（示例）
+FROMgolang:1.15 ENV GOPROXY=https://goproxy.</description>
     </item>
     
     <item>
@@ -52,7 +54,7 @@ Mount NameSpace + mount(&amp;quot;none&amp;quot;,&amp;quot;/tmp&amp;quot;,&amp;q
       <pubDate>Wed, 27 Jan 2021 13:34:41 +0800</pubDate>
       
       <guid>https://blog.moyrn.com/tools/nginx_proxy/</guid>
-      <description>将静态文件交给nginx代理 配置文件位置 /etc/nginx/conf.d/default.conf  server { listen 80; server_name www.moyrn.com; location / { root /usr/share/nginx/webmonitor; index index.html; } } 通过不同的域名，将80端口的消息转发到其他端口 server { listen 80; server_name go.moyrn.com; location / { proxy_pass http://127.0.0.1:8080; } } server { listen 80; server_name moyrn.com; location / { proxy_pass http://127.0.0.1:8086; } } server { listen 80; server_name www.moyrn.com; location / { proxy_pass http://127.0.0.1:8086; } } </description>
+      <description>将静态文件交给nginx代理 配置文件位置 /etc/nginx/conf.d/default.conf server {listen 80;server_name www.moyrn.com;location / {root /usr/share/nginx/webmonitor;index index.html;}}通过不同的域名，将80端口的消息转发到其他端口 server {listen 80;server_name go.moyrn.com;location / {proxy_pass http://127.0.0.1:8080;}}server {listen 80;server_name moyrn.com;location / {proxy_pass http://127.0.0.1:8086;}}server {listen 80;server_name www.moyrn.com;location / {proxy_pass http://127.0.0.1:8086;}}</description>
     </item>
     
     <item>
@@ -70,7 +72,7 @@ Mount NameSpace + mount(&amp;quot;none&amp;quot;,&amp;quot;/tmp&amp;quot;,&amp;q
       <pubDate>Wed, 27 Jan 2021 13:02:39 +0800</pubDate>
       
       <guid>https://blog.moyrn.com/golang/http_file/</guid>
-      <description>文件传输 Content-Type http://tool.oschina.net/commons?type=22013-05-17 multipart/form-data： 既可以提交普通键值对，也可以提交(多个)文件键值对。 application/octet-stream： 只能提交二进制，而且只能提交一个二进制，如果提交文件的话，只能提交一个文件,后台接收参数只能有一个，而且只能是流（或者字节数组） application/x-www-form-urlencoded 不属于http content-type规范，通常用于浏览器表单提交，数据组织格式:name1=value1&amp;amp;name2=value2,post时会放入http body，get时，显示在在地址栏。  // golang 实现  W.Header().Add(&amp;#34;Content-Type&amp;#34;,&amp;#34;application/octet-stream&amp;#34;) W.Header().Add(&amp;#34;Content-Disposition&amp;#34;,fmt.Sprintf(&amp;#34;attachment; filename=\&amp;#34;%s\&amp;#34;&amp;#34;, fileName)) </description>
+      <description>文件传输 Content-Type http://tool.oschina.net/commons?type=22013-05-17multipart/form-data：既可以提交普通键值对，也可以提交(多个)文件键值对。application/octet-stream：只能提交二进制，而且只能提交一个二进制，如果提交文件的话，只能提交一个文件,后台接收参数只能有一个，而且只能是流（或者字节数组）application/x-www-form-urlencoded不属于http content-type规范，通常用于浏览器表单提交，数据组织格式:name1=value1&amp;amp;name2=value2,post时会放入http body，get时，显示在在地址栏。 // golang 实现  W.Header().Add(&amp;#34;Content-Type&amp;#34;,&amp;#34;application/octet-stream&amp;#34;) W.Header().Add(&amp;#34;Content-Disposition&amp;#34;,fmt.Sprintf(&amp;#34;attachment; filename=\&amp;#34;%s\&amp;#34;&amp;#34;, fileName)) </description>
     </item>
     
     <item>
@@ -79,7 +81,7 @@ Mount NameSpace + mount(&amp;quot;none&amp;quot;,&amp;quot;/tmp&amp;quot;,&amp;q
       <pubDate>Wed, 27 Jan 2021 12:04:51 +0800</pubDate>
       
       <guid>https://blog.moyrn.com/golang/build/</guid>
-      <description>编译 编译其他系统 CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build # 不能复制空格 set CGO_ENABLED=0 set GOOS=linux set GOARCH=amd64 go build  图标制作 第一步： Windows 下载MinGW 第二步： 新建一个.rc文件，加入文件名为 demo.rc 输入内容 IDI_ICON1 ICON &amp;quot;cefclient.ico&amp;quot; 其中 cefclient.ico 是你的ico的地址 第三步: MinGW 执行 windres -o demo.syso demo.rc 第四步: 将生成的demo.syso 放到项目目录下 go build  隐藏命令行 go build -i -ldflags=&amp;quot;-H windowsgui&amp;quot; </description>
+      <description>编译 编译其他系统 CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build# 不能复制空格set CGO_ENABLED=0set GOOS=linuxset GOARCH=amd64go build 图标制作 第一步：Windows 下载MinGW第二步：新建一个.rc文件，加入文件名为 demo.rc 输入内容 IDI_ICON1 ICON &amp;quot;cefclient.ico&amp;quot;其中 cefclient.ico 是你的ico的地址第三步:MinGW 执行windres -o demo.syso demo.rc第四步:将生成的demo.syso 放到项目目录下go build 隐藏命令行 go build -i -ldflags=&amp;quot;-H windowsgui&amp;quot; </description>
     </item>
     
     <item>
@@ -88,7 +90,7 @@ Mount NameSpace + mount(&amp;quot;none&amp;quot;,&amp;quot;/tmp&amp;quot;,&amp;q
       <pubDate>Wed, 27 Jan 2021 11:53:34 +0800</pubDate>
       
       <guid>https://blog.moyrn.com/database/gorm/</guid>
-      <description>MYSQL 悲观锁 tx := db.DB.Begin() if err := tx.Set(&amp;quot;gorm:query_option&amp;quot;, &amp;quot;FOR UPDATE&amp;quot;). Where(&amp;quot;`xx` = ? and `xxx` = ?&amp;quot;, xx, xxx). First(&amp;amp;xx).Error; err != nil { tx.Rollback() return } 在事务中使用 Set(&amp;quot;gorm:query_option&amp;quot;, &amp;quot;FOR UPDATE&amp;quot;) + first 能将查询的这条记录锁住； 在事务 rollback 或 commit 后会 unlock。   创建复合主键(当主键涉及自增时) gorm:&amp;quot;primary_key;AUTO_INCREMENT:false&amp;quot;  连接数据库 步骤分析  引入mysql数据库驱动 引入gorm包 读取配置文件中的数据库信息 将读取的数据生成为Open()需要的字符串  代码示例 package base import ( _ &amp;quot;github.com/go-sql-driver/mysql&amp;quot; _ &amp;quot;github.com/jinzhu/gorm/dialects/mysql&amp;quot; &amp;quot;github.com/jinzhu/gorm&amp;quot; &amp;quot;fmt&amp;quot; &amp;quot;log&amp;quot; ) func DBConnect() { user := &amp;quot;user&amp;quot; password := &amp;quot;password&amp;quot; dbname := &amp;quot;dbname&amp;quot; address := &amp;quot;address&amp;quot; port := &amp;quot;port&amp;quot; str := fmt.</description>
+      <description>MYSQL 悲观锁 tx := db.DB.Begin()if err := tx.Set(&amp;quot;gorm:query_option&amp;quot;, &amp;quot;FOR UPDATE&amp;quot;).Where(&amp;quot;`xx` = ? and `xxx` = ?&amp;quot;, xx, xxx).First(&amp;amp;xx).Error; err != nil {tx.Rollback()return}在事务中使用 Set(&amp;quot;gorm:query_option&amp;quot;, &amp;quot;FOR UPDATE&amp;quot;) + first 能将查询的这条记录锁住；在事务 rollback 或 commit 后会 unlock。  创建复合主键(当主键涉及自增时) gorm:&amp;quot;primary_key;AUTO_INCREMENT:false&amp;quot; 连接数据库 步骤分析  引入mysql数据库驱动 引入gorm包 读取配置文件中的数据库信息 将读取的数据生成为Open()需要的字符串  代码示例 package baseimport (_ &amp;quot;github.com/go-sql-driver/mysql&amp;quot;_ &amp;quot;github.com/jinzhu/gorm/dialects/mysql&amp;quot;&amp;quot;github.com/jinzhu/gorm&amp;quot;&amp;quot;fmt&amp;quot;&amp;quot;log&amp;quot;)func DBConnect() {user := &amp;quot;user&amp;quot;password := &amp;quot;password&amp;quot;dbname := &amp;quot;dbname&amp;quot;address := &amp;quot;address&amp;quot;port := &amp;quot;port&amp;quot;str := fmt.</description>
     </item>
     
     <item>
@@ -97,7 +99,7 @@ Mount NameSpace + mount(&amp;quot;none&amp;quot;,&amp;quot;/tmp&amp;quot;,&amp;q
       <pubDate>Wed, 27 Jan 2021 10:01:06 +0800</pubDate>
       
       <guid>https://blog.moyrn.com/tools/vscode/</guid>
-      <description>VSCode 用户代码片段 Golang { &amp;quot;main&amp;quot;: { &amp;quot;prefix&amp;quot;: &amp;quot;main&amp;quot;, &amp;quot;body&amp;quot;: [ &amp;quot;func main() {&amp;quot;, &amp;quot;\t$0&amp;quot;, &amp;quot;}&amp;quot; ], &amp;quot;description&amp;quot;: &amp;quot;func main() {}&amp;quot; }, &amp;quot;init&amp;quot;: { &amp;quot;prefix&amp;quot;: &amp;quot;init&amp;quot;, &amp;quot;body&amp;quot;: [ &amp;quot;func init() {&amp;quot;, &amp;quot;\t$0&amp;quot;, &amp;quot;}&amp;quot; ], &amp;quot;description&amp;quot;: &amp;quot;func init() {}&amp;quot; }, &amp;quot;for range&amp;quot;: { &amp;quot;prefix&amp;quot;: &amp;quot;forr&amp;quot;, &amp;quot;body&amp;quot;: [ &amp;quot;for ${1:i},${2:v} := range $3 {&amp;quot;, &amp;quot;\t$0&amp;quot;, &amp;quot;}&amp;quot; ], &amp;quot;description&amp;quot;: &amp;quot;for range&amp;quot; }, &amp;quot;for index&amp;quot; : { &amp;quot;prefix&amp;quot;: &amp;quot;fori&amp;quot;, &amp;quot;body&amp;quot;: [ &amp;quot;for ${1:i}:=${2:0};${1:i}${3:&amp;lt;}${4:n};${1:i}${5:++} {&amp;quot;, &amp;quot;\t$0&amp;quot;, &amp;quot;}&amp;quot; ], &amp;quot;description&amp;quot;: &amp;quot;for index&amp;quot; }, &amp;quot;if err := xxx();err !</description>
+      <description>VSCode 用户代码片段 Golang {&amp;quot;main&amp;quot;: {&amp;quot;prefix&amp;quot;: &amp;quot;main&amp;quot;,&amp;quot;body&amp;quot;: [&amp;quot;func main() {&amp;quot;,&amp;quot;\t$0&amp;quot;,&amp;quot;}&amp;quot;],&amp;quot;description&amp;quot;: &amp;quot;func main() {}&amp;quot;},&amp;quot;init&amp;quot;: {&amp;quot;prefix&amp;quot;: &amp;quot;init&amp;quot;,&amp;quot;body&amp;quot;: [&amp;quot;func init() {&amp;quot;,&amp;quot;\t$0&amp;quot;,&amp;quot;}&amp;quot;],&amp;quot;description&amp;quot;: &amp;quot;func init() {}&amp;quot;},&amp;quot;for range&amp;quot;: {&amp;quot;prefix&amp;quot;: &amp;quot;forr&amp;quot;,&amp;quot;body&amp;quot;: [&amp;quot;for ${1:i},${2:v} := range $3 {&amp;quot;,&amp;quot;\t$0&amp;quot;,&amp;quot;}&amp;quot;],&amp;quot;description&amp;quot;: &amp;quot;for range&amp;quot;},&amp;quot;for index&amp;quot; : {&amp;quot;prefix&amp;quot;: &amp;quot;fori&amp;quot;,&amp;quot;body&amp;quot;: [&amp;quot;for ${1:i}:=${2:0};${1:i}${3:&amp;lt;}${4:n};${1:i}${5:++} {&amp;quot;,&amp;quot;\t$0&amp;quot;,&amp;quot;}&amp;quot;],&amp;quot;description&amp;quot;: &amp;quot;for index&amp;quot;},&amp;quot;if err := xxx();err !</description>
     </item>
     
   </channel>

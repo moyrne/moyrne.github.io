@@ -7,14 +7,14 @@
     <meta name="description" content="一个正在成长的菜鸟">
     
     <link rel="stylesheet"
-          href="https://blog.moyrn.com/css/style.min.bb7146835efb4da60bec03e4c446c3a3b94260c78c8bdb82057b37dab9c8768e.css"
-          integrity="sha256-u3FGg177TaYL7APkxEbDo7lCYMeMi9uCBXs32rnIdo4="
+          href="https://blog.moyrn.com/css/style.min.9a6700e4461b50dccdddfc4f81dc65d77e7fca22c35665e398a0c36568db59c7.css"
+          integrity="sha256-mmcA5EYbUNzN3fxPgdxl135/yiLDVmXjmKDDZWjbWcc="
           crossorigin="anonymous"
           type="text/css">
     
     <link rel="stylesheet"
-        href="https://blog.moyrn.com/css/markupHighlight.min.9755453ffb7bc4cd220f86ebb5922107b49f193cc62fc17e9785d27b33a8bf5b.css"
-        integrity="sha256-l1VFP/t7xM0iD4brtZIhB7SfGTzGL8F&#43;l4XSezOov1s="
+        href="https://blog.moyrn.com/css/markupHighlight.min.cc84ed683057cc175ddfa738ea6ba2d5c882b95cb64f50bf9be918cb3791887b.css"
+        integrity="sha256-zITtaDBXzBdd36c46mui1ciCuVy2T1C/m&#43;kYyzeRiHs="
         crossorigin="anonymous"
         type="text/css">
     
@@ -51,7 +51,7 @@
     
     <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Nginx 反向代理"/>
-<meta name="twitter:description" content="将静态文件交给nginx代理 配置文件位置 /etc/nginx/conf.d/default.conf  server { listen 80; server_name www.moyrn.com; location / { root /usr/share/nginx/webmonitor; index index.html; } } 通过不同的域名，将80端口的消息转发到其他端口 server { listen 80; server_name go.moyrn.com; location / { proxy_pass http://127.0.0.1:8080; } } server { listen 80; server_name moyrn.com; location / { proxy_pass http://127.0.0.1:8086; } } server { listen 80; server_name www.moyrn.com; location / { proxy_pass http://127.0.0.1:8086; } } "/>
+<meta name="twitter:description" content="将静态文件交给nginx代理 配置文件位置 /etc/nginx/conf.d/default.conf server {listen 80;server_name www.moyrn.com;location / {root /usr/share/nginx/webmonitor;index index.html;}}通过不同的域名，将80端口的消息转发到其他端口 server {listen 80;server_name go.moyrn.com;location / {proxy_pass http://127.0.0.1:8080;}}server {listen 80;server_name moyrn.com;location / {proxy_pass http://127.0.0.1:8086;}}server {listen 80;server_name www.moyrn.com;location / {proxy_pass http://127.0.0.1:8086;}}"/>
 
 </head>
 <body><div class="sidebar animated fadeInDown ">
