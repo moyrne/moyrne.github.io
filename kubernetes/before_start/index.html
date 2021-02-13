@@ -94,21 +94,15 @@ FROMgolang:1.15 ENV GOPROXY=https://goproxy."/>
         
             
             <li><a 
-                   href="/golang/"
-                        
-                   title="">Golang</a></li>
-        
-            
-            <li><a 
                    href="/kubernetes/"
                         
                    title="">Kubernetes</a></li>
         
             
             <li><a 
-                   href="/database/"
+                   href="/golang/"
                         
-                   title="">数据库</a></li>
+                   title="">Golang</a></li>
         
             
             <li><a 
@@ -220,7 +214,44 @@ $ kubectl apply -f https://raw.githubusercontent.com/rook/rook/master/cluster/ex
         - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">beego-index</span>
           <span style="color:#f92672">hostPath</span>:
             <span style="color:#f92672">path</span>: <span style="color:#e6db74">&#34;/var/data/beego/views&#34;</span>
-</code></pre></div><p>还在学习的路上 。。。。。。</p>
+</code></pre></div></li>
+<li>
+<p>nodeSelector 与 nodeAffinity</p>
+<ul>
+<li>nodeAffinity 支持更丰富的语义，如：operator</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#f92672">nodeSelector</span>: 
+  <span style="color:#f92672">name</span>: <span style="color:#ae81ff">&lt;Node名字&gt;</span>
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#f92672">affinity</span>:
+  <span style="color:#f92672">nodeAffinity</span>:
+    <span style="color:#f92672">requiredDuringSchedulingIgnoredDuringExecution</span>:
+      <span style="color:#f92672">nodeSelectorTerms</span>:
+      - <span style="color:#f92672">matchExpressions</span>:
+        - <span style="color:#f92672">key</span>: <span style="color:#ae81ff">metadata.name</span>
+          <span style="color:#f92672">operator</span>: <span style="color:#ae81ff">In</span>
+          <span style="color:#f92672">values</span>:
+          - <span style="color:#ae81ff">node-geektime</span>
+</code></pre></div></li>
+<li>
+<p>DaemonSet</p>
+<ul>
+<li>DaemonSet具有Toleration字段,用于忽略节点上的某些污点</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#75715e"># k8s项目中，当一个节点的网络插件尚未安装时，这个节点就会被自动加上名为node.kubernetes.io/network-unavailable的“污点”</span>
+<span style="color:#75715e"># 例如master节点上也会有 node-role.kubernetes.io/master 这样的污点</span>
+<span style="color:#f92672">template</span>:
+  <span style="color:#f92672">metadata</span>:
+    <span style="color:#f92672">labels</span>:
+      <span style="color:#f92672">name</span>: <span style="color:#ae81ff">network-plugin-agent</span>
+  <span style="color:#f92672">spec</span>:
+    <span style="color:#f92672">tolerations</span>:
+    - <span style="color:#f92672">key</span>: <span style="color:#ae81ff">node.kubernetes.io/network-unavailable</span>
+      <span style="color:#f92672">operator</span>: <span style="color:#ae81ff">Exists</span>
+      <span style="color:#f92672">effect</span>: <span style="color:#ae81ff">NoSchedule</span>
+</code></pre></div><ul>
+<li>DaemonSet 与 DeploymentSet 一样拥有滚动更新的能力，但与 DeploymentSet 通过 ReplicaSet 管理不同版本的区别是， DaemonSet 使用的是 ControllerRevision 对象（StatefulSet 同样如此）。</li>
+</ul>
+<p>还在学习的路上 。。。。。。</p>
 </li>
 </ul>
 </div>

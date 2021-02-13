@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" data-theme=""><head>
-    <title> Moyrne | Nginx 反向代理 </title>
+    <title> Moyrne | GORM 使用 </title>
 
     
     <meta charset="utf-8"><meta name="generator" content="Hugo 0.80.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
@@ -29,7 +29,7 @@
     <link rel="icon" type="image/png" sizes="32x32" href="https://blog.moyrn.com/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="https://blog.moyrn.com/favicon-16x16.png">
 
-    <link rel="canonical" href="https://blog.moyrn.com/tools/nginx_proxy/">
+    <link rel="canonical" href="https://blog.moyrn.com/golang/gorm/">
 
     
     
@@ -50,8 +50,8 @@
                 crossorigin="anonymous"></script>
     
     <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="Nginx 反向代理"/>
-<meta name="twitter:description" content="将静态文件交给nginx代理 配置文件位置 /etc/nginx/conf.d/default.conf server {listen 80;server_name www.moyrn.com;location / {root /usr/share/nginx/webmonitor;index index.html;}}通过不同的域名，将80端口的消息转发到其他端口 server {listen 80;server_name go.moyrn.com;location / {proxy_pass http://127.0.0.1:8080;}}server {listen 80;server_name moyrn.com;location / {proxy_pass http://127.0.0.1:8086;}}server {listen 80;server_name www.moyrn.com;location / {proxy_pass http://127.0.0.1:8086;}}"/>
+<meta name="twitter:title" content="GORM 使用"/>
+<meta name="twitter:description" content="MYSQL 悲观锁 tx := db.DB.Begin()if err := tx.Set(&quot;gorm:query_option&quot;, &quot;FOR UPDATE&quot;).Where(&quot;`xx` = ? and `xxx` = ?&quot;, xx, xxx).First(&amp;xx).Error; err != nil {tx.Rollback()return}在事务中使用 Set(&quot;gorm:query_option&quot;, &quot;FOR UPDATE&quot;) &#43; first 能将查询的这条记录锁住；在事务 rollback 或 commit 后会 unlock。  创建复合主键(当主键涉及自增时) gorm:&quot;primary_key;AUTO_INCREMENT:false&quot; 连接数据库 步骤分析  引入mysql数据库驱动 引入gorm包 读取配置文件中的数据库信息 将读取的数据生成为Open()需要的字符串  代码示例 package baseimport (_ &quot;github.com/go-sql-driver/mysql&quot;_ &quot;github.com/jinzhu/gorm/dialects/mysql&quot;&quot;github.com/jinzhu/gorm&quot;&quot;fmt&quot;&quot;log&quot;)func DBConnect() {user := &quot;user&quot;password := &quot;password&quot;dbname := &quot;dbname&quot;address := &quot;address&quot;port := &quot;port&quot;str := fmt."/>
 
 </head>
 <body><div class="sidebar animated fadeInDown ">
@@ -128,43 +128,59 @@
         <div class="post-content">
             
             <div class="post-title">
-                <h3>Nginx 反向代理</h3>
+                <h3>GORM 使用</h3>
                 
             </div>
 
-            <h1 id="将静态文件交给nginx代理">将静态文件交给nginx代理</h1>
-<pre><code>配置文件位置 /etc/nginx/conf.d/default.conf
+            <h1 id="mysql-悲观锁">MYSQL 悲观锁</h1>
+<pre><code>tx := db.DB.Begin()
+if err := tx.Set(&quot;gorm:query_option&quot;, &quot;FOR UPDATE&quot;).
+	Where(&quot;`xx` = ? and `xxx` = ?&quot;, xx, xxx).
+	First(&amp;xx).Error; err != nil {
+	tx.Rollback()
+	return
+}
+</code></pre><pre><code>在事务中使用 Set(&quot;gorm:query_option&quot;, &quot;FOR UPDATE&quot;) + first 能将查询的这条记录锁住；
+在事务 rollback 或 commit 后会 unlock。
 </code></pre>
-<pre><code>server {
-    listen 80;
-    server_name www.moyrn.com;
-    location / {
-        root /usr/share/nginx/webmonitor;
-        index index.html;
-    }
-}
-</code></pre><h4 id="通过不同的域名将80端口的消息转发到其他端口">通过不同的域名，将80端口的消息转发到其他端口</h4>
-<pre><code>server {
-    listen  80;
-    server_name go.moyrn.com;
-    location / {
-        proxy_pass http://127.0.0.1:8080;
-    }
-}
+<hr>
+<h1 id="创建复合主键当主键涉及自增时">创建复合主键(当主键涉及自增时)</h1>
+<pre><code>gorm:&quot;primary_key;AUTO_INCREMENT:false&quot;
+</code></pre><hr>
+<h1 id="连接数据库">连接数据库</h1>
+<h2 id="步骤分析">步骤分析</h2>
+<ul>
+<li>引入mysql数据库驱动</li>
+<li>引入gorm包</li>
+<li>读取配置文件中的数据库信息</li>
+<li>将读取的数据生成为Open()需要的字符串</li>
+</ul>
+<h2 id="代码示例">代码示例</h2>
+<pre><code>package base
 
-server {
-    listen 80;
-    server_name moyrn.com;
-    location / {
-        proxy_pass http://127.0.0.1:8086;
-    }
-}
-server {
-    listen 80;
-    server_name www.moyrn.com;
-    location / {
-        proxy_pass http://127.0.0.1:8086;
-    }
+import (
+	_ &quot;github.com/go-sql-driver/mysql&quot;
+	_ &quot;github.com/jinzhu/gorm/dialects/mysql&quot;
+	&quot;github.com/jinzhu/gorm&quot;
+	&quot;fmt&quot;
+	&quot;log&quot;
+)
+
+func DBConnect() {
+	user := &quot;user&quot;
+	password := &quot;password&quot;
+	dbname := &quot;dbname&quot;
+	address := &quot;address&quot;
+	port := &quot;port&quot;
+	str := fmt.Sprintf(&quot;%s&quot;,user+&quot;:&quot;+password+ &quot;@tcp(&quot;+address+
+		&quot;:&quot;+port+&quot;)/&quot;+dbname+&quot;?charset=utf8&amp;parseTime=True&amp;loc=Local&quot;)
+	db, err := gorm.Open(&quot;mysql&quot;, str)
+	//&quot;user:password@/dbname?charset=utf8&amp;parseTime=True&amp;loc=Local&quot;
+	if err != nil {
+		log.Println(&quot;Opening mysql error is :&quot;,err)
+		return
+	}
+	defer db.Close()
 }
 </code></pre></div>
         <div class="post-footer">

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" data-theme=""><head>
-    <title> Moyrne | 关于我 </title>
+    <title> Moyrne | Deployment 和 ReplicaSet </title>
 
     
     <meta charset="utf-8"><meta name="generator" content="Hugo 0.80.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
@@ -29,7 +29,7 @@
     <link rel="icon" type="image/png" sizes="32x32" href="https://blog.moyrn.com/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="https://blog.moyrn.com/favicon-16x16.png">
 
-    <link rel="canonical" href="https://blog.moyrn.com/about/">
+    <link rel="canonical" href="https://blog.moyrn.com/kubernetes/deployment_and_replicaset/">
 
     
     
@@ -50,8 +50,12 @@
                 crossorigin="anonymous"></script>
     
     <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="关于我"/>
-<meta name="twitter:description" content="联系方式  邮箱： moyrn@qq.com gitee: https://gitee.com/moyrn  "/>
+<meta name="twitter:title" content="Deployment 和 ReplicaSet"/>
+<meta name="twitter:description" content="Deployment 水平扩容和滚动更新 概念   Deployment 所管理的 Pod 的 ownerReference 就是 ReplicaSet
+  Deployment 会拥有多个ReplicaSet, 不同的 ReplicaSet 代表不同的版本
+  关系图   Deployment 状态字段
+ DESIRED：用户期望的 Pod 副本个数（spec.replicas 的值）； CURRENT：当前处于 Running 状态的 Pod 的个数； UP-TO-DATE：当前处于最新版本的 Pod 的个数，所谓最新版本指的是 Pod 的 Spec 部分与 Deployment 里 Pod 模板里定义的完全一致； AVAILABLE：当前已经可用的 Pod 的个数，即：既是 Running 状态，又是最新版本，并且已经处于 Ready（健康检查正确）状态的 Pod 的个数。    ReplicaSet 状态字段 DESIRED、CURRENT 和 READY，与 Deployment 一致，Deployment 仅多出 UP-TO-DATE 状态
+  滚动更新 RollingUpdateStrategy 在“滚动更新”的过程中永远都会确保至少有 2 个 Pod 处于可用状态，至多只有 4 个 Pod 同时存在于集群中"/>
 
 </head>
 <body><div class="sidebar animated fadeInDown ">
@@ -89,15 +93,21 @@
         
             
             <li><a 
+                   href="/golang/"
+                        
+                   title="">Golang</a></li>
+        
+            
+            <li><a 
                    href="/kubernetes/"
                         
                    title="">Kubernetes</a></li>
         
             
             <li><a 
-                   href="/golang/"
+                   href="/database/"
                         
-                   title="">Golang</a></li>
+                   title="">数据库</a></li>
         
             
             <li><a 
@@ -128,16 +138,70 @@
         <div class="post-content">
             
             <div class="post-title">
-                <h3>关于我</h3>
+                <h3>Deployment 和 ReplicaSet</h3>
                 
             </div>
 
-            <h3 id="联系方式">联系方式</h3>
+            <h2 id="deployment-水平扩容和滚动更新">Deployment 水平扩容和滚动更新</h2>
+<h4 id="概念">概念</h4>
 <ul>
-<li>邮箱： <a href="mailto:moyrn@qq.com">moyrn@qq.com</a></li>
-<li>gitee: <a href="https://gitee.com/moyrn">https://gitee.com/moyrn</a></li>
+<li>
+<p>Deployment 所管理的 Pod 的 ownerReference 就是 ReplicaSet</p>
+</li>
+<li>
+<p>Deployment 会拥有多个ReplicaSet, 不同的 ReplicaSet 代表不同的版本</p>
+</li>
+<li>
+<p>关系图 <img src="/images/deployment_replicaset_pod.png" alt="avatar"></p>
+</li>
+<li>
+<p>Deployment 状态字段</p>
+<ol>
+<li>DESIRED：用户期望的 Pod 副本个数（spec.replicas 的值）；</li>
+<li>CURRENT：当前处于 Running 状态的 Pod 的个数；</li>
+<li>UP-TO-DATE：当前处于最新版本的 Pod 的个数，所谓最新版本指的是 Pod 的 Spec 部分与 Deployment 里 Pod 模板里定义的完全一致；</li>
+<li>AVAILABLE：当前已经可用的 Pod 的个数，即：既是 Running 状态，又是最新版本，并且已经处于 Ready（健康检查正确）状态的 Pod 的个数。</li>
+</ol>
+</li>
+<li>
+<p>ReplicaSet 状态字段 DESIRED、CURRENT 和 READY，与 Deployment 一致，Deployment 仅多出 UP-TO-DATE 状态</p>
+</li>
+<li>
+<p>滚动更新 RollingUpdateStrategy 在“滚动更新”的过程中永远都会确保至少有 2 个 Pod 处于可用状态，至多只有 4 个 Pod 同时存在于集群中</p>
+</li>
 </ul>
-</div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#f92672">apiVersion</span>: 
+  <span style="color:#f92672">apps/v1kind</span>: 
+    <span style="color:#f92672">Deploymentmetadata</span>: 
+      <span style="color:#f92672">name</span>: <span style="color:#ae81ff">nginx-deployment </span>
+      <span style="color:#f92672">labels</span>: 
+        <span style="color:#f92672">app</span>: <span style="color:#ae81ff">nginx</span>
+<span style="color:#f92672">spec</span>:
+<span style="color:#75715e"># ... </span>
+  <span style="color:#f92672">strategy</span>: 
+    <span style="color:#f92672">type</span>: <span style="color:#ae81ff">RollingUpdate </span>
+    <span style="color:#f92672">rollingUpdate</span>: 
+      <span style="color:#f92672">maxSurge</span>: <span style="color:#ae81ff">1</span> 
+      <span style="color:#f92672">maxUnavailable</span>: <span style="color:#ae81ff">1</span>
+</code></pre></div><h4 id="命令">命令</h4>
+<ul>
+<li>扩容</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ kubectl scale deployment nginx-deployment --replicas<span style="color:#f92672">=</span><span style="color:#ae81ff">4</span>
+</code></pre></div><ul>
+<li>滚动更新</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="color:#75715e"># --record 参数会记录下每次操作执行的命令</span>
+$ kubectl create -f nginx-deployment.yaml --record
+</code></pre></div><ul>
+<li>实时查看 Deployment 状态变化</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ kubectl rollout status deployment/nginx-deployment
+</code></pre></div><ul>
+<li>查看 ReplicaSet</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ kubectl get rs 
+</code></pre></div></div>
         <div class="post-footer">
             <div class="info">
                 
