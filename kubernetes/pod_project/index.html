@@ -51,7 +51,7 @@
     
     <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Pod 对象"/>
-<meta name="twitter:description" content="Volume  Projected Volume 将预先设置好的数据投射到容器中，  Secret  volumes: - name: mysql-cred  projected: sources: - secret: name: user  - secret: name: pass  ConfigMap   DownwardAPI   ServiceAccountToken    restartPolicy livenessProbe   只要 Pod 的 restartPolicy 指定的策略允许重启异常的容器（比如：Always），那么这个 Pod 就会保持 Running 状态，并进行容器重启。否则，Pod 就会进入 Failed 状态 。
+<meta name="twitter:description" content="Volume  Projected Volume 将预先设置好的数据投射到容器中，  Secret    volumes: - name: mysql-cred  projected: sources: - secret: name: user  - secret: name: pass - ConfigMap - DownwardAPI - ServiceAccountToken restartPolicy livenessProbe   只要 Pod 的 restartPolicy 指定的策略允许重启异常的容器（比如：Always），那么这个 Pod 就会保持 Running 状态，并进行容器重启。否则，Pod 就会进入 Failed 状态 。
   对于包含多个容器的 Pod，只有它里面所有的容器都进入异常状态后，Pod 才会进入 Failed 状态。在此之前，Pod 都是 Running 状态。此时，Pod 的 READY 字段会显示正常容器的个数，比如：
 $ kubectl get pod test-liveness-exec NAME READY STATUS RESTARTS AGE liveness-exec 0/1 Running 1 1m   livenessProbe HTTP Or TCP, 多用于Web服务健康检查, Web服务中暴露出健康检查URL"/>
 
@@ -146,6 +146,8 @@ $ kubectl get pod test-liveness-exec NAME READY STATUS RESTARTS AGE liveness-exe
 <ul>
 <li>Secret</li>
 </ul>
+</li>
+</ul>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#f92672">volumes</span>: 
 - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">mysql-cred </span>
 <span style="color:#f92672">projected</span>: 
@@ -154,18 +156,13 @@ $ kubectl get pod test-liveness-exec NAME READY STATUS RESTARTS AGE liveness-exe
     <span style="color:#f92672">name</span>: <span style="color:#ae81ff">user </span>
   - <span style="color:#f92672">secret</span>: 
     <span style="color:#f92672">name</span>: <span style="color:#ae81ff">pass</span>
-</code></pre></div><ul>
-<li>ConfigMap</li>
-</ul>
-<pre><code></code></pre><ul>
-<li>DownwardAPI</li>
-</ul>
-<pre><code></code></pre><ul>
-<li>ServiceAccountToken</li>
-</ul>
-<pre><code></code></pre></li>
-</ul>
-<h2 id="restartpolicy-livenessprobe">restartPolicy livenessProbe</h2>
+</code></pre></div><pre><code>- ConfigMap
+</code></pre>
+<pre><code></code></pre><pre><code>- DownwardAPI
+</code></pre>
+<pre><code></code></pre><pre><code>- ServiceAccountToken
+</code></pre>
+<pre><code></code></pre><h2 id="restartpolicy-livenessprobe">restartPolicy livenessProbe</h2>
 <ol>
 <li>
 <p>只要 Pod 的 restartPolicy 指定的策略允许重启异常的容器（比如：Always），那么这个 Pod 就会保持 Running 状态，并进行容器重启。否则，Pod 就会进入 Failed 状态 。</p>
