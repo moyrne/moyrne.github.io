@@ -6,7 +6,31 @@
     <description>Recent content on Moyrne Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Sun, 07 Feb 2021 13:56:54 +0800</lastBuildDate><atom:link href="https://blog.moyrn.com/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 13 Feb 2021 22:38:54 +0800</lastBuildDate><atom:link href="https://blog.moyrn.com/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Deployment 水平扩容和滚动更新</title>
+      <link>https://blog.moyrn.com/kubernetes/rollout_uptodate/</link>
+      <pubDate>Sat, 13 Feb 2021 22:38:54 +0800</pubDate>
+      
+      <guid>https://blog.moyrn.com/kubernetes/rollout_uptodate/</guid>
+      <description>概念   Deployment 所管理的 Pod 的 ownerReference 就是 ReplicaSet
+  Deployment 会拥有多个ReplicaSet, 不同的 ReplicaSet 代表不同的版本
+  关系图   Deployment 状态字段
+ DESIRED：用户期望的 Pod 副本个数（spec.replicas 的值）； CURRENT：当前处于 Running 状态的 Pod 的个数； UP-TO-DATE：当前处于最新版本的 Pod 的个数，所谓最新版本指的是 Pod 的 Spec 部分与 Deployment 里 Pod 模板里定义的完全一致； AVAILABLE：当前已经可用的 Pod 的个数，即：既是 Running 状态，又是最新版本，并且已经处于 Ready（健康检查正确）状态的 Pod 的个数。    ReplicaSet 状态字段 DESIRED、CURRENT 和 READY，与 Deployment 一致，Deployment 仅多出 UP-TO-DATE 状态
+  滚动更新 RollingUpdateStrategy 在“滚动更新”的过程中永远都会确保至少有 2 个 Pod 处于可用状态，至多只有 4 个 Pod 同时存在于集群中 旧版本RS的Pod数量递减，新版本RS的Pod数量递增</description>
+    </item>
+    
+    <item>
+      <title>Pod 对象</title>
+      <link>https://blog.moyrn.com/kubernetes/pod_project/</link>
+      <pubDate>Fri, 12 Feb 2021 15:07:14 +0800</pubDate>
+      
+      <guid>https://blog.moyrn.com/kubernetes/pod_project/</guid>
+      <description>Volume  Projected Volume 将预先设置好的数据投射到容器中，  Secret    volumes: - name: mysql-cred  projected: sources: - secret: name: user  - secret: name: pass - ConfigMap - DownwardAPI - ServiceAccountToken restartPolicy livenessProbe   只要 Pod 的 restartPolicy 指定的策略允许重启异常的容器（比如：Always），那么这个 Pod 就会保持 Running 状态，并进行容器重启。否则，Pod 就会进入 Failed 状态 。
+  对于包含多个容器的 Pod，只有它里面所有的容器都进入异常状态后，Pod 才会进入 Failed 状态。在此之前，Pod 都是 Running 状态。此时，Pod 的 READY 字段会显示正常容器的个数，比如：
+$ kubectl get pod test-liveness-exec NAME READY STATUS RESTARTS AGE liveness-exec 0/1 Running 1 1m   livenessProbe HTTP Or TCP, 多用于Web服务健康检查, Web服务中暴露出健康检查URL</description>
+    </item>
+    
     <item>
       <title>Kubeadm 搭建K8s集群</title>
       <link>https://blog.moyrn.com/kubernetes/kubeadm_start/</link>
@@ -24,8 +48,10 @@
       <guid>https://blog.moyrn.com/kubernetes/before_start/</guid>
       <description>CPU
 CGroup 设置cpu可使用时间   文件系统隔离
-Mount NameSpace + mount(&amp;quot;none&amp;quot;,&amp;quot;/tmp&amp;quot;,&amp;quot;tmpfs&amp;quot;,0,&amp;quot;&amp;quot;)   为 结点 打上污点 禁止其它Pod在结点上启动
-  kubectl taint nodes node1 foo=bar:NoSchedule 还在学习的路上 。。。。。。</description>
+Mount NameSpace + mount(&amp;#34;none&amp;#34;,&amp;#34;/tmp&amp;#34;,&amp;#34;tmpfs&amp;#34;,0,&amp;#34;&amp;#34;)   为 结点 打上污点 禁止其它Pod在结点上启动
+kubectl taint nodes node1 foo=bar:NoSchedule   rook 安装 按顺序执行以下命令
+$ kubectl apply -f https://raw.githubusercontent.com/rook/rook/master/cluster/examples/kubernetes/ceph/common.yaml $ kubectl apply -f https://raw.githubusercontent.com/rook/rook/master/cluster/examples/kubernetes/ceph/operator.yaml # 在 apply cluster.yaml 之前, 需要先apply crds.yaml, 否则会报错 no matches for kind &amp;#34;CephCluster&amp;#34; in version &amp;#34;ceph.rook.io/v1&amp;#34; $ kubectl apply -f https://raw.githubusercontent.com/rook/rook/master/cluster/examples/kubernetes/ceph/crds.yaml $ kubectl apply -f https://raw.githubusercontent.com/rook/rook/master/cluster/examples/kubernetes/ceph/cluster.yaml   [20210211] docker 多阶段构建,减小体积（示例）
+FROMgolang:1.15 ENV GOPROXY=https://goproxy.</description>
     </item>
     
     <item>
@@ -84,11 +110,11 @@ Mount NameSpace + mount(&amp;quot;none&amp;quot;,&amp;quot;/tmp&amp;quot;,&amp;q
     
     <item>
       <title>GORM 使用</title>
-      <link>https://blog.moyrn.com/database/gorm/</link>
+      <link>https://blog.moyrn.com/golang/gorm/</link>
       <pubDate>Wed, 27 Jan 2021 11:53:34 +0800</pubDate>
       
-      <guid>https://blog.moyrn.com/database/gorm/</guid>
-      <description>MYSQL 悲观锁 tx := db.DB.Begin() if err := tx.Set(&amp;quot;gorm:query_option&amp;quot;, &amp;quot;FOR UPDATE&amp;quot;). Where(&amp;quot;`xx` = ? and `xxx` = ?&amp;quot;, xx, xxx). First(&amp;amp;xx).Error; err != nil { tx.Rollback() return } 在事务中使用 Set(&amp;quot;gorm:query_option&amp;quot;, &amp;quot;FOR UPDATE&amp;quot;) + first 能将查询的这条记录锁住； 在事务 rollback 或 commit 后会 unlock。   创建复合主键(当主键涉及自增时) gorm:&amp;quot;primary_key;AUTO_INCREMENT:false&amp;quot;  连接数据库 步骤分析  引入mysql数据库驱动 引入gorm包 读取配置文件中的数据库信息 将读取的数据生成为Open()需要的字符串  代码示例 package base import ( _ &amp;quot;github.com/go-sql-driver/mysql&amp;quot; _ &amp;quot;github.com/jinzhu/gorm/dialects/mysql&amp;quot; &amp;quot;github.com/jinzhu/gorm&amp;quot; &amp;quot;fmt&amp;quot; &amp;quot;log&amp;quot; ) func DBConnect() { user := &amp;quot;user&amp;quot; password := &amp;quot;password&amp;quot; dbname := &amp;quot;dbname&amp;quot; address := &amp;quot;address&amp;quot; port := &amp;quot;port&amp;quot; str := fmt.</description>
+      <guid>https://blog.moyrn.com/golang/gorm/</guid>
+      <description>MYSQL 悲观锁 tx := db.DB.Begin()if err := tx.Set(&amp;quot;gorm:query_option&amp;quot;, &amp;quot;FOR UPDATE&amp;quot;).Where(&amp;quot;`xx` = ? and `xxx` = ?&amp;quot;, xx, xxx).First(&amp;amp;xx).Error; err != nil {tx.Rollback()return}在事务中使用 Set(&amp;quot;gorm:query_option&amp;quot;, &amp;quot;FOR UPDATE&amp;quot;) + first 能将查询的这条记录锁住；在事务 rollback 或 commit 后会 unlock。  创建复合主键(当主键涉及自增时) gorm:&amp;quot;primary_key;AUTO_INCREMENT:false&amp;quot; 连接数据库 步骤分析  引入mysql数据库驱动 引入gorm包 读取配置文件中的数据库信息 将读取的数据生成为Open()需要的字符串  代码示例 package baseimport (_ &amp;quot;github.com/go-sql-driver/mysql&amp;quot;_ &amp;quot;github.com/jinzhu/gorm/dialects/mysql&amp;quot;&amp;quot;github.com/jinzhu/gorm&amp;quot;&amp;quot;fmt&amp;quot;&amp;quot;log&amp;quot;)func DBConnect() {user := &amp;quot;user&amp;quot;password := &amp;quot;password&amp;quot;dbname := &amp;quot;dbname&amp;quot;address := &amp;quot;address&amp;quot;port := &amp;quot;port&amp;quot;str := fmt.</description>
     </item>
     
     <item>
