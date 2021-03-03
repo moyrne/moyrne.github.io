@@ -3,12 +3,17 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>https://blog.moyrn.com/kubernetes/rollout_uptodate/</loc>
+    <loc>https://blog.moyrn.com/blogs/</loc>
     <lastmod>2021-02-13T22:38:54+08:00</lastmod>
   </url>
   
   <url>
-    <loc>https://blog.moyrn.com/kubernetes/</loc>
+    <loc>https://blog.moyrn.com/blogs/rollout_uptodate/</loc>
+    <lastmod>2021-02-13T22:38:54+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://blog.moyrn.com/tags/kubernetes/</loc>
     <lastmod>2021-02-13T22:38:54+08:00</lastmod>
   </url>
   
@@ -18,17 +23,22 @@
   </url>
   
   <url>
-    <loc>https://blog.moyrn.com/kubernetes/pod_project/</loc>
+    <loc>https://blog.moyrn.com/tags/</loc>
+    <lastmod>2021-02-13T22:38:54+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://blog.moyrn.com/blogs/pod_project/</loc>
     <lastmod>2021-02-12T15:07:14+08:00</lastmod>
   </url>
   
   <url>
-    <loc>https://blog.moyrn.com/kubernetes/kubeadm_start/</loc>
+    <loc>https://blog.moyrn.com/blogs/kubeadm_start/</loc>
     <lastmod>2021-02-07T13:56:54+08:00</lastmod>
   </url>
   
   <url>
-    <loc>https://blog.moyrn.com/kubernetes/before_start/</loc>
+    <loc>https://blog.moyrn.com/blogs/before_start/</loc>
     <lastmod>2021-02-06T10:13:46+08:00</lastmod>
   </url>
   
@@ -38,52 +48,68 @@
   </url>
   
   <url>
-    <loc>https://blog.moyrn.com/golang/</loc>
+    <loc>https://blog.moyrn.com/tags/benchmark/</loc>
     <lastmod>2021-01-28T13:31:45+08:00</lastmod>
   </url>
   
   <url>
-    <loc>https://blog.moyrn.com/golang/string_join_benchmark/</loc>
+    <loc>https://blog.moyrn.com/tags/golang/</loc>
     <lastmod>2021-01-28T13:31:45+08:00</lastmod>
   </url>
   
   <url>
-    <loc>https://blog.moyrn.com/tools/nginx_proxy/</loc>
+    <loc>https://blog.moyrn.com/blogs/string_join_benchmark/</loc>
+    <lastmod>2021-01-28T13:31:45+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://blog.moyrn.com/tags/nginx/</loc>
     <lastmod>2021-01-27T13:34:41+08:00</lastmod>
   </url>
   
   <url>
-    <loc>https://blog.moyrn.com/tools/</loc>
+    <loc>https://blog.moyrn.com/blogs/nginx_proxy/</loc>
     <lastmod>2021-01-27T13:34:41+08:00</lastmod>
   </url>
   
   <url>
-    <loc>https://blog.moyrn.com/golang/time_after_oom/</loc>
+    <loc>https://blog.moyrn.com/tags/memory/</loc>
     <lastmod>2021-01-27T13:04:41+08:00</lastmod>
   </url>
   
   <url>
-    <loc>https://blog.moyrn.com/golang/http_file/</loc>
+    <loc>https://blog.moyrn.com/blogs/time_after_oom/</loc>
+    <lastmod>2021-01-27T13:04:41+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://blog.moyrn.com/blogs/http_file/</loc>
     <lastmod>2021-01-27T13:02:39+08:00</lastmod>
   </url>
   
   <url>
-    <loc>https://blog.moyrn.com/golang/build/</loc>
+    <loc>https://blog.moyrn.com/tags/build/</loc>
     <lastmod>2021-01-27T12:04:51+08:00</lastmod>
   </url>
   
   <url>
-    <loc>https://blog.moyrn.com/golang/gorm/</loc>
+    <loc>https://blog.moyrn.com/blogs/build/</loc>
+    <lastmod>2021-01-27T12:04:51+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://blog.moyrn.com/blogs/gorm/</loc>
     <lastmod>2021-01-27T11:53:34+08:00</lastmod>
   </url>
   
   <url>
-    <loc>https://blog.moyrn.com/tools/vscode/</loc>
+    <loc>https://blog.moyrn.com/blogs/vscode/</loc>
     <lastmod>2021-01-27T10:01:06+08:00</lastmod>
   </url>
   
   <url>
-    <loc>https://blog.moyrn.com/tags/</loc>
+    <loc>https://blog.moyrn.com/tags/vscode/</loc>
+    <lastmod>2021-01-27T10:01:06+08:00</lastmod>
   </url>
   
 </urlset>
