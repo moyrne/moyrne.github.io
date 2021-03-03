@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Blogs on Moyrne&#39;Blog</title>
+    <link>https://blog.moyrn.com/blogs/</link>
+    <description>Recent content in Blogs on Moyrne&#39;Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
+    <lastBuildDate>Sat, 13 Feb 2021 22:38:54 +0800</lastBuildDate><atom:link href="https://blog.moyrn.com/blogs/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Deployment 水平扩容和滚动更新</title>
+      <link>https://blog.moyrn.com/blogs/rollout_uptodate/</link>
+      <pubDate>Sat, 13 Feb 2021 22:38:54 +0800</pubDate>
+      
+      <guid>https://blog.moyrn.com/blogs/rollout_uptodate/</guid>
+      <description>概念   Deployment 所管理的 Pod 的 ownerReference 就是 ReplicaSet
+  Deployment 会拥有多个ReplicaSet, 不同的 ReplicaSet 代表不同的版本
+  关系图   Deployment 状态字段
+ DESIRED：用户期望的 Pod 副本个数（spec.replicas 的值）； CURRENT：当前处于 Running 状态的 Pod 的个数； UP-TO-DATE：当前处于最新版本的 Pod 的个数，所谓最新版本指的是 Pod 的 Spec 部分与 Deployment 里 Pod 模板里定义的完全一致； AVAILABLE：当前已经可用的 Pod 的个数，即：既是 Running 状态，又是最新版本，并且已经处于 Ready（健康检查正确）状态的 Pod 的个数。    ReplicaSet 状态字段 DESIRED、CURRENT 和 READY，与 Deployment 一致，Deployment 仅多出 UP-TO-DATE 状态
+  滚动更新 RollingUpdateStrategy 在“滚动更新”的过程中永远都会确保至少有 2 个 Pod 处于可用状态，至多只有 4 个 Pod 同时存在于集群中 旧版本RS的Pod数量递减，新版本RS的Pod数量递增</description>
+    </item>
+    
+    <item>
+      <title>Pod 对象</title>
+      <link>https://blog.moyrn.com/blogs/pod_project/</link>
+      <pubDate>Fri, 12 Feb 2021 15:07:14 +0800</pubDate>
+      
+      <guid>https://blog.moyrn.com/blogs/pod_project/</guid>
+      <description>Volume  Projected Volume 将预先设置好的数据投射到容器中，  Secret    volumes:- name:mysql-cred projected:sources:- secret:name:user - secret:name:pass- ConfigMap - DownwardAPI - ServiceAccountToken restartPolicy livenessProbe   只要 Pod 的 restartPolicy 指定的策略允许重启异常的容器（比如：Always），那么这个 Pod 就会保持 Running 状态，并进行容器重启。否则，Pod 就会进入 Failed 状态 。
+  对于包含多个容器的 Pod，只有它里面所有的容器都进入异常状态后，Pod 才会进入 Failed 状态。在此之前，Pod 都是 Running 状态。此时，Pod 的 READY 字段会显示正常容器的个数，比如：
+$ kubectl get pod test-liveness-exec NAME READY STATUS RESTARTS AGE liveness-exec 0/1 Running 1 1m   livenessProbe HTTP Or TCP, 多用于Web服务健康检查, Web服务中暴露出健康检查URL</description>
+    </item>
+    
+    <item>
+      <title>Kubeadm 搭建K8s集群</title>
+      <link>https://blog.moyrn.com/blogs/kubeadm_start/</link>
+      <pubDate>Sun, 07 Feb 2021 13:56:54 +0800</pubDate>
+      
+      <guid>https://blog.moyrn.com/blogs/kubeadm_start/</guid>
+      <description>前置操作 (每台机器上都需要操作)  使用系统 Centos 7  cat /etc/redhat-release CentOS Linux release 7.9.2009 (Core)  关闭防火墙  systemctl stop firewalld &amp;amp;&amp;amp; systemctl disable firewalld  禁用SELINUX  vim /etc/selinux/config # 或者修改/etc/sysconfig/selinux SELINUX=disabled  修改 k8s.conf  cat &amp;lt;&amp;lt;EOF &amp;gt; /etc/sysctl.d/k8s.conf net.bridge.bridge-nf-call-ip6tables = 1 net.bridge.bridge-nf-call-iptables = 1 EOF sysctl --system  关闭 swap  swapoff -a vim /etc/fstab # 注释掉以下字段 /dev/mapper/cl-swap swap swap defaults 0 0 reboot  使用yum安装 docker-ce docker-ce-selinux  # step 1: 安装必要的一些系统工具 sudo yum install -y yum-utils device-mapper-persistent-data lvm2 # Step 2: 添加软件源信息 sudo yum-config-manager --add-repo http://mirrors.</description>
+    </item>
+    
+    <item>
+      <title>Kubernetes入门-基础</title>
+      <link>https://blog.moyrn.com/blogs/before_start/</link>
+      <pubDate>Sat, 06 Feb 2021 10:13:46 +0800</pubDate>
+      
+      <guid>https://blog.moyrn.com/blogs/before_start/</guid>
+      <description>CPU
+CGroup 设置cpu可使用时间   文件系统隔离
+Mount NameSpace + mount(&amp;#34;none&amp;#34;,&amp;#34;/tmp&amp;#34;,&amp;#34;tmpfs&amp;#34;,0,&amp;#34;&amp;#34;)   为 结点 打上污点 禁止其它Pod在结点上启动
+kubectl taint nodes node1 foo=bar:NoSchedule   rook 安装 按顺序执行以下命令
+$ kubectl apply -f https://raw.githubusercontent.com/rook/rook/master/cluster/examples/kubernetes/ceph/common.yaml $ kubectl apply -f https://raw.githubusercontent.com/rook/rook/master/cluster/examples/kubernetes/ceph/operator.yaml # 在 apply cluster.yaml 之前, 需要先apply crds.yaml, 否则会报错 no matches for kind &amp;#34;CephCluster&amp;#34; in version &amp;#34;ceph.rook.io/v1&amp;#34; $ kubectl apply -f https://raw.githubusercontent.com/rook/rook/master/cluster/examples/kubernetes/ceph/crds.yaml $ kubectl apply -f https://raw.githubusercontent.com/rook/rook/master/cluster/examples/kubernetes/ceph/cluster.yaml   [20210211] docker 多阶段构建,减小体积（示例）
+FROMgolang:1.15 ENV GOPROXY=https://goproxy.</description>
+    </item>
+    
+    <item>
+      <title>字符串拼接性能测试</title>
+      <link>https://blog.moyrn.com/blogs/string_join_benchmark/</link>
+      <pubDate>Thu, 28 Jan 2021 13:31:45 +0800</pubDate>
+      
+      <guid>https://blog.moyrn.com/blogs/string_join_benchmark/</guid>
+      <description>// splicing_test.go package splicing import ( &amp;#34;strconv&amp;#34; &amp;#34;strings&amp;#34; &amp;#34;testing&amp;#34; ) func Str(str []string) string { var rst string for _, s := range str { rst += s } return rst } func BuilderStr(str []string) string { var builder strings.Builder for _, s := range str { builder.WriteString(s) } return builder.String() } func BenchmarkStr(b *testing.B) { srcStr := make([]string, 0, 100000) b.Run(&amp;#34;Append-10000&amp;#34;, func(b *testing.B) { for i := 0; i &amp;lt; 10000; i++ { srcStr = append(srcStr, strconv.</description>
+    </item>
+    
+    <item>
+      <title>Nginx 反向代理</title>
+      <link>https://blog.moyrn.com/blogs/nginx_proxy/</link>
+      <pubDate>Wed, 27 Jan 2021 13:34:41 +0800</pubDate>
+      
+      <guid>https://blog.moyrn.com/blogs/nginx_proxy/</guid>
+      <description>将静态文件交给nginx代理 配置文件位置 /etc/nginx/conf.d/default.conf  server { listen 80; server_name www.moyrn.com; location / { root /usr/share/nginx/webmonitor; index index.html; } } 通过不同的域名，将80端口的消息转发到其他端口 server { listen 80; server_name go.moyrn.com; location / { proxy_pass http://127.0.0.1:8080; } } server { listen 80; server_name moyrn.com; location / { proxy_pass http://127.0.0.1:8086; } } server { listen 80; server_name www.moyrn.com; location / { proxy_pass http://127.0.0.1:8086; } } </description>
+    </item>
+    
+    <item>
+      <title>time.After() 导致内存暴涨</title>
+      <link>https://blog.moyrn.com/blogs/time_after_oom/</link>
+      <pubDate>Wed, 27 Jan 2021 13:04:41 +0800</pubDate>
+      
+      <guid>https://blog.moyrn.com/blogs/time_after_oom/</guid>
+      <description>select + time.After 导致内存暴涨 func Function(notRun notRun) { for { select { case &amp;lt;-notRun.notRun: // 大多数情况都是有notRun的输入 	case &amp;lt;-time.After(time.Minute): notRun.Close() continue case &amp;lt;-notRun.run: notRun.Close() return } } }  notRun 发送消息频率过快，而每次select都会调用到time.After，而time.After又会NewTimer，而每次NewTimer都必须在1分钟后才能释放。 当notRun的频率很高时，会在内存中堆积非常多的无用的Timer。导致内存暴涨。  解决方法 func Function(notRun notRun) { afterTime := time.Minute after := time.NewTimer(afterTime) defer after.Stop() for { after.Reset(afterTime) select { case &amp;lt;-notRun.notRun: case &amp;lt;-after.C: notRun.Close() continue case &amp;lt;-notRun.run: notRun.Close() return } } }  自己 NewTimer 在每次 select 之前 reset，使 timer 重新计时，从而避免每次都 new timer。  </description>
+    </item>
+    
+    <item>
+      <title>Golang HTTP包传输文件</title>
+      <link>https://blog.moyrn.com/blogs/http_file/</link>
+      <pubDate>Wed, 27 Jan 2021 13:02:39 +0800</pubDate>
+      
+      <guid>https://blog.moyrn.com/blogs/http_file/</guid>
+      <description>文件传输 Content-Type http://tool.oschina.net/commons?type=22013-05-17 multipart/form-data： 既可以提交普通键值对，也可以提交(多个)文件键值对。 application/octet-stream： 只能提交二进制，而且只能提交一个二进制，如果提交文件的话，只能提交一个文件,后台接收参数只能有一个，而且只能是流（或者字节数组） application/x-www-form-urlencoded 不属于http content-type规范，通常用于浏览器表单提交，数据组织格式:name1=value1&amp;amp;name2=value2,post时会放入http body，get时，显示在在地址栏。  // golang 实现  W.Header().Add(&amp;#34;Content-Type&amp;#34;,&amp;#34;application/octet-stream&amp;#34;) W.Header().Add(&amp;#34;Content-Disposition&amp;#34;,fmt.Sprintf(&amp;#34;attachment; filename=\&amp;#34;%s\&amp;#34;&amp;#34;, fileName)) </description>
+    </item>
+    
+    <item>
+      <title>Golang 编译</title>
+      <link>https://blog.moyrn.com/blogs/build/</link>
+      <pubDate>Wed, 27 Jan 2021 12:04:51 +0800</pubDate>
+      
+      <guid>https://blog.moyrn.com/blogs/build/</guid>
+      <description>编译 编译其他系统 CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build # 不能复制空格 set CGO_ENABLED=0 set GOOS=linux set GOARCH=amd64 go build  图标制作 第一步： Windows 下载MinGW 第二步： 新建一个.rc文件，加入文件名为 demo.rc 输入内容 IDI_ICON1 ICON &amp;quot;cefclient.ico&amp;quot; 其中 cefclient.ico 是你的ico的地址 第三步: MinGW 执行 windres -o demo.syso demo.rc 第四步: 将生成的demo.syso 放到项目目录下 go build  隐藏命令行 go build -i -ldflags=&amp;quot;-H windowsgui&amp;quot; </description>
+    </item>
+    
+    <item>
+      <title>GORM 使用</title>
+      <link>https://blog.moyrn.com/blogs/gorm/</link>
+      <pubDate>Wed, 27 Jan 2021 11:53:34 +0800</pubDate>
+      
+      <guid>https://blog.moyrn.com/blogs/gorm/</guid>
+      <description>MYSQL 悲观锁 tx := db.DB.Begin()if err := tx.Set(&amp;quot;gorm:query_option&amp;quot;, &amp;quot;FOR UPDATE&amp;quot;).Where(&amp;quot;`xx` = ? and `xxx` = ?&amp;quot;, xx, xxx).First(&amp;amp;xx).Error; err != nil {tx.Rollback()return}在事务中使用 Set(&amp;quot;gorm:query_option&amp;quot;, &amp;quot;FOR UPDATE&amp;quot;) + first 能将查询的这条记录锁住；在事务 rollback 或 commit 后会 unlock。  创建复合主键(当主键涉及自增时) gorm:&amp;quot;primary_key;AUTO_INCREMENT:false&amp;quot; 连接数据库 步骤分析  引入mysql数据库驱动 引入gorm包 读取配置文件中的数据库信息 将读取的数据生成为Open()需要的字符串  代码示例 package baseimport (_ &amp;quot;github.com/go-sql-driver/mysql&amp;quot;_ &amp;quot;github.com/jinzhu/gorm/dialects/mysql&amp;quot;&amp;quot;github.com/jinzhu/gorm&amp;quot;&amp;quot;fmt&amp;quot;&amp;quot;log&amp;quot;)func DBConnect() {user := &amp;quot;user&amp;quot;password := &amp;quot;password&amp;quot;dbname := &amp;quot;dbname&amp;quot;address := &amp;quot;address&amp;quot;port := &amp;quot;port&amp;quot;str := fmt.</description>
+    </item>
+    
+  </channel>
+</rss>
