@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>golang on Moyrne&#39;Blog</title>
+    <link>https://blog.moyrn.com/tags/golang/</link>
+    <description>Recent content in golang on Moyrne&#39;Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
+    <lastBuildDate>Thu, 28 Jan 2021 13:31:45 +0800</lastBuildDate><atom:link href="https://blog.moyrn.com/tags/golang/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>字符串拼接性能测试</title>
+      <link>https://blog.moyrn.com/blogs/string_join_benchmark/</link>
+      <pubDate>Thu, 28 Jan 2021 13:31:45 +0800</pubDate>
+      
+      <guid>https://blog.moyrn.com/blogs/string_join_benchmark/</guid>
+      <description>// splicing_test.go package splicing import ( &amp;#34;strconv&amp;#34; &amp;#34;strings&amp;#34; &amp;#34;testing&amp;#34; ) func Str(str []string) string { var rst string for _, s := range str { rst += s } return rst } func BuilderStr(str []string) string { var builder strings.Builder for _, s := range str { builder.WriteString(s) } return builder.String() } func BenchmarkStr(b *testing.B) { srcStr := make([]string, 0, 100000) b.Run(&amp;#34;Append-10000&amp;#34;, func(b *testing.B) { for i := 0; i &amp;lt; 10000; i++ { srcStr = append(srcStr, strconv.</description>
+    </item>
+    
+    <item>
+      <title>time.After() 导致内存暴涨</title>
+      <link>https://blog.moyrn.com/blogs/time_after_oom/</link>
+      <pubDate>Wed, 27 Jan 2021 13:04:41 +0800</pubDate>
+      
+      <guid>https://blog.moyrn.com/blogs/time_after_oom/</guid>
+      <description>select + time.After 导致内存暴涨 func Function(notRun notRun) { for { select { case &amp;lt;-notRun.notRun: // 大多数情况都是有notRun的输入 	case &amp;lt;-time.After(time.Minute): notRun.Close() continue case &amp;lt;-notRun.run: notRun.Close() return } } }  notRun 发送消息频率过快，而每次select都会调用到time.After，而time.After又会NewTimer，而每次NewTimer都必须在1分钟后才能释放。 当notRun的频率很高时，会在内存中堆积非常多的无用的Timer。导致内存暴涨。  解决方法 func Function(notRun notRun) { afterTime := time.Minute after := time.NewTimer(afterTime) defer after.Stop() for { after.Reset(afterTime) select { case &amp;lt;-notRun.notRun: case &amp;lt;-after.C: notRun.Close() continue case &amp;lt;-notRun.run: notRun.Close() return } } }  自己 NewTimer 在每次 select 之前 reset，使 timer 重新计时，从而避免每次都 new timer。  </description>
+    </item>
+    
+    <item>
+      <title>Golang HTTP包传输文件</title>
+      <link>https://blog.moyrn.com/blogs/http_file/</link>
+      <pubDate>Wed, 27 Jan 2021 13:02:39 +0800</pubDate>
+      
+      <guid>https://blog.moyrn.com/blogs/http_file/</guid>
+      <description>文件传输 Content-Type http://tool.oschina.net/commons?type=22013-05-17multipart/form-data：既可以提交普通键值对，也可以提交(多个)文件键值对。application/octet-stream：只能提交二进制，而且只能提交一个二进制，如果提交文件的话，只能提交一个文件,后台接收参数只能有一个，而且只能是流（或者字节数组）application/x-www-form-urlencoded不属于http content-type规范，通常用于浏览器表单提交，数据组织格式:name1=value1&amp;amp;name2=value2,post时会放入http body，get时，显示在在地址栏。 // golang 实现  W.Header().Add(&amp;#34;Content-Type&amp;#34;,&amp;#34;application/octet-stream&amp;#34;) W.Header().Add(&amp;#34;Content-Disposition&amp;#34;,fmt.Sprintf(&amp;#34;attachment; filename=\&amp;#34;%s\&amp;#34;&amp;#34;, fileName)) </description>
+    </item>
+    
+    <item>
+      <title>Golang 编译</title>
+      <link>https://blog.moyrn.com/blogs/build/</link>
+      <pubDate>Wed, 27 Jan 2021 12:04:51 +0800</pubDate>
+      
+      <guid>https://blog.moyrn.com/blogs/build/</guid>
+      <description>编译 编译其他系统 CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build# 不能复制空格set CGO_ENABLED=0set GOOS=linuxset GOARCH=amd64go build 图标制作 第一步：Windows 下载MinGW第二步：新建一个.rc文件，加入文件名为 demo.rc 输入内容 IDI_ICON1 ICON &amp;quot;cefclient.ico&amp;quot;其中 cefclient.ico 是你的ico的地址第三步:MinGW 执行windres -o demo.syso demo.rc第四步:将生成的demo.syso 放到项目目录下go build 隐藏命令行 go build -i -ldflags=&amp;quot;-H windowsgui&amp;quot; </description>
+    </item>
+    
+    <item>
+      <title>GORM 使用</title>
+      <link>https://blog.moyrn.com/blogs/gorm/</link>
+      <pubDate>Wed, 27 Jan 2021 11:53:34 +0800</pubDate>
+      
+      <guid>https://blog.moyrn.com/blogs/gorm/</guid>
+      <description>MYSQL 悲观锁 tx := db.DB.Begin()if err := tx.Set(&amp;quot;gorm:query_option&amp;quot;, &amp;quot;FOR UPDATE&amp;quot;).Where(&amp;quot;`xx` = ? and `xxx` = ?&amp;quot;, xx, xxx).First(&amp;amp;xx).Error; err != nil {tx.Rollback()return}在事务中使用 Set(&amp;quot;gorm:query_option&amp;quot;, &amp;quot;FOR UPDATE&amp;quot;) + first 能将查询的这条记录锁住；在事务 rollback 或 commit 后会 unlock。  创建复合主键(当主键涉及自增时) gorm:&amp;quot;primary_key;AUTO_INCREMENT:false&amp;quot; 连接数据库 步骤分析  引入mysql数据库驱动 引入gorm包 读取配置文件中的数据库信息 将读取的数据生成为Open()需要的字符串  代码示例 package baseimport (_ &amp;quot;github.com/go-sql-driver/mysql&amp;quot;_ &amp;quot;github.com/jinzhu/gorm/dialects/mysql&amp;quot;&amp;quot;github.com/jinzhu/gorm&amp;quot;&amp;quot;fmt&amp;quot;&amp;quot;log&amp;quot;)func DBConnect() {user := &amp;quot;user&amp;quot;password := &amp;quot;password&amp;quot;dbname := &amp;quot;dbname&amp;quot;address := &amp;quot;address&amp;quot;port := &amp;quot;port&amp;quot;str := fmt.</description>
+    </item>
+    
+  </channel>
+</rss>
