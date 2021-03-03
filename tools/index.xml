@@ -1,29 +1,0 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title>Tools on Moyrne Blog</title>
-    <link>https://blog.moyrn.com/tools/</link>
-    <description>Recent content in Tools on Moyrne Blog</description>
-    <generator>Hugo -- gohugo.io</generator>
-    <language>zh-CN</language>
-    <lastBuildDate>Wed, 27 Jan 2021 13:34:41 +0800</lastBuildDate><atom:link href="https://blog.moyrn.com/tools/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>Nginx 反向代理</title>
-      <link>https://blog.moyrn.com/tools/nginx_proxy/</link>
-      <pubDate>Wed, 27 Jan 2021 13:34:41 +0800</pubDate>
-      
-      <guid>https://blog.moyrn.com/tools/nginx_proxy/</guid>
-      <description>将静态文件交给nginx代理 配置文件位置 /etc/nginx/conf.d/default.conf server {listen 80;server_name www.moyrn.com;location / {root /usr/share/nginx/webmonitor;index index.html;}}通过不同的域名，将80端口的消息转发到其他端口 server {listen 80;server_name go.moyrn.com;location / {proxy_pass http://127.0.0.1:8080;}}server {listen 80;server_name moyrn.com;location / {proxy_pass http://127.0.0.1:8086;}}server {listen 80;server_name www.moyrn.com;location / {proxy_pass http://127.0.0.1:8086;}}</description>
-    </item>
-    
-    <item>
-      <title>Vscode</title>
-      <link>https://blog.moyrn.com/tools/vscode/</link>
-      <pubDate>Wed, 27 Jan 2021 10:01:06 +0800</pubDate>
-      
-      <guid>https://blog.moyrn.com/tools/vscode/</guid>
-      <description>VSCode 用户代码片段 Golang {&amp;quot;main&amp;quot;: {&amp;quot;prefix&amp;quot;: &amp;quot;main&amp;quot;,&amp;quot;body&amp;quot;: [&amp;quot;func main() {&amp;quot;,&amp;quot;\t$0&amp;quot;,&amp;quot;}&amp;quot;],&amp;quot;description&amp;quot;: &amp;quot;func main() {}&amp;quot;},&amp;quot;init&amp;quot;: {&amp;quot;prefix&amp;quot;: &amp;quot;init&amp;quot;,&amp;quot;body&amp;quot;: [&amp;quot;func init() {&amp;quot;,&amp;quot;\t$0&amp;quot;,&amp;quot;}&amp;quot;],&amp;quot;description&amp;quot;: &amp;quot;func init() {}&amp;quot;},&amp;quot;for range&amp;quot;: {&amp;quot;prefix&amp;quot;: &amp;quot;forr&amp;quot;,&amp;quot;body&amp;quot;: [&amp;quot;for ${1:i},${2:v} := range $3 {&amp;quot;,&amp;quot;\t$0&amp;quot;,&amp;quot;}&amp;quot;],&amp;quot;description&amp;quot;: &amp;quot;for range&amp;quot;},&amp;quot;for index&amp;quot; : {&amp;quot;prefix&amp;quot;: &amp;quot;fori&amp;quot;,&amp;quot;body&amp;quot;: [&amp;quot;for ${1:i}:=${2:0};${1:i}${3:&amp;lt;}${4:n};${1:i}${5:++} {&amp;quot;,&amp;quot;\t$0&amp;quot;,&amp;quot;}&amp;quot;],&amp;quot;description&amp;quot;: &amp;quot;for index&amp;quot;},&amp;quot;if err := xxx();err !</description>
-    </item>
-    
-  </channel>
-</rss>

@@ -8,7 +8,14 @@
 	<meta name="theme-color" content="#494f5c">
 	<meta name="msapplication-TileColor" content="#494f5c">
 <meta itemprop="name" content="Golang HTTP包传输文件">
-<meta itemprop="description" content="文件传输 Content-Type http://tool.oschina.net/commons?type=22013-05-17multipart/form-data：既可以提交普通键值对，也可以提交(多个)文件键值对。application/octet-stream：只能提交二进制，而且只能提交一个二进制，如果提交文件的话，只能提交一个文件,后台接收参数只能有一个，而且只能是流（或者字节数组）application/x-www-form-urlencoded不属于http content-type规范，通常用于浏览器表单提交，数据组织格式:name1=value1&amp;name2=value2,post时会放入http body，get时，显示在在地址栏。 // golang 实现  W.Header().Add(&#34;Content-Type&#34;,&#34;application/octet-stream&#34;) W.Header().Add(&#34;Content-Disposition&#34;,fmt.Sprintf(&#34;attachment; filename=\&#34;%s\&#34;&#34;, fileName)) ">
+<meta itemprop="description" content="文件传输 Content-Type http://tool.oschina.net/commons?type=22013-05-17
+multipart/form-data：
+既可以提交普通键值对，也可以提交(多个)文件键值对。
+application/octet-stream：
+只能提交二进制，而且只能提交一个二进制，如果提交文件的话，只能提交一个文件,后台接收参数只能有一个，而且只能是流（或者字节数组）
+application/x-www-form-urlencoded
+不属于http content-type规范，通常用于浏览器表单提交，数据组织格式:name1=value1&amp;name2=value2,post时会放入http body，get时，显示在在地址栏。
+ // golang 实现  W.Header().Add(&#34;Content-Type&#34;,&#34;application/octet-stream&#34;) W.Header().Add(&#34;Content-Disposition&#34;,fmt.Sprintf(&#34;attachment; filename=\&#34;%s\&#34;&#34;, fileName)) ">
 <meta itemprop="datePublished" content="2021-01-27T13:02:39+08:00" />
 <meta itemprop="dateModified" content="2021-01-27T13:02:39+08:00" />
 <meta itemprop="wordCount" content="18">
@@ -17,14 +24,28 @@
 
 <meta itemprop="keywords" content="golang," />
 <meta property="og:title" content="Golang HTTP包传输文件" />
-<meta property="og:description" content="文件传输 Content-Type http://tool.oschina.net/commons?type=22013-05-17multipart/form-data：既可以提交普通键值对，也可以提交(多个)文件键值对。application/octet-stream：只能提交二进制，而且只能提交一个二进制，如果提交文件的话，只能提交一个文件,后台接收参数只能有一个，而且只能是流（或者字节数组）application/x-www-form-urlencoded不属于http content-type规范，通常用于浏览器表单提交，数据组织格式:name1=value1&amp;name2=value2,post时会放入http body，get时，显示在在地址栏。 // golang 实现  W.Header().Add(&#34;Content-Type&#34;,&#34;application/octet-stream&#34;) W.Header().Add(&#34;Content-Disposition&#34;,fmt.Sprintf(&#34;attachment; filename=\&#34;%s\&#34;&#34;, fileName)) " />
+<meta property="og:description" content="文件传输 Content-Type http://tool.oschina.net/commons?type=22013-05-17
+multipart/form-data：
+既可以提交普通键值对，也可以提交(多个)文件键值对。
+application/octet-stream：
+只能提交二进制，而且只能提交一个二进制，如果提交文件的话，只能提交一个文件,后台接收参数只能有一个，而且只能是流（或者字节数组）
+application/x-www-form-urlencoded
+不属于http content-type规范，通常用于浏览器表单提交，数据组织格式:name1=value1&amp;name2=value2,post时会放入http body，get时，显示在在地址栏。
+ // golang 实现  W.Header().Add(&#34;Content-Type&#34;,&#34;application/octet-stream&#34;) W.Header().Add(&#34;Content-Disposition&#34;,fmt.Sprintf(&#34;attachment; filename=\&#34;%s\&#34;&#34;, fileName)) " />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://blog.moyrn.com/blogs/http_file/" />
 <meta property="article:published_time" content="2021-01-27T13:02:39+08:00" />
 <meta property="article:modified_time" content="2021-01-27T13:02:39+08:00" />
 <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Golang HTTP包传输文件"/>
-<meta name="twitter:description" content="文件传输 Content-Type http://tool.oschina.net/commons?type=22013-05-17multipart/form-data：既可以提交普通键值对，也可以提交(多个)文件键值对。application/octet-stream：只能提交二进制，而且只能提交一个二进制，如果提交文件的话，只能提交一个文件,后台接收参数只能有一个，而且只能是流（或者字节数组）application/x-www-form-urlencoded不属于http content-type规范，通常用于浏览器表单提交，数据组织格式:name1=value1&amp;name2=value2,post时会放入http body，get时，显示在在地址栏。 // golang 实现  W.Header().Add(&#34;Content-Type&#34;,&#34;application/octet-stream&#34;) W.Header().Add(&#34;Content-Disposition&#34;,fmt.Sprintf(&#34;attachment; filename=\&#34;%s\&#34;&#34;, fileName)) "/>
+<meta name="twitter:description" content="文件传输 Content-Type http://tool.oschina.net/commons?type=22013-05-17
+multipart/form-data：
+既可以提交普通键值对，也可以提交(多个)文件键值对。
+application/octet-stream：
+只能提交二进制，而且只能提交一个二进制，如果提交文件的话，只能提交一个文件,后台接收参数只能有一个，而且只能是流（或者字节数组）
+application/x-www-form-urlencoded
+不属于http content-type规范，通常用于浏览器表单提交，数据组织格式:name1=value1&amp;name2=value2,post时会放入http body，get时，显示在在地址栏。
+ // golang 实现  W.Header().Add(&#34;Content-Type&#34;,&#34;application/octet-stream&#34;) W.Header().Add(&#34;Content-Disposition&#34;,fmt.Sprintf(&#34;attachment; filename=\&#34;%s\&#34;&#34;, fileName)) "/>
 
 	<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 	<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
