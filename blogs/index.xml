@@ -70,7 +70,7 @@ FROMgolang:1.15 ENV GOPROXY=https://goproxy.</description>
       <pubDate>Wed, 27 Jan 2021 13:34:41 +0800</pubDate>
       
       <guid>https://blog.moyrn.com/blogs/nginx_proxy/</guid>
-      <description>将静态文件交给nginx代理 配置文件位置 /etc/nginx/conf.d/default.conf server {listen 80;server_name www.moyrn.com;location / {root /usr/share/nginx/webmonitor;index index.html;}}通过不同的域名，将80端口的消息转发到其他端口 server {listen 80;server_name go.moyrn.com;location / {proxy_pass http://127.0.0.1:8080;}}server {listen 80;server_name moyrn.com;location / {proxy_pass http://127.0.0.1:8086;}}server {listen 80;server_name www.moyrn.com;location / {proxy_pass http://127.0.0.1:8086;}}</description>
+      <description>将静态文件交给nginx代理 配置文件位置 /etc/nginx/conf.d/default.conf  server { listen 80; server_name www.moyrn.com; location / { root /usr/share/nginx/webmonitor; index index.html; } } 通过不同的域名，将80端口的消息转发到其他端口 server { listen 80; server_name go.moyrn.com; location / { proxy_pass http://127.0.0.1:8080; } } server { listen 80; server_name moyrn.com; location / { proxy_pass http://127.0.0.1:8086; } } server { listen 80; server_name www.moyrn.com; location / { proxy_pass http://127.0.0.1:8086; } } </description>
     </item>
     
     <item>
@@ -88,7 +88,7 @@ FROMgolang:1.15 ENV GOPROXY=https://goproxy.</description>
       <pubDate>Wed, 27 Jan 2021 13:02:39 +0800</pubDate>
       
       <guid>https://blog.moyrn.com/blogs/http_file/</guid>
-      <description>文件传输 Content-Type http://tool.oschina.net/commons?type=22013-05-17multipart/form-data：既可以提交普通键值对，也可以提交(多个)文件键值对。application/octet-stream：只能提交二进制，而且只能提交一个二进制，如果提交文件的话，只能提交一个文件,后台接收参数只能有一个，而且只能是流（或者字节数组）application/x-www-form-urlencoded不属于http content-type规范，通常用于浏览器表单提交，数据组织格式:name1=value1&amp;amp;name2=value2,post时会放入http body，get时，显示在在地址栏。 // golang 实现  W.Header().Add(&amp;#34;Content-Type&amp;#34;,&amp;#34;application/octet-stream&amp;#34;) W.Header().Add(&amp;#34;Content-Disposition&amp;#34;,fmt.Sprintf(&amp;#34;attachment; filename=\&amp;#34;%s\&amp;#34;&amp;#34;, fileName)) </description>
+      <description>文件传输 Content-Type http://tool.oschina.net/commons?type=22013-05-17 multipart/form-data： 既可以提交普通键值对，也可以提交(多个)文件键值对。 application/octet-stream： 只能提交二进制，而且只能提交一个二进制，如果提交文件的话，只能提交一个文件,后台接收参数只能有一个，而且只能是流（或者字节数组） application/x-www-form-urlencoded 不属于http content-type规范，通常用于浏览器表单提交，数据组织格式:name1=value1&amp;amp;name2=value2,post时会放入http body，get时，显示在在地址栏。  // golang 实现  W.Header().Add(&amp;#34;Content-Type&amp;#34;,&amp;#34;application/octet-stream&amp;#34;) W.Header().Add(&amp;#34;Content-Disposition&amp;#34;,fmt.Sprintf(&amp;#34;attachment; filename=\&amp;#34;%s\&amp;#34;&amp;#34;, fileName)) </description>
     </item>
     
     <item>
@@ -97,7 +97,7 @@ FROMgolang:1.15 ENV GOPROXY=https://goproxy.</description>
       <pubDate>Wed, 27 Jan 2021 12:04:51 +0800</pubDate>
       
       <guid>https://blog.moyrn.com/blogs/build/</guid>
-      <description>编译 编译其他系统 CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build# 不能复制空格set CGO_ENABLED=0set GOOS=linuxset GOARCH=amd64go build 图标制作 第一步：Windows 下载MinGW第二步：新建一个.rc文件，加入文件名为 demo.rc 输入内容 IDI_ICON1 ICON &amp;quot;cefclient.ico&amp;quot;其中 cefclient.ico 是你的ico的地址第三步:MinGW 执行windres -o demo.syso demo.rc第四步:将生成的demo.syso 放到项目目录下go build 隐藏命令行 go build -i -ldflags=&amp;quot;-H windowsgui&amp;quot; </description>
+      <description>编译 编译其他系统 CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build # 不能复制空格 set CGO_ENABLED=0 set GOOS=linux set GOARCH=amd64 go build  图标制作 第一步： Windows 下载MinGW 第二步： 新建一个.rc文件，加入文件名为 demo.rc 输入内容 IDI_ICON1 ICON &amp;quot;cefclient.ico&amp;quot; 其中 cefclient.ico 是你的ico的地址 第三步: MinGW 执行 windres -o demo.syso demo.rc 第四步: 将生成的demo.syso 放到项目目录下 go build  隐藏命令行 go build -i -ldflags=&amp;quot;-H windowsgui&amp;quot; </description>
     </item>
     
     <item>
