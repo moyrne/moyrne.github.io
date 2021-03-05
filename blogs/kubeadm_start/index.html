@@ -8,23 +8,23 @@
 	<meta name="theme-color" content="#494f5c">
 	<meta name="msapplication-TileColor" content="#494f5c">
 <meta itemprop="name" content="Kubeadm 搭建K8s集群">
-<meta itemprop="description" content="前置操作 (每台机器上都需要操作)  使用系统 Centos 7  cat /etc/redhat-release CentOS Linux release 7.9.2009 (Core)  关闭防火墙  systemctl stop firewalld &amp;&amp; systemctl disable firewalld  禁用SELINUX  vim /etc/selinux/config # 或者修改/etc/sysconfig/selinux SELINUX=disabled  修改 k8s.conf  cat &lt;&lt;EOF &gt; /etc/sysctl.d/k8s.conf net.bridge.bridge-nf-call-ip6tables = 1 net.bridge.bridge-nf-call-iptables = 1 EOF sysctl --system  关闭 swap  swapoff -a vim /etc/fstab # 注释掉以下字段 /dev/mapper/cl-swap swap swap defaults 0 0 reboot  使用yum安装 docker-ce docker-ce-selinux  # step 1: 安装必要的一些系统工具 sudo yum install -y yum-utils device-mapper-persistent-data lvm2 # Step 2: 添加软件源信息 sudo yum-config-manager --add-repo http://mirrors.">
+<meta itemprop="description" content="前置操作 (每台机器上都需要操作)  使用系统 Centos 7  cat /etc/redhat-release CentOS Linux release 7.9.2009 (Core)  关闭防火墙  systemctl stop firewalld &amp;&amp; systemctl disable firewalld  禁用SELINUX  vim /etc/selinux/config # 或者修改/etc/sysconfig/selinux SELINUX=disabled  [注意] 开启 IP 路由转发和 NAT  # https://ccie.lol/knowledge-base/linux-centos-route-forwarding/ # 不开启会导致 Pod 无法链接外网以及 Pod 间无法通信的问题. [root@host ~]# echo &#34;net.ipv4.ip_forward = 1&#34; &gt;&gt; /etc/sysctl.conf [root@host ~]# sysctl -p [root@host ~]# sysctl -a | grep &#34;ip_forward&#34; net.ipv4.ip_forward = 1 # 开启NAT [root@host ~]# iptables -P FORWARD ACCEPT # 缺省允许 IP 转发 # 利用 iptables 实现 NAT MASQUERADE 共享上网，此处 eth0 需要是能够访问外部网络的网卡接口 [root@host ~]# iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE  修改 k8s.">
 <meta itemprop="datePublished" content="2021-02-07T13:56:54+08:00" />
 <meta itemprop="dateModified" content="2021-02-07T13:56:54+08:00" />
-<meta itemprop="wordCount" content="541">
+<meta itemprop="wordCount" content="546">
 
 
 
 <meta itemprop="keywords" content="kubernetes," />
 <meta property="og:title" content="Kubeadm 搭建K8s集群" />
-<meta property="og:description" content="前置操作 (每台机器上都需要操作)  使用系统 Centos 7  cat /etc/redhat-release CentOS Linux release 7.9.2009 (Core)  关闭防火墙  systemctl stop firewalld &amp;&amp; systemctl disable firewalld  禁用SELINUX  vim /etc/selinux/config # 或者修改/etc/sysconfig/selinux SELINUX=disabled  修改 k8s.conf  cat &lt;&lt;EOF &gt; /etc/sysctl.d/k8s.conf net.bridge.bridge-nf-call-ip6tables = 1 net.bridge.bridge-nf-call-iptables = 1 EOF sysctl --system  关闭 swap  swapoff -a vim /etc/fstab # 注释掉以下字段 /dev/mapper/cl-swap swap swap defaults 0 0 reboot  使用yum安装 docker-ce docker-ce-selinux  # step 1: 安装必要的一些系统工具 sudo yum install -y yum-utils device-mapper-persistent-data lvm2 # Step 2: 添加软件源信息 sudo yum-config-manager --add-repo http://mirrors." />
+<meta property="og:description" content="前置操作 (每台机器上都需要操作)  使用系统 Centos 7  cat /etc/redhat-release CentOS Linux release 7.9.2009 (Core)  关闭防火墙  systemctl stop firewalld &amp;&amp; systemctl disable firewalld  禁用SELINUX  vim /etc/selinux/config # 或者修改/etc/sysconfig/selinux SELINUX=disabled  [注意] 开启 IP 路由转发和 NAT  # https://ccie.lol/knowledge-base/linux-centos-route-forwarding/ # 不开启会导致 Pod 无法链接外网以及 Pod 间无法通信的问题. [root@host ~]# echo &#34;net.ipv4.ip_forward = 1&#34; &gt;&gt; /etc/sysctl.conf [root@host ~]# sysctl -p [root@host ~]# sysctl -a | grep &#34;ip_forward&#34; net.ipv4.ip_forward = 1 # 开启NAT [root@host ~]# iptables -P FORWARD ACCEPT # 缺省允许 IP 转发 # 利用 iptables 实现 NAT MASQUERADE 共享上网，此处 eth0 需要是能够访问外部网络的网卡接口 [root@host ~]# iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE  修改 k8s." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://blog.moyrn.com/blogs/kubeadm_start/" />
 <meta property="article:published_time" content="2021-02-07T13:56:54+08:00" />
 <meta property="article:modified_time" content="2021-02-07T13:56:54+08:00" />
 <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Kubeadm 搭建K8s集群"/>
-<meta name="twitter:description" content="前置操作 (每台机器上都需要操作)  使用系统 Centos 7  cat /etc/redhat-release CentOS Linux release 7.9.2009 (Core)  关闭防火墙  systemctl stop firewalld &amp;&amp; systemctl disable firewalld  禁用SELINUX  vim /etc/selinux/config # 或者修改/etc/sysconfig/selinux SELINUX=disabled  修改 k8s.conf  cat &lt;&lt;EOF &gt; /etc/sysctl.d/k8s.conf net.bridge.bridge-nf-call-ip6tables = 1 net.bridge.bridge-nf-call-iptables = 1 EOF sysctl --system  关闭 swap  swapoff -a vim /etc/fstab # 注释掉以下字段 /dev/mapper/cl-swap swap swap defaults 0 0 reboot  使用yum安装 docker-ce docker-ce-selinux  # step 1: 安装必要的一些系统工具 sudo yum install -y yum-utils device-mapper-persistent-data lvm2 # Step 2: 添加软件源信息 sudo yum-config-manager --add-repo http://mirrors."/>
+<meta name="twitter:description" content="前置操作 (每台机器上都需要操作)  使用系统 Centos 7  cat /etc/redhat-release CentOS Linux release 7.9.2009 (Core)  关闭防火墙  systemctl stop firewalld &amp;&amp; systemctl disable firewalld  禁用SELINUX  vim /etc/selinux/config # 或者修改/etc/sysconfig/selinux SELINUX=disabled  [注意] 开启 IP 路由转发和 NAT  # https://ccie.lol/knowledge-base/linux-centos-route-forwarding/ # 不开启会导致 Pod 无法链接外网以及 Pod 间无法通信的问题. [root@host ~]# echo &#34;net.ipv4.ip_forward = 1&#34; &gt;&gt; /etc/sysctl.conf [root@host ~]# sysctl -p [root@host ~]# sysctl -a | grep &#34;ip_forward&#34; net.ipv4.ip_forward = 1 # 开启NAT [root@host ~]# iptables -P FORWARD ACCEPT # 缺省允许 IP 转发 # 利用 iptables 实现 NAT MASQUERADE 共享上网，此处 eth0 需要是能够访问外部网络的网卡接口 [root@host ~]# iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE  修改 k8s."/>
 
 	<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 	<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -87,6 +87,19 @@ CentOS Linux release 7.9.2009 <span class="o">(</span>Core<span class="o">)</spa
 <div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">vim /etc/selinux/config
 </code></pre></div><div class="highlight"><pre class="chroma"><code class="language-text" data-lang="text"># 或者修改/etc/sysconfig/selinux
 SELINUX=disabled
+</code></pre></div><ul>
+<li>[注意] 开启 IP 路由转发和 NAT</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># https://ccie.lol/knowledge-base/linux-centos-route-forwarding/</span>
+<span class="c1"># 不开启会导致 Pod 无法链接外网以及 Pod 间无法通信的问题.</span>
+<span class="o">[</span>root@host ~<span class="o">]</span><span class="c1"># echo &#34;net.ipv4.ip_forward = 1&#34; &gt;&gt; /etc/sysctl.conf</span>
+<span class="o">[</span>root@host ~<span class="o">]</span><span class="c1"># sysctl -p</span>
+<span class="o">[</span>root@host ~<span class="o">]</span><span class="c1"># sysctl -a | grep &#34;ip_forward&#34;</span>
+net.ipv4.ip_forward <span class="o">=</span> <span class="m">1</span>
+<span class="c1"># 开启NAT</span>
+<span class="o">[</span>root@host ~<span class="o">]</span><span class="c1"># iptables -P FORWARD ACCEPT    # 缺省允许 IP 转发</span>
+<span class="c1"># 利用 iptables 实现 NAT MASQUERADE 共享上网，此处 eth0 需要是能够访问外部网络的网卡接口</span>
+<span class="o">[</span>root@host ~<span class="o">]</span><span class="c1"># iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE</span>
 </code></pre></div><ul>
 <li>修改 k8s.conf</li>
 </ul>
@@ -198,17 +211,7 @@ sudo chown <span class="k">$(</span>id -u<span class="k">)</span>:<span class="k
 </code></pre></div><ul>
 <li>安装Pod Network</li>
 </ul>
-<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># https://ccie.lol/knowledge-base/linux-centos-route-forwarding/</span>
-<span class="c1"># 注意事项 开启 IP 路由转发和 NAT</span>
-<span class="o">[</span>root@host ~<span class="o">]</span><span class="c1"># echo &#34;net.ipv4.ip_forward = 1&#34; &gt;&gt; /etc/sysctl.conf</span>
-<span class="o">[</span>root@host ~<span class="o">]</span><span class="c1"># sysctl -p</span>
-<span class="o">[</span>root@host ~<span class="o">]</span><span class="c1"># sysctl -a | grep &#34;ip_forward&#34;</span>
-net.ipv4.ip_forward <span class="o">=</span> <span class="m">1</span>
-<span class="c1"># 开启NAT</span>
-<span class="o">[</span>root@host ~<span class="o">]</span><span class="c1"># iptables -P FORWARD ACCEPT    # 缺省允许 IP 转发</span>
-<span class="c1"># 利用 iptables 实现 NAT MASQUERADE 共享上网，此处 eth0 需要是能够访问外部网络的网卡接口</span>
-<span class="o">[</span>root@host ~<span class="o">]</span><span class="c1"># iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE</span>
-</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-text" data-lang="text"># 比较知名的网络解决方案:
+<div class="highlight"><pre class="chroma"><code class="language-text" data-lang="text"># 比较知名的网络解决方案:
 flannel
 calico
 canel
