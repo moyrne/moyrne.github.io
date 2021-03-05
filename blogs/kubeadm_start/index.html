@@ -11,7 +11,7 @@
 <meta itemprop="description" content="前置操作 (每台机器上都需要操作)  使用系统 Centos 7  cat /etc/redhat-release CentOS Linux release 7.9.2009 (Core)  关闭防火墙  systemctl stop firewalld &amp;&amp; systemctl disable firewalld  禁用SELINUX  vim /etc/selinux/config # 或者修改/etc/sysconfig/selinux SELINUX=disabled  修改 k8s.conf  cat &lt;&lt;EOF &gt; /etc/sysctl.d/k8s.conf net.bridge.bridge-nf-call-ip6tables = 1 net.bridge.bridge-nf-call-iptables = 1 EOF sysctl --system  关闭 swap  swapoff -a vim /etc/fstab # 注释掉以下字段 /dev/mapper/cl-swap swap swap defaults 0 0 reboot  使用yum安装 docker-ce docker-ce-selinux  # step 1: 安装必要的一些系统工具 sudo yum install -y yum-utils device-mapper-persistent-data lvm2 # Step 2: 添加软件源信息 sudo yum-config-manager --add-repo http://mirrors.">
 <meta itemprop="datePublished" content="2021-02-07T13:56:54+08:00" />
 <meta itemprop="dateModified" content="2021-02-07T13:56:54+08:00" />
-<meta itemprop="wordCount" content="523">
+<meta itemprop="wordCount" content="541">
 
 
 
@@ -213,11 +213,20 @@ flannel
 calico
 canel
 kube-router
+weave
 .......
-</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 下载 至 本地</span>
+</code></pre></div><ul>
+<li>flannel</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 下载 至 本地</span>
 wget https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
 <span class="c1"># 如果打不开也可以自行复制 https://github.com/coreos/flannel/blob/master/Documentation/kube-flannel.yml</span>
 kubectl apply -f kube-flannel.yml
+</code></pre></div><ul>
+<li>weave</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">kubectl apply -f <span class="s2">&#34;https://cloud.weave.works/k8s/net?k8s-version=</span><span class="k">$(</span>kubectl version <span class="p">|</span> base64 <span class="p">|</span> tr -d <span class="s1">&#39;\n&#39;</span><span class="k">)</span><span class="s2">&#34;</span> 
+kubeadm config print init-defaults
 </code></pre></div><ul>
 <li>查看当前 Pod 状态</li>
 </ul>
