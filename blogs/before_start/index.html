@@ -8,38 +8,29 @@
 	<meta name="theme-color" content="#494f5c">
 	<meta name="msapplication-TileColor" content="#494f5c">
 <meta itemprop="name" content="Kubernetes入门-基础">
-<meta itemprop="description" content="CPU
-CGroup 设置cpu可使用时间   文件系统隔离
-Mount NameSpace &#43; mount(&#34;none&#34;,&#34;/tmp&#34;,&#34;tmpfs&#34;,0,&#34;&#34;)   为 结点 打上污点 禁止其它Pod在结点上启动
-kubectl taint nodes node1 foo=bar:NoSchedule   rook 安装 按顺序执行以下命令
-$ kubectl apply -f https://raw.githubusercontent.com/rook/rook/master/cluster/examples/kubernetes/ceph/common.yaml $ kubectl apply -f https://raw.githubusercontent.com/rook/rook/master/cluster/examples/kubernetes/ceph/operator.yaml # 在 apply cluster.yaml 之前, 需要先apply crds.yaml, 否则会报错 no matches for kind &#34;CephCluster&#34; in version &#34;ceph.rook.io/v1&#34; $ kubectl apply -f https://raw.githubusercontent.com/rook/rook/master/cluster/examples/kubernetes/ceph/crds.yaml $ kubectl apply -f https://raw.githubusercontent.com/rook/rook/master/cluster/examples/kubernetes/ceph/cluster.yaml   [20210211] docker 多阶段构建,减小体积（示例）
-FROMgolang:1.15 ENV GOPROXY=https://goproxy.">
+<meta itemprop="description" content="网络设置
+# https://ccie.lol/knowledge-base/linux-centos-route-forwarding/ # 注意事项 开启 IP 路由转发和 NAT [root@host ~]# echo &#34;net.ipv4.ip_forward = 1&#34; &gt;&gt; /etc/sysctl.conf [root@host ~]# sysctl -p [root@host ~]# sysctl -a | grep &#34;ip_forward&#34; net.ipv4.ip_forward = 1 # 开启NAT [root@host ~]# iptables -P FORWARD ACCEPT # 缺省允许 IP 转发 # 利用 iptables 实现 NAT MASQUERADE 共享上网，此处 eth0 需要是能够访问外部网络的网卡接口 [root@host ~]# iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE   CPU
+CGroup 设置cpu可使用时间   文件系统隔离">
 <meta itemprop="datePublished" content="2021-02-06T10:13:46+08:00" />
 <meta itemprop="dateModified" content="2021-02-06T10:13:46+08:00" />
-<meta itemprop="wordCount" content="176">
+<meta itemprop="wordCount" content="239">
 
 
 
 <meta itemprop="keywords" content="kubernetes," />
 <meta property="og:title" content="Kubernetes入门-基础" />
-<meta property="og:description" content="CPU
-CGroup 设置cpu可使用时间   文件系统隔离
-Mount NameSpace &#43; mount(&#34;none&#34;,&#34;/tmp&#34;,&#34;tmpfs&#34;,0,&#34;&#34;)   为 结点 打上污点 禁止其它Pod在结点上启动
-kubectl taint nodes node1 foo=bar:NoSchedule   rook 安装 按顺序执行以下命令
-$ kubectl apply -f https://raw.githubusercontent.com/rook/rook/master/cluster/examples/kubernetes/ceph/common.yaml $ kubectl apply -f https://raw.githubusercontent.com/rook/rook/master/cluster/examples/kubernetes/ceph/operator.yaml # 在 apply cluster.yaml 之前, 需要先apply crds.yaml, 否则会报错 no matches for kind &#34;CephCluster&#34; in version &#34;ceph.rook.io/v1&#34; $ kubectl apply -f https://raw.githubusercontent.com/rook/rook/master/cluster/examples/kubernetes/ceph/crds.yaml $ kubectl apply -f https://raw.githubusercontent.com/rook/rook/master/cluster/examples/kubernetes/ceph/cluster.yaml   [20210211] docker 多阶段构建,减小体积（示例）
-FROMgolang:1.15 ENV GOPROXY=https://goproxy." />
+<meta property="og:description" content="网络设置
+# https://ccie.lol/knowledge-base/linux-centos-route-forwarding/ # 注意事项 开启 IP 路由转发和 NAT [root@host ~]# echo &#34;net.ipv4.ip_forward = 1&#34; &gt;&gt; /etc/sysctl.conf [root@host ~]# sysctl -p [root@host ~]# sysctl -a | grep &#34;ip_forward&#34; net.ipv4.ip_forward = 1 # 开启NAT [root@host ~]# iptables -P FORWARD ACCEPT # 缺省允许 IP 转发 # 利用 iptables 实现 NAT MASQUERADE 共享上网，此处 eth0 需要是能够访问外部网络的网卡接口 [root@host ~]# iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE   CPU
+CGroup 设置cpu可使用时间   文件系统隔离" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://blog.moyrn.com/blogs/before_start/" />
 <meta property="article:published_time" content="2021-02-06T10:13:46+08:00" />
 <meta property="article:modified_time" content="2021-02-06T10:13:46+08:00" />
 <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Kubernetes入门-基础"/>
-<meta name="twitter:description" content="CPU
-CGroup 设置cpu可使用时间   文件系统隔离
-Mount NameSpace &#43; mount(&#34;none&#34;,&#34;/tmp&#34;,&#34;tmpfs&#34;,0,&#34;&#34;)   为 结点 打上污点 禁止其它Pod在结点上启动
-kubectl taint nodes node1 foo=bar:NoSchedule   rook 安装 按顺序执行以下命令
-$ kubectl apply -f https://raw.githubusercontent.com/rook/rook/master/cluster/examples/kubernetes/ceph/common.yaml $ kubectl apply -f https://raw.githubusercontent.com/rook/rook/master/cluster/examples/kubernetes/ceph/operator.yaml # 在 apply cluster.yaml 之前, 需要先apply crds.yaml, 否则会报错 no matches for kind &#34;CephCluster&#34; in version &#34;ceph.rook.io/v1&#34; $ kubectl apply -f https://raw.githubusercontent.com/rook/rook/master/cluster/examples/kubernetes/ceph/crds.yaml $ kubectl apply -f https://raw.githubusercontent.com/rook/rook/master/cluster/examples/kubernetes/ceph/cluster.yaml   [20210211] docker 多阶段构建,减小体积（示例）
-FROMgolang:1.15 ENV GOPROXY=https://goproxy."/>
+<meta name="twitter:description" content="网络设置
+# https://ccie.lol/knowledge-base/linux-centos-route-forwarding/ # 注意事项 开启 IP 路由转发和 NAT [root@host ~]# echo &#34;net.ipv4.ip_forward = 1&#34; &gt;&gt; /etc/sysctl.conf [root@host ~]# sysctl -p [root@host ~]# sysctl -a | grep &#34;ip_forward&#34; net.ipv4.ip_forward = 1 # 开启NAT [root@host ~]# iptables -P FORWARD ACCEPT # 缺省允许 IP 转发 # 利用 iptables 实现 NAT MASQUERADE 共享上网，此处 eth0 需要是能够访问外部网络的网卡接口 [root@host ~]# iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE   CPU
+CGroup 设置cpu可使用时间   文件系统隔离"/>
 
 	<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 	<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -87,6 +78,19 @@ FROMgolang:1.15 ENV GOPROXY=https://goproxy."/>
 		<h1>Kubernetes入门-基础</h1>
 		<div class="content">
 			<ul>
+<li>
+<p>网络设置</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># https://ccie.lol/knowledge-base/linux-centos-route-forwarding/</span>
+<span class="c1"># 注意事项 开启 IP 路由转发和 NAT</span>
+<span class="o">[</span>root@host ~<span class="o">]</span><span class="c1"># echo &#34;net.ipv4.ip_forward = 1&#34; &gt;&gt; /etc/sysctl.conf</span>
+<span class="o">[</span>root@host ~<span class="o">]</span><span class="c1"># sysctl -p</span>
+<span class="o">[</span>root@host ~<span class="o">]</span><span class="c1"># sysctl -a | grep &#34;ip_forward&#34;</span>
+net.ipv4.ip_forward <span class="o">=</span> <span class="m">1</span>
+<span class="c1"># 开启NAT</span>
+<span class="o">[</span>root@host ~<span class="o">]</span><span class="c1"># iptables -P FORWARD ACCEPT    # 缺省允许 IP 转发</span>
+<span class="c1"># 利用 iptables 实现 NAT MASQUERADE 共享上网，此处 eth0 需要是能够访问外部网络的网卡接口</span>
+<span class="o">[</span>root@host ~<span class="o">]</span><span class="c1"># iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE</span>
+</code></pre></div></li>
 <li>
 <p>CPU</p>
 <div class="highlight"><pre class="chroma"><code class="language-text" data-lang="text">CGroup 设置cpu可使用时间
@@ -264,8 +268,8 @@ docker tag ist0ne/xtrabackup:latest gcr.io/google-samples/xtrabackup:1.0
 <section class="comments">
 	<script src="https://utteranc.es/client.js"
 					repo="moyrne/hugo-comment"
-					issue-term="pathname"
-					theme="photon-dark"
+					issue-term="title"
+					theme="github-dark-orange"
 					crossorigin="anonymous"
 					async>
 	</script>

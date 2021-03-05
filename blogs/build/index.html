@@ -8,7 +8,7 @@
 	<meta name="theme-color" content="#494f5c">
 	<meta name="msapplication-TileColor" content="#494f5c">
 <meta itemprop="name" content="Golang 编译">
-<meta itemprop="description" content="编译 编译其他系统 CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build # 不能复制空格 set CGO_ENABLED=0 set GOOS=linux set GOARCH=amd64 go build  图标制作 第一步： Windows 下载MinGW 第二步： 新建一个.rc文件，加入文件名为 demo.rc 输入内容 IDI_ICON1 ICON &quot;cefclient.ico&quot; 其中 cefclient.ico 是你的ico的地址 第三步: MinGW 执行 windres -o demo.syso demo.rc 第四步: 将生成的demo.syso 放到项目目录下 go build  隐藏命令行 go build -i -ldflags=&quot;-H windowsgui&quot; ">
+<meta itemprop="description" content="编译 编译其他系统 CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build# 不能复制空格set CGO_ENABLED=0set GOOS=linuxset GOARCH=amd64go build 图标制作 第一步：Windows 下载MinGW第二步：新建一个.rc文件，加入文件名为 demo.rc 输入内容 IDI_ICON1 ICON &quot;cefclient.ico&quot;其中 cefclient.ico 是你的ico的地址第三步:MinGW 执行windres -o demo.syso demo.rc第四步:将生成的demo.syso 放到项目目录下go build 隐藏命令行 go build -i -ldflags=&quot;-H windowsgui&quot; ">
 <meta itemprop="datePublished" content="2021-01-27T12:04:51+08:00" />
 <meta itemprop="dateModified" content="2021-01-27T12:04:51+08:00" />
 <meta itemprop="wordCount" content="49">
@@ -17,14 +17,14 @@
 
 <meta itemprop="keywords" content="golang,build," />
 <meta property="og:title" content="Golang 编译" />
-<meta property="og:description" content="编译 编译其他系统 CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build # 不能复制空格 set CGO_ENABLED=0 set GOOS=linux set GOARCH=amd64 go build  图标制作 第一步： Windows 下载MinGW 第二步： 新建一个.rc文件，加入文件名为 demo.rc 输入内容 IDI_ICON1 ICON &quot;cefclient.ico&quot; 其中 cefclient.ico 是你的ico的地址 第三步: MinGW 执行 windres -o demo.syso demo.rc 第四步: 将生成的demo.syso 放到项目目录下 go build  隐藏命令行 go build -i -ldflags=&quot;-H windowsgui&quot; " />
+<meta property="og:description" content="编译 编译其他系统 CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build# 不能复制空格set CGO_ENABLED=0set GOOS=linuxset GOARCH=amd64go build 图标制作 第一步：Windows 下载MinGW第二步：新建一个.rc文件，加入文件名为 demo.rc 输入内容 IDI_ICON1 ICON &quot;cefclient.ico&quot;其中 cefclient.ico 是你的ico的地址第三步:MinGW 执行windres -o demo.syso demo.rc第四步:将生成的demo.syso 放到项目目录下go build 隐藏命令行 go build -i -ldflags=&quot;-H windowsgui&quot; " />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://blog.moyrn.com/blogs/build/" />
 <meta property="article:published_time" content="2021-01-27T12:04:51+08:00" />
 <meta property="article:modified_time" content="2021-01-27T12:04:51+08:00" />
 <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Golang 编译"/>
-<meta name="twitter:description" content="编译 编译其他系统 CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build # 不能复制空格 set CGO_ENABLED=0 set GOOS=linux set GOARCH=amd64 go build  图标制作 第一步： Windows 下载MinGW 第二步： 新建一个.rc文件，加入文件名为 demo.rc 输入内容 IDI_ICON1 ICON &quot;cefclient.ico&quot; 其中 cefclient.ico 是你的ico的地址 第三步: MinGW 执行 windres -o demo.syso demo.rc 第四步: 将生成的demo.syso 放到项目目录下 go build  隐藏命令行 go build -i -ldflags=&quot;-H windowsgui&quot; "/>
+<meta name="twitter:description" content="编译 编译其他系统 CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build# 不能复制空格set CGO_ENABLED=0set GOOS=linuxset GOARCH=amd64go build 图标制作 第一步：Windows 下载MinGW第二步：新建一个.rc文件，加入文件名为 demo.rc 输入内容 IDI_ICON1 ICON &quot;cefclient.ico&quot;其中 cefclient.ico 是你的ico的地址第三步:MinGW 执行windres -o demo.syso demo.rc第四步:将生成的demo.syso 放到项目目录下go build 隐藏命令行 go build -i -ldflags=&quot;-H windowsgui&quot; "/>
 
 	<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 	<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -105,7 +105,7 @@ go build
 		</div>
 	</main>
 
-	
+
 <section class="comments">
 	<script src="https://utteranc.es/client.js"
 					repo="moyrne/hugo-comment"
