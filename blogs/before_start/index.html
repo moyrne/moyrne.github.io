@@ -13,7 +13,7 @@
 CGroup 设置cpu可使用时间   文件系统隔离">
 <meta itemprop="datePublished" content="2021-02-06T10:13:46+08:00" />
 <meta itemprop="dateModified" content="2021-02-06T10:13:46+08:00" />
-<meta itemprop="wordCount" content="230">
+<meta itemprop="wordCount" content="239">
 
 
 
@@ -186,6 +186,11 @@ $ kubectl apply -f https://raw.githubusercontent.com/rook/rook/master/cluster/ex
 </span><span class="w">          </span>- <span class="l">node-geektime</span><span class="w">
 </span></code></pre></div></li>
 <li>
+<p>xtrabackup 无法下载</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">docker pull ist0ne/xtrabackup
+docker tag ist0ne/xtrabackup:latest gcr.io/google-samples/xtrabackup:1.0
+</code></pre></div></li>
+<li>
 <p>DaemonSet</p>
 <ul>
 <li>DaemonSet具有Toleration字段,用于忽略节点上的某些污点</li>
@@ -259,7 +264,7 @@ $ kubectl apply -f https://raw.githubusercontent.com/rook/rook/master/cluster/ex
 		</div>
 	</main>
 
-	
+
 <section class="comments">
 	<script src="https://utteranc.es/client.js"
 					repo="moyrne/hugo-comment"
