@@ -14,7 +14,7 @@
       <pubDate>Tue, 16 Mar 2021 11:51:54 +0800</pubDate>
       
       <guid>https://blog.moyrn.com/blogs/go_features/</guid>
-      <description>internal 包 /go/src/xxx/package/internal   internal 包中的内容，无法在package外被导入，否则编译不通过。  </description>
+      <description>internal 包 [20210316] /go/src/xxx/package/internal   internal 包中的内容，无法在package外被导入，否则编译不通过。  </description>
     </item>
     
     <item>
