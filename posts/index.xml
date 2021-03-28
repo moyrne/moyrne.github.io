@@ -1,0 +1,1218 @@
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>Posts on Moyrne&#39;Blog</title>
+        <link>https://blog.moyrn.com/posts/</link>
+        <description>Recent content in Posts on Moyrne&#39;Blog</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>zh-CN</language>
+        <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
+        <lastBuildDate>Tue, 16 Mar 2021 11:51:54 +0800</lastBuildDate>
+        <atom:link href="https://blog.moyrn.com/posts/index.xml" rel="self" type="application/rss+xml" />
+        
+        <item>
+            <title>Go特性记录</title>
+            <link>https://blog.moyrn.com/posts/20210316_go_features/</link>
+            <pubDate>Tue, 16 Mar 2021 11:51:54 +0800</pubDate>
+            
+            <guid>https://blog.moyrn.com/posts/20210316_go_features/</guid>
+            <description>internal 包 [20210316] /go/src/xxx/package/internal  internal 包中的内容，无法在package外被导入，否则编译不通过。  </description>
+            <content type="html"><![CDATA[<h3 id="internal-包-20210316">internal 包 [20210316]</h3>
+<pre><code>/go/src/xxx/package/internal
+</code></pre>
+<ul>
+<li>internal 包中的内容，无法在package外被导入，否则编译不通过。</li>
+</ul>
+]]></content>
+        </item>
+        
+        <item>
+            <title>Deployment 水平扩容和滚动更新</title>
+            <link>https://blog.moyrn.com/posts/20210213_rollout_uptodate/</link>
+            <pubDate>Sat, 13 Feb 2021 22:38:54 +0800</pubDate>
+            
+            <guid>https://blog.moyrn.com/posts/20210213_rollout_uptodate/</guid>
+            <description>概念   Deployment 所管理的 Pod 的 ownerReference 就是 ReplicaSet
+  Deployment 会拥有多个ReplicaSet, 不同的 ReplicaSet 代表不同的版本
+  关系图   Deployment 状态字段
+ DESIRED：用户期望的 Pod 副本个数（spec.replicas 的值）； CURRENT：当前处于 Running 状态的 Pod 的个数； UP-TO-DATE：当前处于最新版本的 Pod 的个数，所谓最新版本指的是 Pod 的 Spec 部分与 Deployment 里 Pod 模板里定义的完全一致； AVAILABLE：当前已经可用的 Pod 的个数，即：既是 Running 状态，又是最新版本，并且已经处于 Ready（健康检查正确）状态的 Pod 的个数。    ReplicaSet 状态字段 DESIRED、CURRENT 和 READY，与 Deployment 一致，Deployment 仅多出 UP-TO-DATE 状态
+  滚动更新 RollingUpdateStrategy 在“滚动更新”的过程中永远都会确保至少有 2 个 Pod 处于可用状态，至多只有 4 个 Pod 同时存在于集群中 旧版本RS的Pod数量递减，新版本RS的Pod数量递增</description>
+            <content type="html"><![CDATA[<h4 id="概念">概念</h4>
+<ul>
+<li>
+<p>Deployment 所管理的 Pod 的 ownerReference 就是 ReplicaSet</p>
+</li>
+<li>
+<p>Deployment 会拥有多个ReplicaSet, 不同的 ReplicaSet 代表不同的版本</p>
+</li>
+<li>
+<p>关系图 <img src="/images/deployment_replicaset_pod.png" alt="avatar"></p>
+</li>
+<li>
+<p>Deployment 状态字段</p>
+<ol>
+<li>DESIRED：用户期望的 Pod 副本个数（spec.replicas 的值）；</li>
+<li>CURRENT：当前处于 Running 状态的 Pod 的个数；</li>
+<li>UP-TO-DATE：当前处于最新版本的 Pod 的个数，所谓最新版本指的是 Pod 的 Spec 部分与 Deployment 里 Pod 模板里定义的完全一致；</li>
+<li>AVAILABLE：当前已经可用的 Pod 的个数，即：既是 Running 状态，又是最新版本，并且已经处于 Ready（健康检查正确）状态的 Pod 的个数。</li>
+</ol>
+</li>
+<li>
+<p>ReplicaSet 状态字段 DESIRED、CURRENT 和 READY，与 Deployment 一致，Deployment 仅多出 UP-TO-DATE 状态</p>
+</li>
+<li>
+<p>滚动更新 RollingUpdateStrategy 在“滚动更新”的过程中永远都会确保至少有 2 个 Pod 处于可用状态，至多只有 4 个 Pod 同时存在于集群中
+旧版本RS的Pod数量递减，新版本RS的Pod数量递增</p>
+<div class="highlight"><pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> 
+</span><span class="w">  </span><span class="nt">apps/v1kind</span><span class="p">:</span><span class="w"> 
+</span><span class="w">    </span><span class="nt">Deploymentmetadata</span><span class="p">:</span><span class="w"> 
+</span><span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">nginx-deployment </span><span class="w">
+</span><span class="w">      </span><span class="nt">labels</span><span class="p">:</span><span class="w"> 
+</span><span class="w">        </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l">nginx</span><span class="w">
+</span><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span><span class="w"></span><span class="nn">...</span><span class="w"> 
+</span><span class="w">  </span><span class="nt">strategy</span><span class="p">:</span><span class="w"> 
+</span><span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l">RollingUpdate </span><span class="w">
+</span><span class="w">    </span><span class="nt">rollingUpdate</span><span class="p">:</span><span class="w"> 
+</span><span class="w">      </span><span class="nt">maxSurge</span><span class="p">:</span><span class="w"> </span><span class="m">1</span><span class="w"> 
+</span><span class="w">      </span><span class="nt">maxUnavailable</span><span class="p">:</span><span class="w"> </span><span class="m">1</span><span class="w">
+</span></code></pre></div></li>
+<li>
+<p>金丝雀发布和蓝绿发布，示例： <a href="https://github.com/ContainerSolutions/k8s-deployment-strategies/tree/master/canary">https://github.com/ContainerSolutions/k8s-deployment-strategies/tree/master/canary</a></p>
+</li>
+</ul>
+<h4 id="命令">命令</h4>
+<ul>
+<li>
+<p>扩容</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">$ kubectl scale deployment nginx-deployment --replicas<span class="o">=</span><span class="m">4</span>
+</code></pre></div></li>
+<li>
+<p>滚动更新</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># --record 参数会记录下每次操作执行的命令</span>
+$ kubectl create -f nginx-deployment.yaml --record
+</code></pre></div></li>
+<li>
+<p>实时查看 Deployment 状态变化</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">$ kubectl rollout status deployment/nginx-deployment
+</code></pre></div></li>
+<li>
+<p>查看 ReplicaSet</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">$ kubectl get rs 
+</code></pre></div></li>
+<li>
+<p>回滚 (有 &ndash;to-version=? 参数可选，回滚到指定版本)</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">$ kubectl rollout undo deployment/nginx-deployment
+</code></pre></div></li>
+<li>
+<p>查看 Deployment 每次的变更</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">$ kubectl rollout <span class="nb">history</span> deployment/nginx-deployment
+</code></pre></div></li>
+</ul>
+]]></content>
+        </item>
+        
+        <item>
+            <title>Pod 对象</title>
+            <link>https://blog.moyrn.com/posts/20210212_pod_project/</link>
+            <pubDate>Fri, 12 Feb 2021 15:07:14 +0800</pubDate>
+            
+            <guid>https://blog.moyrn.com/posts/20210212_pod_project/</guid>
+            <description>Volume  Projected Volume 将预先设置好的数据投射到容器中，  Secret    volumes:- name:mysql-cred projected:sources:- secret:name:user - secret:name:pass- ConfigMap - DownwardAPI - ServiceAccountToken restartPolicy livenessProbe   只要 Pod 的 restartPolicy 指定的策略允许重启异常的容器（比如：Always），那么这个 Pod 就会保持 Running 状态，并进行容器重启。否则，Pod 就会进入 Failed 状态 。
+  对于包含多个容器的 Pod，只有它里面所有的容器都进入异常状态后，Pod 才会进入 Failed 状态。在此之前，Pod 都是 Running 状态。此时，Pod 的 READY 字段会显示正常容器的个数，比如：
+$ kubectl get pod test-liveness-exec NAME READY STATUS RESTARTS AGE liveness-exec 0/1 Running 1 1m   livenessProbe HTTP Or TCP, 多用于Web服务健康检查, Web服务中暴露出健康检查URL</description>
+            <content type="html"><![CDATA[<h2 id="volume">Volume</h2>
+<ul>
+<li>Projected Volume 将预先设置好的数据投射到容器中，
+<ul>
+<li>Secret</li>
+</ul>
+</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">volumes</span><span class="p">:</span><span class="w"> 
+</span><span class="w"></span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">mysql-cred </span><span class="w">
+</span><span class="w"></span><span class="nt">projected</span><span class="p">:</span><span class="w"> 
+</span><span class="w">  </span><span class="nt">sources</span><span class="p">:</span><span class="w"> 
+</span><span class="w">  </span>- <span class="nt">secret</span><span class="p">:</span><span class="w"> 
+</span><span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">user </span><span class="w">
+</span><span class="w">  </span>- <span class="nt">secret</span><span class="p">:</span><span class="w"> 
+</span><span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">pass</span><span class="w">
+</span></code></pre></div><pre><code>- ConfigMap
+</code></pre>
+<pre><code></code></pre><pre><code>- DownwardAPI
+</code></pre>
+<pre><code></code></pre><pre><code>- ServiceAccountToken
+</code></pre>
+<pre><code></code></pre><h2 id="restartpolicy-livenessprobe">restartPolicy livenessProbe</h2>
+<ol>
+<li>
+<p>只要 Pod 的 restartPolicy 指定的策略允许重启异常的容器（比如：Always），那么这个 Pod 就会保持 Running 状态，并进行容器重启。否则，Pod 就会进入 Failed 状态 。</p>
+</li>
+<li>
+<p>对于包含多个容器的 Pod，只有它里面所有的容器都进入异常状态后，Pod 才会进入 Failed 状态。在此之前，Pod 都是 Running 状态。此时，Pod 的 READY 字段会显示正常容器的个数，比如：</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">$ kubectl get pod test-liveness-exec
+NAME          READY STATUS  RESTARTS AGE
+liveness-exec 0/1   Running <span class="m">1</span>        1m
+</code></pre></div></li>
+<li>
+<p>livenessProbe HTTP Or TCP, 多用于Web服务健康检查, Web服务中暴露出健康检查URL</p>
+</li>
+</ol>
+<div class="highlight"><pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nn">...</span><span class="w">
+</span><span class="w"></span><span class="nt">livenessProbe</span><span class="p">:</span><span class="w">
+</span><span class="w">     </span><span class="nt">httpGet</span><span class="p">:</span><span class="w">
+</span><span class="w">       </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l">/healthz</span><span class="w">
+</span><span class="w">       </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="m">8080</span><span class="w">
+</span><span class="w">       </span><span class="nt">httpHeaders</span><span class="p">:</span><span class="w">
+</span><span class="w">       </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">X-Custom-Header</span><span class="w">
+</span><span class="w">         </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l">Awesome</span><span class="w">
+</span><span class="w">       </span><span class="nt">initialDelaySeconds</span><span class="p">:</span><span class="w"> </span><span class="m">3</span><span class="w">
+</span><span class="w">       </span><span class="nt">periodSeconds</span><span class="p">:</span><span class="w"> </span><span class="m">3</span><span class="w">
+</span></code></pre></div><div class="highlight"><pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="w">    </span><span class="l">...</span><span class="w">
+</span><span class="w">    </span><span class="nt">livenessProbe</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span><span class="nt">tcpSocket</span><span class="p">:</span><span class="w">
+</span><span class="w">        </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="m">8080</span><span class="w">
+</span><span class="w">      </span><span class="nt">initialDelaySeconds</span><span class="p">:</span><span class="w"> </span><span class="m">15</span><span class="w">
+</span><span class="w">      </span><span class="nt">periodSeconds</span><span class="p">:</span><span class="w"> </span><span class="m">20</span><span class="w">
+</span></code></pre></div><h2 id="podpreset">PodPreset</h2>
+<p>PodPreset 里定义的内容，只会在 Pod API 对象被创建之前追加在这个对象本身上，而不会影响任何 Pod 的控制器的定义。</p>
+<p>比如，我们现在提交的是一个 nginx-deployment，那么这个 Deployment 对象本身是永远不会被 PodPreset 改变的， 被修改的只是这个 Deployment 创建出来的所有 Pod。</p>
+]]></content>
+        </item>
+        
+        <item>
+            <title>Kubeadm 搭建K8s集群</title>
+            <link>https://blog.moyrn.com/posts/20210207_kubeadm_start/</link>
+            <pubDate>Sun, 07 Feb 2021 13:56:54 +0800</pubDate>
+            
+            <guid>https://blog.moyrn.com/posts/20210207_kubeadm_start/</guid>
+            <description>前置操作 (每台机器上都需要操作)  使用系统 Centos 7  cat /etc/redhat-release CentOS Linux release 7.9.2009 (Core)  关闭防火墙  systemctl stop firewalld &amp;amp;&amp;amp; systemctl disable firewalld  禁用SELINUX  vim /etc/selinux/config # 或者修改/etc/sysconfig/selinux SELINUX=disabled  [注意] 开启 IP 路由转发和 NAT  # https://ccie.lol/knowledge-base/linux-centos-route-forwarding/ # 不开启会导致 Pod 无法链接外网以及 Pod 间无法通信的问题. [root@host ~]# echo &amp;#34;net.ipv4.ip_forward = 1&amp;#34; &amp;gt;&amp;gt; /etc/sysctl.conf [root@host ~]# sysctl -p [root@host ~]# sysctl -a | grep &amp;#34;ip_forward&amp;#34; net.ipv4.ip_forward = 1 # 开启NAT [root@host ~]# iptables -P FORWARD ACCEPT # 缺省允许 IP 转发 # 利用 iptables 实现 NAT MASQUERADE 共享上网，此处 eth0 需要是能够访问外部网络的网卡接口 [root@host ~]# iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE  修改 k8s.</description>
+            <content type="html"><![CDATA[<h2 id="前置操作-每台机器上都需要操作">前置操作 (每台机器上都需要操作)</h2>
+<ul>
+<li>使用系统 Centos 7</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">cat /etc/redhat-release
+CentOS Linux release 7.9.2009 <span class="o">(</span>Core<span class="o">)</span>
+</code></pre></div><ul>
+<li>关闭防火墙</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">systemctl stop firewalld <span class="o">&amp;&amp;</span> systemctl disable firewalld
+</code></pre></div><ul>
+<li>禁用SELINUX</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">vim /etc/selinux/config
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-text" data-lang="text"># 或者修改/etc/sysconfig/selinux
+SELINUX=disabled
+</code></pre></div><ul>
+<li>[注意] 开启 IP 路由转发和 NAT</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># https://ccie.lol/knowledge-base/linux-centos-route-forwarding/</span>
+<span class="c1"># 不开启会导致 Pod 无法链接外网以及 Pod 间无法通信的问题.</span>
+<span class="o">[</span>root@host ~<span class="o">]</span><span class="c1"># echo &#34;net.ipv4.ip_forward = 1&#34; &gt;&gt; /etc/sysctl.conf</span>
+<span class="o">[</span>root@host ~<span class="o">]</span><span class="c1"># sysctl -p</span>
+<span class="o">[</span>root@host ~<span class="o">]</span><span class="c1"># sysctl -a | grep &#34;ip_forward&#34;</span>
+net.ipv4.ip_forward <span class="o">=</span> <span class="m">1</span>
+<span class="c1"># 开启NAT</span>
+<span class="o">[</span>root@host ~<span class="o">]</span><span class="c1"># iptables -P FORWARD ACCEPT    # 缺省允许 IP 转发</span>
+<span class="c1"># 利用 iptables 实现 NAT MASQUERADE 共享上网，此处 eth0 需要是能够访问外部网络的网卡接口</span>
+<span class="o">[</span>root@host ~<span class="o">]</span><span class="c1"># iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE</span>
+</code></pre></div><ul>
+<li>修改 k8s.conf</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">cat <span class="s">&lt;&lt;EOF &gt;  /etc/sysctl.d/k8s.conf
+</span><span class="s">net.bridge.bridge-nf-call-ip6tables = 1
+</span><span class="s">net.bridge.bridge-nf-call-iptables = 1
+</span><span class="s">EOF</span>
+sysctl --system
+</code></pre></div><ul>
+<li>关闭 swap</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">swapoff -a
+vim /etc/fstab
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-text" data-lang="text"># 注释掉以下字段
+/dev/mapper/cl-swap     swap                    swap    defaults        0 0
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">reboot
+</code></pre></div><ul>
+<li>使用yum安装 <code>docker-ce</code> <code>docker-ce-selinux</code></li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># step 1: 安装必要的一些系统工具</span>
+sudo yum install -y yum-utils device-mapper-persistent-data lvm2
+<span class="c1"># Step 2: 添加软件源信息</span>
+sudo yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
+<span class="c1"># Step 3: 查看可安装的 docker-ce 版本</span>
+yum list docker-ce.x86_64 --showduplicates <span class="p">|</span> sort -r
+<span class="c1"># Step 4 : 安装指定版本的Docker-CE</span>
+sudo yum -y --setopt<span class="o">=</span><span class="nv">obsoletes</span><span class="o">=</span><span class="m">0</span> install docker-ce-<span class="o">[</span>VERSION<span class="o">]</span> docker-ce-selinux-<span class="o">[</span>VERSION<span class="o">]</span>
+<span class="c1"># Step 5: 开启Docker服务</span>
+sudo systemctl <span class="nb">enable</span> docker <span class="o">&amp;&amp;</span> systemctl start docker
+</code></pre></div><ul>
+<li>安装成功后验证</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">docker version
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-text" data-lang="text">Client: Docker Engine - Community
+ Version:           20.10.3
+ API version:       1.40
+ Go version:        go1.13.15
+ Git commit:        48d30b5
+ Built:             Fri Jan 29 14:34:14 2021
+ OS/Arch:           linux/amd64
+ Context:           default
+ Experimental:      true
+
+Server: Docker Engine - Community
+ Engine:
+  Version:          19.03.10
+  API version:      1.40 (minimum version 1.12)
+  Go version:       go1.13.10
+  Git commit:       9424aeaee9
+  Built:            Thu May 28 22:16:43 2020
+  OS/Arch:          linux/amd64
+  Experimental:     false
+ containerd:
+  Version:          1.4.3
+  GitCommit:        269548fa27e0089a8b8278fc4fc781d7f65a939b
+ runc:
+  Version:          1.0.0-rc92
+  GitCommit:        ff819c7e9184c13b7c2607fe6c30ae19403a7aff
+ docker-init:
+  Version:          0.18.0
+  GitCommit:        fec3683
+</code></pre></div><h2 id="安装kubeadmkubeletkubectl">安装kubeadm，kubelet，kubectl</h2>
+<ul>
+<li>修改 yum 源</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">cat <span class="s">&lt;&lt;EOF &gt; /etc/yum.repos.d/kubernetes.repo
+</span><span class="s">[kubernetes]
+</span><span class="s">name=Kubernetes
+</span><span class="s">baseurl=https://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-x86_64/
+</span><span class="s">enabled=1
+</span><span class="s">gpgcheck=1
+</span><span class="s">repo_gpgcheck=1
+</span><span class="s">gpgkey=https://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg https://mirrors.aliyun.com/kubernetes/yum/doc/rpm-package-key.gpg
+</span><span class="s">EOF</span>
+</code></pre></div><ul>
+<li>安装 <code>kubelet</code> <code>kubeadm</code> <code>kubectl</code></li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">yum install -y kubelet kubeadm kubectl
+systemctl <span class="nb">enable</span> kubelet <span class="o">&amp;&amp;</span> systemctl start kubelet
+</code></pre></div><ul>
+<li>创建 kubeadm init 初始化文件 (仅master)</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">vim kubeadm-init.yaml
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">kubeadm.k8s.io/v1beta2</span><span class="w">
+</span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">ClusterConfiguration</span><span class="w">
+</span><span class="w"></span><span class="nt">kubernetesVersion</span><span class="p">:</span><span class="w"> </span><span class="l">v1.20.0</span><span class="w">
+</span><span class="w"></span><span class="nt">imageRepository</span><span class="p">:</span><span class="w"> </span><span class="l">registry.aliyuncs.com/k8sxio</span><span class="w">
+</span><span class="w"></span><span class="nt">controlPlaneEndpoint</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;192.168.111.128:6443&#34;</span><span class="w">
+</span><span class="w"></span><span class="nt">networking</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">serviceSubnet</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;10.96.0.0/16&#34;</span><span class="w">
+</span><span class="w">  </span><span class="nt">podSubnet</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;10.100.0.1/16&#34;</span><span class="w">
+</span><span class="w">  </span><span class="nt">dnsDomain</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;192.168.111.128&#34;</span><span class="w">
+</span></code></pre></div><ul>
+<li>初始化 (仅master)</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">kubeadm init --config kubeadm-init.yaml
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 初始化完成后，会有以下提示出现</span>
+kubeadm join --token &lt;token&gt; &lt;master-ip&gt;:&lt;master-port&gt; --discovery-token-ca-cert-hash sha256:&lt;hash&gt;
+</code></pre></div><ul>
+<li>配置 kubectl (仅master), node上需要使用时，需要拷贝 config 文件</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">mkdir -p ~/.kube
+sudo cp -i /etc/kubernetes/admin.conf ~/.kube/config
+sudo chown <span class="k">$(</span>id -u<span class="k">)</span>:<span class="k">$(</span>id -g<span class="k">)</span> ~/.kube/config
+</code></pre></div><ul>
+<li>[警告] 当配置错误时可以使用</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">kubeadm reset
+</code></pre></div><ul>
+<li>安装Pod Network</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-text" data-lang="text"># 比较知名的网络解决方案:
+flannel
+calico
+canel
+kube-router
+weave
+.......
+</code></pre></div><ul>
+<li>
+<p>flannel</p>
+<ul>
+<li>[*] flannel 如果需要跨主机修改配置信息
+<ul>
+<li>host-gw</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">net-conf.json</span><span class="p">:</span><span class="w"> </span><span class="p">|</span><span class="sd">
+</span><span class="sd">  {
+</span><span class="sd">    &#34;Network&#34;: &#34;10.244.0.0/16&#34;,
+</span><span class="sd">    &#34;Backend&#34;: {
+</span><span class="sd">      &#34;Type&#34;: &#34;host-gw&#34;
+</span><span class="sd">    }
+</span><span class="sd">  }</span><span class="w">  
+</span></code></pre></div><ul>
+<li>vxlan 要打开直接路由转发方式</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">net-conf.json</span><span class="p">:</span><span class="w"> </span><span class="p">|</span><span class="sd">
+</span><span class="sd">  {
+</span><span class="sd">    &#34;Network&#34;: &#34;10.244.0.0/16&#34;,
+</span><span class="sd">    &#34;Backend&#34;: {
+</span><span class="sd">      &#34;Type&#34;: &#34;vxlan&#34;,
+</span><span class="sd">      &#34;Directrouting&#34;: true
+</span><span class="sd">    }
+</span><span class="sd">  }</span><span class="w">  
+</span></code></pre></div></li>
+</ul>
+</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 下载 至 本地</span>
+wget https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+<span class="c1"># 如果打不开也可以自行复制 https://github.com/coreos/flannel/blob/master/Documentation/kube-flannel.yml</span>
+kubectl apply -f kube-flannel.yml
+</code></pre></div><ul>
+<li>weave</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">kubectl apply -f <span class="s2">&#34;https://cloud.weave.works/k8s/net?k8s-version=</span><span class="k">$(</span>kubectl version <span class="p">|</span> base64 <span class="p">|</span> tr -d <span class="s1">&#39;\n&#39;</span><span class="k">)</span><span class="s2">&#34;</span> 
+kubeadm config print init-defaults
+</code></pre></div><ul>
+<li>查看当前 Pod 状态</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">kubectl get pod -A -o wide
+</code></pre></div><ul>
+<li>在 node 上执行 kubeadm init 完成时提示的命令</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">kubeadm join --token &lt;token&gt; &lt;master-ip&gt;:&lt;master-port&gt; --discovery-token-ca-cert-hash sha256:&lt;hash&gt;
+</code></pre></div><ul>
+<li>再次查看当前 Pod 状态</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># -A == -all-namespace</span>
+kubectl get pod -A -o wide
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-text" data-lang="text">NAMESPACE     NAME                             READY   STATUS    RESTARTS   AGE   IP                NODE     NOMINATED NODE   READINESS GATES
+kube-system   coredns-68b9d7b887-2pswd         1/1     Running   1          22h   10.100.0.5        master   &lt;none&gt;           &lt;none&gt;
+kube-system   coredns-68b9d7b887-7t42s         1/1     Running   1          22h   10.100.0.4        master   &lt;none&gt;           &lt;none&gt;
+kube-system   etcd-master                      1/1     Running   1          22h   192.168.111.128   master   &lt;none&gt;           &lt;none&gt;
+kube-system   kube-apiserver-master            1/1     Running   1          22h   192.168.111.128   master   &lt;none&gt;           &lt;none&gt;
+kube-system   kube-controller-manager-master   1/1     Running   1          22h   192.168.111.128   master   &lt;none&gt;           &lt;none&gt;
+kube-system   kube-flannel-ds-5h8jr            1/1     Running   1          22h   192.168.111.130   node2    &lt;none&gt;           &lt;none&gt;
+kube-system   kube-flannel-ds-gzzhz            1/1     Running   1          22h   192.168.111.128   master   &lt;none&gt;           &lt;none&gt;
+kube-system   kube-flannel-ds-pxh9j            1/1     Running   7          22h   192.168.111.129   node1    &lt;none&gt;           &lt;none&gt;
+kube-system   kube-proxy-cxphf                 1/1     Running   1          22h   192.168.111.130   node2    &lt;none&gt;           &lt;none&gt;
+kube-system   kube-proxy-hzh4k                 1/1     Running   1          22h   192.168.111.129   node1    &lt;none&gt;           &lt;none&gt;
+kube-system   kube-proxy-kktrf                 1/1     Running   1          22h   192.168.111.128   master   &lt;none&gt;           &lt;none&gt;
+kube-system   kube-scheduler-master            1/1     Running   1          22h   192.168.111.128   master   &lt;none&gt;           &lt;none&gt;
+</code></pre></div>]]></content>
+        </item>
+        
+        <item>
+            <title>Kubernetes入门-基础</title>
+            <link>https://blog.moyrn.com/posts/20210206_before_start/</link>
+            <pubDate>Sat, 06 Feb 2021 10:13:46 +0800</pubDate>
+            
+            <guid>https://blog.moyrn.com/posts/20210206_before_start/</guid>
+            <description>网络设置
+# https://ccie.lol/knowledge-base/linux-centos-route-forwarding/ # 注意事项 开启 IP 路由转发和 NAT, 未开启会导致 Pod 无法访问外网以及 Pod 间无法通信. [root@host ~]# echo &amp;#34;net.ipv4.ip_forward = 1&amp;#34; &amp;gt;&amp;gt; /etc/sysctl.conf [root@host ~]# sysctl -p [root@host ~]# sysctl -a | grep &amp;#34;ip_forward&amp;#34; net.ipv4.ip_forward = 1 # 开启NAT [root@host ~]# iptables -P FORWARD ACCEPT # 缺省允许 IP 转发 # 利用 iptables 实现 NAT MASQUERADE 共享上网，此处 eth0 需要是能够访问外部网络的网卡接口 [root@host ~]# iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE   CPU</description>
+            <content type="html"><![CDATA[<ul>
+<li>
+<p>网络设置</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># https://ccie.lol/knowledge-base/linux-centos-route-forwarding/</span>
+<span class="c1"># 注意事项 开启 IP 路由转发和 NAT, 未开启会导致 Pod 无法访问外网以及 Pod 间无法通信.</span>
+<span class="o">[</span>root@host ~<span class="o">]</span><span class="c1"># echo &#34;net.ipv4.ip_forward = 1&#34; &gt;&gt; /etc/sysctl.conf</span>
+<span class="o">[</span>root@host ~<span class="o">]</span><span class="c1"># sysctl -p</span>
+<span class="o">[</span>root@host ~<span class="o">]</span><span class="c1"># sysctl -a | grep &#34;ip_forward&#34;</span>
+net.ipv4.ip_forward <span class="o">=</span> <span class="m">1</span>
+<span class="c1"># 开启NAT</span>
+<span class="o">[</span>root@host ~<span class="o">]</span><span class="c1"># iptables -P FORWARD ACCEPT    # 缺省允许 IP 转发</span>
+<span class="c1"># 利用 iptables 实现 NAT MASQUERADE 共享上网，此处 eth0 需要是能够访问外部网络的网卡接口</span>
+<span class="o">[</span>root@host ~<span class="o">]</span><span class="c1"># iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE</span>
+</code></pre></div></li>
+<li>
+<p>CPU</p>
+<div class="highlight"><pre class="chroma"><code class="language-text" data-lang="text">CGroup 设置cpu可使用时间
+</code></pre></div></li>
+<li>
+<p>文件系统隔离</p>
+<div class="highlight"><pre class="chroma"><code class="language-text" data-lang="text">Mount NameSpace + mount(&#34;none&#34;,&#34;/tmp&#34;,&#34;tmpfs&#34;,0,&#34;&#34;)
+</code></pre></div></li>
+<li>
+<p>为 结点 打上污点 禁止其它Pod在结点上启动</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">kubectl taint nodes node1 <span class="nv">foo</span><span class="o">=</span>bar:NoSchedule
+</code></pre></div></li>
+<li>
+<p>rook 安装 按顺序执行以下命令</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">$ kubectl apply -f https://raw.githubusercontent.com/rook/rook/master/cluster/examples/kubernetes/ceph/common.yaml
+$ kubectl apply -f https://raw.githubusercontent.com/rook/rook/master/cluster/examples/kubernetes/ceph/operator.yaml
+  
+<span class="c1"># 在 apply cluster.yaml 之前, 需要先apply crds.yaml, 否则会报错 no matches for kind &#34;CephCluster&#34; in version &#34;ceph.rook.io/v1&#34;</span>
+$ kubectl apply -f https://raw.githubusercontent.com/rook/rook/master/cluster/examples/kubernetes/ceph/crds.yaml
+  
+$ kubectl apply -f https://raw.githubusercontent.com/rook/rook/master/cluster/examples/kubernetes/ceph/cluster.yaml
+</code></pre></div></li>
+<li>
+<p>[20210211] docker 多阶段构建,减小体积（示例）</p>
+<div class="highlight"><pre class="chroma"><code class="language-dockerfile" data-lang="dockerfile"><span class="k">FROM</span><span class="s"> golang:1.15</span><span class="err">
+</span><span class="err"></span>  <span class="err">
+</span><span class="err"></span><span class="k">ENV</span> <span class="nv">GOPROXY</span><span class="o">=</span>https://goproxy.cn,direct <span class="se">\
+</span><span class="se"></span>    <span class="nv">GO111MODULE</span><span class="o">=</span>on<span class="err">
+</span><span class="err"></span>  <span class="err">
+</span><span class="err"></span><span class="k">WORKDIR</span><span class="s"> /app</span><span class="err">
+</span><span class="err"></span>  <span class="err">
+</span><span class="err"></span><span class="k">COPY</span> kubernetes .<span class="err">
+</span><span class="err"></span>  <span class="err">
+</span><span class="err"></span><span class="k">RUN</span> go build<span class="err">
+</span><span class="err"></span>  <span class="err">
+</span><span class="err"></span><span class="k">FROM</span><span class="s"> ubuntu:20.04</span><span class="err">
+</span><span class="err"></span>  <span class="err">
+</span><span class="err"></span><span class="k">ENV</span> <span class="nv">PORT</span><span class="o">=</span><span class="m">8080</span>
+  
+<span class="k">WORKDIR</span><span class="s"> /app</span><span class="err">
+</span><span class="err"></span>  <span class="err">
+</span><span class="err"></span><span class="c"># --from=0 表示从第一阶段中获取 文件</span><span class="err">
+</span><span class="err"></span><span class="k">COPY</span> --from<span class="o">=</span><span class="m">0</span> /app .<span class="err">
+</span><span class="err"></span>  <span class="err">
+</span><span class="err"></span><span class="k">EXPOSE</span><span class="s"> 8080</span><span class="err">
+</span><span class="err"></span>  <span class="err">
+</span><span class="err"></span><span class="k">ENTRYPOINT</span> <span class="p">[</span><span class="s2">&#34;./beego&#34;</span><span class="p">]</span><span class="err">
+</span></code></pre></div></li>
+<li>
+<p>设置 volume</p>
+<div class="highlight"><pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">apps/v1</span><span class="w">
+</span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Deployment</span><span class="w">
+</span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">beego-demo</span><span class="w">
+</span><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">selector</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="nt">matchLabels</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l">beego-demo</span><span class="w">
+</span><span class="w">  </span><span class="nt">replicas</span><span class="p">:</span><span class="w"> </span><span class="m">2</span><span class="w">
+</span><span class="w">  </span><span class="nt">template</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span><span class="nt">labels</span><span class="p">:</span><span class="w">
+</span><span class="w">        </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l">beego-demo</span><span class="w">
+</span><span class="w">    </span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span><span class="nt">containers</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">beego</span><span class="w">
+</span><span class="w">        </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">master:5000/beego</span><span class="w">
+</span><span class="w">        </span><span class="nt">ports</span><span class="p">:</span><span class="w">
+</span><span class="w">          </span>- <span class="nt">containerPort</span><span class="p">:</span><span class="w"> </span><span class="m">8080</span><span class="w">
+</span><span class="w">        </span><span class="nt">volumeMounts</span><span class="p">:</span><span class="w">
+</span><span class="w">          </span>- <span class="nt">mountPath</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;/app/views&#34;</span><span class="w">
+</span><span class="w">            </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">beego-index</span><span class="w">
+</span><span class="w">      </span><span class="nt">volumes</span><span class="p">:</span><span class="w">
+</span><span class="w">        </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">beego-index</span><span class="w">
+</span><span class="w">          </span><span class="nt">hostPath</span><span class="p">:</span><span class="w">
+</span><span class="w">            </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;/var/data/beego/views&#34;</span><span class="w">
+</span></code></pre></div></li>
+<li>
+<p>nodeSelector 与 nodeAffinity</p>
+<ul>
+<li>nodeAffinity 支持更丰富的语义，如：operator</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">nodeSelector</span><span class="p">:</span><span class="w"> 
+</span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">&lt;Node名字&gt;</span><span class="w">
+</span></code></pre></div><div class="highlight"><pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">affinity</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">nodeAffinity</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="nt">requiredDuringSchedulingIgnoredDuringExecution</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span><span class="nt">nodeSelectorTerms</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span>- <span class="nt">matchExpressions</span><span class="p">:</span><span class="w">
+</span><span class="w">        </span>- <span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l">metadata.name</span><span class="w">
+</span><span class="w">          </span><span class="nt">operator</span><span class="p">:</span><span class="w"> </span><span class="l">In</span><span class="w">
+</span><span class="w">          </span><span class="nt">values</span><span class="p">:</span><span class="w">
+</span><span class="w">          </span>- <span class="l">node-geektime</span><span class="w">
+</span></code></pre></div></li>
+<li>
+<p>xtrabackup 无法下载</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">docker pull ist0ne/xtrabackup
+docker tag ist0ne/xtrabackup:latest gcr.io/google-samples/xtrabackup:1.0
+</code></pre></div></li>
+<li>
+<p>DaemonSet</p>
+<ul>
+<li>DaemonSet具有Toleration字段,用于忽略节点上的某些污点</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="c"># k8s项目中，当一个节点的网络插件尚未安装时，这个节点就会被自动加上名为node.kubernetes.io/network-unavailable的“污点”</span><span class="w">
+</span><span class="w"></span><span class="c"># 例如master节点上也会有 node-role.kubernetes.io/master 这样的污点</span><span class="w">
+</span><span class="w"></span><span class="nt">template</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="nt">labels</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">network-plugin-agent</span><span class="w">
+</span><span class="w">  </span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="nt">tolerations</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span>- <span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l">node.kubernetes.io/network-unavailable</span><span class="w">
+</span><span class="w">      </span><span class="nt">operator</span><span class="p">:</span><span class="w"> </span><span class="l">Exists</span><span class="w">
+</span><span class="w">      </span><span class="nt">effect</span><span class="p">:</span><span class="w"> </span><span class="l">NoSchedule</span><span class="w">
+</span></code></pre></div><ul>
+<li>DaemonSet 与 DeploymentSet 一样拥有滚动更新的能力，但与 DeploymentSet 通过 ReplicaSet 管理不同版本的区别是， DaemonSet 使用的是 ControllerRevision 对象（StatefulSet 同样如此）。</li>
+</ul>
+</li>
+<li>
+<p>Job 与 CronJob</p>
+<ul>
+<li>像 Deployment ，线上业务时才会使用，但实际上还有离线业务，此时就可以使用 Job。</li>
+<li>定时任务则是 CronJob，定时任务可能存在上一次任务未完成，下一次任务已经开始执行的情况，可以通过 spec.concurrencyPolicy 进行配置。
+<ol>
+<li>concurrencyPolicy=Allow，这也是默认情况，这意味着这些 Job 可以同时存在；</li>
+<li>concurrencyPolicy=Forbid，这意味着不会创建新的 Pod，该创建周期被跳过；</li>
+<li>concurrencyPolicy=Replace，这意味着新产生的 Job 会替换旧的、没有执行完的 Job。</li>
+</ol>
+</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="c"># job</span><span class="w">
+</span><span class="w"></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">batch/v1</span><span class="w">
+</span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Job</span><span class="w">
+</span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">pi</span><span class="w">
+</span><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">parallelism</span><span class="p">:</span><span class="w"> </span><span class="m">2</span><span class="w">
+</span><span class="w">  </span><span class="nt">completions</span><span class="p">:</span><span class="w"> </span><span class="m">4</span><span class="w">
+</span><span class="w">  </span><span class="nt">template</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span><span class="nt">containers</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">pi</span><span class="w">
+</span><span class="w">        </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">resouer/ubuntu-bc</span><span class="w">
+</span><span class="w">        </span><span class="nt">command</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&#34;sh&#34;</span><span class="p">,</span><span class="w"> </span><span class="s2">&#34;-c&#34;</span><span class="p">,</span><span class="w"> </span><span class="s2">&#34;echo &#39;scale=5000; 4*a(1)&#39; | bc -l &#34;</span><span class="p">]</span><span class="w">
+</span><span class="w">      </span><span class="nt">restartPolicy</span><span class="p">:</span><span class="w"> </span><span class="l">Never</span><span class="w">
+</span><span class="w">  </span><span class="nt">backoffLimit</span><span class="p">:</span><span class="w"> </span><span class="m">4</span><span class="w">
+</span></code></pre></div><div class="highlight"><pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="c"># cronjob</span><span class="w">
+</span><span class="w"></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">batch/v1beta1</span><span class="w">
+</span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">CronJob</span><span class="w">
+</span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">hello</span><span class="w">
+</span><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">schedule</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;*/1 * * * *&#34;</span><span class="w">
+</span><span class="w">  </span><span class="nt">jobTemplate</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span><span class="nt">template</span><span class="p">:</span><span class="w">
+</span><span class="w">        </span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span><span class="w">        </span><span class="nt">containers</span><span class="p">:</span><span class="w">
+</span><span class="w">        </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">hello</span><span class="w">
+</span><span class="w">          </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">busybox</span><span class="w">
+</span><span class="w">          </span><span class="nt">args</span><span class="p">:</span><span class="w">
+</span><span class="w">          </span>- <span class="l">/bin/sh</span><span class="w">
+</span><span class="w">          </span>- -<span class="l">c</span><span class="w">
+</span><span class="w">          </span>- <span class="l">date; echo Hello from the Kubernetes cluster</span><span class="w">
+</span><span class="w">        </span><span class="nt">restartPolicy</span><span class="p">:</span><span class="w"> </span><span class="l">OnFailure</span><span class="w">
+</span></code></pre></div><p>还在学习的路上 。。。。。。</p>
+</li>
+</ul>
+]]></content>
+        </item>
+        
+        <item>
+            <title>字符串拼接性能测试</title>
+            <link>https://blog.moyrn.com/posts/20210128_string_join_benchmark/</link>
+            <pubDate>Thu, 28 Jan 2021 13:31:45 +0800</pubDate>
+            
+            <guid>https://blog.moyrn.com/posts/20210128_string_join_benchmark/</guid>
+            <description>// splicing_test.go package splicing import ( &amp;#34;strconv&amp;#34; &amp;#34;strings&amp;#34; &amp;#34;testing&amp;#34; ) func Str(str []string) string { var rst string for _, s := range str { rst += s } return rst } func BuilderStr(str []string) string { var builder strings.Builder for _, s := range str { builder.WriteString(s) } return builder.String() } func BenchmarkStr(b *testing.B) { srcStr := make([]string, 0, 100000) b.Run(&amp;#34;Append-10000&amp;#34;, func(b *testing.B) { for i := 0; i &amp;lt; 10000; i++ { srcStr = append(srcStr, strconv.</description>
+            <content type="html"><![CDATA[<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="c1">// splicing_test.go
+</span><span class="c1"></span><span class="kn">package</span> <span class="nx">splicing</span>
+
+<span class="kn">import</span> <span class="p">(</span>
+	<span class="s">&#34;strconv&#34;</span>
+	<span class="s">&#34;strings&#34;</span>
+	<span class="s">&#34;testing&#34;</span>
+<span class="p">)</span>
+
+<span class="kd">func</span> <span class="nf">Str</span><span class="p">(</span><span class="nx">str</span> <span class="p">[]</span><span class="kt">string</span><span class="p">)</span> <span class="kt">string</span> <span class="p">{</span>
+	<span class="kd">var</span> <span class="nx">rst</span> <span class="kt">string</span>
+	<span class="k">for</span> <span class="nx">_</span><span class="p">,</span> <span class="nx">s</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">str</span> <span class="p">{</span>
+		<span class="nx">rst</span> <span class="o">+=</span> <span class="nx">s</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="nx">rst</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="nf">BuilderStr</span><span class="p">(</span><span class="nx">str</span> <span class="p">[]</span><span class="kt">string</span><span class="p">)</span> <span class="kt">string</span> <span class="p">{</span>
+	<span class="kd">var</span> <span class="nx">builder</span> <span class="nx">strings</span><span class="p">.</span><span class="nx">Builder</span>
+	<span class="k">for</span> <span class="nx">_</span><span class="p">,</span> <span class="nx">s</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">str</span> <span class="p">{</span>
+		<span class="nx">builder</span><span class="p">.</span><span class="nf">WriteString</span><span class="p">(</span><span class="nx">s</span><span class="p">)</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="nx">builder</span><span class="p">.</span><span class="nf">String</span><span class="p">()</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="nf">BenchmarkStr</span><span class="p">(</span><span class="nx">b</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">B</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">srcStr</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">string</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">100000</span><span class="p">)</span>
+
+	<span class="nx">b</span><span class="p">.</span><span class="nf">Run</span><span class="p">(</span><span class="s">&#34;Append-10000&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">b</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">B</span><span class="p">)</span> <span class="p">{</span>
+		<span class="k">for</span> <span class="nx">i</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="p">&lt;</span> <span class="mi">10000</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span> <span class="p">{</span>
+			<span class="nx">srcStr</span> <span class="p">=</span> <span class="nb">append</span><span class="p">(</span><span class="nx">srcStr</span><span class="p">,</span> <span class="nx">strconv</span><span class="p">.</span><span class="nf">Itoa</span><span class="p">(</span><span class="nx">i</span><span class="o">%</span><span class="mi">10</span><span class="p">))</span>
+		<span class="p">}</span>
+	<span class="p">})</span>
+
+	<span class="nx">b</span><span class="p">.</span><span class="nf">Run</span><span class="p">(</span><span class="s">&#34;Str-10000&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">b</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">B</span><span class="p">)</span> <span class="p">{</span>
+		<span class="nf">Str</span><span class="p">(</span><span class="nx">srcStr</span><span class="p">)</span>
+	<span class="p">})</span>
+
+	<span class="nx">b</span><span class="p">.</span><span class="nf">Run</span><span class="p">(</span><span class="s">&#34;BuilderStr-10000&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">b</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">B</span><span class="p">)</span> <span class="p">{</span>
+		<span class="nf">BuilderStr</span><span class="p">(</span><span class="nx">srcStr</span><span class="p">)</span>
+	<span class="p">})</span>
+
+	<span class="nx">b</span><span class="p">.</span><span class="nf">Run</span><span class="p">(</span><span class="s">&#34;Append-100000&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">b</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">B</span><span class="p">)</span> <span class="p">{</span>
+		<span class="k">for</span> <span class="nx">i</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="p">&lt;</span> <span class="mi">90000</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span> <span class="p">{</span>
+			<span class="nx">srcStr</span> <span class="p">=</span> <span class="nb">append</span><span class="p">(</span><span class="nx">srcStr</span><span class="p">,</span> <span class="nx">strconv</span><span class="p">.</span><span class="nf">Itoa</span><span class="p">(</span><span class="nx">i</span><span class="o">%</span><span class="mi">10</span><span class="p">))</span>
+		<span class="p">}</span>
+	<span class="p">})</span>
+
+	<span class="nx">b</span><span class="p">.</span><span class="nf">Run</span><span class="p">(</span><span class="s">&#34;Str-100000&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">b</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">B</span><span class="p">)</span> <span class="p">{</span>
+		<span class="nf">Str</span><span class="p">(</span><span class="nx">srcStr</span><span class="p">)</span>
+	<span class="p">})</span>
+
+	<span class="nx">b</span><span class="p">.</span><span class="nf">Run</span><span class="p">(</span><span class="s">&#34;BuilderStr-100000&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">b</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">B</span><span class="p">)</span> <span class="p">{</span>
+		<span class="nf">BuilderStr</span><span class="p">(</span><span class="nx">srcStr</span><span class="p">)</span>
+	<span class="p">})</span>
+
+<span class="p">}</span>
+</code></pre></div><h2 id="测试结果">测试结果</h2>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">$ go <span class="nb">test</span> -bench<span class="o">=</span>BenchmarkStr  -benchmem -memprofile<span class="o">=</span>mem.prof -cpuprofile<span class="o">=</span>cpu.prof
+goos: linux
+goarch: amd64
+pkg: demo/splicing
+BenchmarkStr/Append-10000-12            <span class="m">1000000000</span>               0.000039 ns/op        <span class="m">0</span> B/op          <span class="m">0</span> allocs/op
+BenchmarkStr/Str-10000-12               <span class="m">1000000000</span>               0.177 ns/op           <span class="m">1</span> B/op          <span class="m">0</span> allocs/op
+BenchmarkStr/BuilderStr-10000-12        <span class="m">1000000000</span>               0.000242 ns/op        <span class="m">0</span> B/op          <span class="m">0</span> allocs/op
+BenchmarkStr/Append-100000-12           <span class="m">1000000000</span>               0.000333 ns/op        <span class="m">0</span> B/op          <span class="m">0</span> allocs/op
+BenchmarkStr/Str-100000-12                     <span class="m">1</span>        <span class="m">20121850900</span> ns/op       <span class="m">182358231216</span> B/op         <span class="m">600145</span> allocs/op
+BenchmarkStr/BuilderStr-100000-12       <span class="m">1000000000</span>               0.00258 ns/op         <span class="m">0</span> B/op          <span class="m">0</span> allocs/op
+BenchmarkStrOnly-12                     <span class="m">1000000000</span>               0.500 ns/op           <span class="m">5</span> B/op          <span class="m">0</span> allocs/op
+PASS
+ok      demo/splicing   35.097s
+$ go tool pprof -http<span class="o">=</span>:8080 mem.prof
+</code></pre></div><h2 id="内存消耗">内存消耗</h2>
+<pre><code>demo/splicing.Str
+/mnt/d/go/src/demo/splicing/splicing.go
+
+  Total:    633.77GB   633.77GB (flat, cum) 199.94%
+      1            .          .           package splicing 
+      2            .          .            
+      3            .          .           import &quot;strings&quot; 
+      4            .          .            
+      5            .          .           func Str(str []string) string { 
+      6            .          .           	var rst string 
+      7            .          .           	for _, s := range str { 
+      8     633.77GB   633.77GB           		rst += s 
+      9            .          .           	} 
+     10            .          .           	return rst 
+     11            .          .           } 
+     12            .          .            
+     13            .          .           func BuilderStr(str []string) string { 
+     14            .          .           	var builder strings.Builder 
+     15            .          .           	for _, s := range str { 
+demo/splicing.BenchmarkStr.func4
+/mnt/d/go/src/demo/splicing/splicing_test.go
+
+  Total:     76.35MB    76.35MB (flat, cum) 0.024%
+     20            .          .            
+     21            .          .           	b.Run(&quot;BuilderStr-10000&quot;, func(b *testing.B) { 
+     22            .          .           		BuilderStr(srcStr) 
+     23            .          .           	}) 
+     24            .          .            
+     25            .          .           	b.Run(&quot;Append-100000&quot;, func(b *testing.B) { 
+     26            .          .           		for i := 0; i &lt; 90000; i++ { 
+     27      76.35MB    76.35MB           			srcStr = append(srcStr, strconv.Itoa(i%10)) 
+     28            .          .           		} 
+     29            .          .           	}) 
+     30            .          .            
+     31            .          .           	b.Run(&quot;Str-100000&quot;, func(b *testing.B) { 
+     32            .          .           		Str(srcStr) 
+</code></pre><ul>
+<li>从结果中可以看出，使用+=进行字符串拼接，会申请大量内存，并且速度非常慢。</li>
+</ul>
+<h2 id="原因分析">原因分析</h2>
+<ul>
+<li>使用 + 进行字符串拼接时，当 拼接 A 和 B 两个字符串时，需要申请另一个为A+B长度的空间C，每次都是如此。</li>
+<li>使用 strings.Builder 进行拼接时，内部实际上是使用的 []byte 存储，使用append操作，在不需要扩容时会在当前slice后追加，且每次是翻倍扩容，能减少扩容（申请新内存片段和复制等操作）次数。</li>
+<li>(bytes.Buffer 与 strings.Builder 的差异)
+<ul>
+<li>bytes.Buffer
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="p">(</span><span class="nx">b</span> <span class="o">*</span><span class="nx">Buffer</span><span class="p">)</span> <span class="nf">String</span><span class="p">()</span> <span class="kt">string</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="nx">b</span> <span class="o">==</span> <span class="kc">nil</span> <span class="p">{</span>
+        <span class="c1">// Special case, useful in debugging.
+</span><span class="c1"></span>        <span class="k">return</span> <span class="s">&#34;&lt;nil&gt;&#34;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nb">string</span><span class="p">(</span><span class="nx">b</span><span class="p">.</span><span class="nx">buf</span><span class="p">[</span><span class="nx">b</span><span class="p">.</span><span class="nx">off</span><span class="p">:])</span>
+<span class="p">}</span>
+</code></pre></div></li>
+<li>strings.Builder
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 会使用原buf的数据，而不会拷贝一份数据到返回值的字符串里面
+</span><span class="c1"></span><span class="kd">func</span> <span class="p">(</span><span class="nx">b</span> <span class="o">*</span><span class="nx">Builder</span><span class="p">)</span> <span class="nf">String</span><span class="p">()</span> <span class="kt">string</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="o">*</span><span class="p">(</span><span class="o">*</span><span class="kt">string</span><span class="p">)(</span><span class="nx">unsafe</span><span class="p">.</span><span class="nf">Pointer</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">b</span><span class="p">.</span><span class="nx">buf</span><span class="p">))</span>
+<span class="p">}</span>
+</code></pre></div></li>
+</ul>
+</li>
+</ul>
+]]></content>
+        </item>
+        
+        <item>
+            <title>Nginx 反向代理</title>
+            <link>https://blog.moyrn.com/posts/20210127_nginx_proxy/</link>
+            <pubDate>Wed, 27 Jan 2021 13:34:41 +0800</pubDate>
+            
+            <guid>https://blog.moyrn.com/posts/20210127_nginx_proxy/</guid>
+            <description>将静态文件交给nginx代理 配置文件位置 /etc/nginx/conf.d/default.conf server {listen 80;server_name www.moyrn.com;location / {root /usr/share/nginx/webmonitor;index index.html;}}通过不同的域名，将80端口的消息转发到其他端口 server {listen 80;server_name go.moyrn.com;location / {proxy_pass http://127.0.0.1:8080;}}server {listen 80;server_name moyrn.com;location / {proxy_pass http://127.0.0.1:8086;}}server {listen 80;server_name www.moyrn.com;location / {proxy_pass http://127.0.0.1:8086;}}</description>
+            <content type="html"><![CDATA[<h1 id="将静态文件交给nginx代理">将静态文件交给nginx代理</h1>
+<pre><code>配置文件位置 /etc/nginx/conf.d/default.conf
+</code></pre>
+<pre><code>server {
+    listen 80;
+    server_name www.moyrn.com;
+    location / {
+        root /usr/share/nginx/webmonitor;
+        index index.html;
+    }
+}
+</code></pre><h4 id="通过不同的域名将80端口的消息转发到其他端口">通过不同的域名，将80端口的消息转发到其他端口</h4>
+<pre><code>server {
+    listen  80;
+    server_name go.moyrn.com;
+    location / {
+        proxy_pass http://127.0.0.1:8080;
+    }
+}
+
+server {
+    listen 80;
+    server_name moyrn.com;
+    location / {
+        proxy_pass http://127.0.0.1:8086;
+    }
+}
+server {
+    listen 80;
+    server_name www.moyrn.com;
+    location / {
+        proxy_pass http://127.0.0.1:8086;
+    }
+}
+</code></pre>]]></content>
+        </item>
+        
+        <item>
+            <title>time.After() 导致内存暴涨</title>
+            <link>https://blog.moyrn.com/posts/20210127_time_after_oom/</link>
+            <pubDate>Wed, 27 Jan 2021 13:04:41 +0800</pubDate>
+            
+            <guid>https://blog.moyrn.com/posts/20210127_time_after_oom/</guid>
+            <description>select + time.After 导致内存暴涨 func Function(notRun notRun) { for { select { case &amp;lt;-notRun.notRun: // 大多数情况都是有notRun的输入 	case &amp;lt;-time.After(time.Minute): notRun.Close() continue case &amp;lt;-notRun.run: notRun.Close() return } } }  notRun 发送消息频率过快，而每次select都会调用到time.After，而time.After又会NewTimer，而每次NewTimer都必须在1分钟后才能释放。 当notRun的频率很高时，会在内存中堆积非常多的无用的Timer。导致内存暴涨。  解决方法 func Function(notRun notRun) { afterTime := time.Minute after := time.NewTimer(afterTime) defer after.Stop() for { after.Reset(afterTime) select { case &amp;lt;-notRun.notRun: case &amp;lt;-after.C: notRun.Close() continue case &amp;lt;-notRun.run: notRun.Close() return } } }  自己 NewTimer 在每次 select 之前 reset，使 timer 重新计时，从而避免每次都 new timer。  </description>
+            <content type="html"><![CDATA[<h1 id="select--timeafter-导致内存暴涨">select + time.After 导致内存暴涨</h1>
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">Function</span><span class="p">(</span><span class="nx">notRun</span> <span class="nx">notRun</span><span class="p">)</span> <span class="p">{</span>
+	<span class="k">for</span> <span class="p">{</span>
+		<span class="k">select</span> <span class="p">{</span>
+		<span class="k">case</span> <span class="o">&lt;-</span><span class="nx">notRun</span><span class="p">.</span><span class="nx">notRun</span><span class="p">:</span>
+		<span class="c1">// 大多数情况都是有notRun的输入
+</span><span class="c1"></span>		<span class="k">case</span> <span class="o">&lt;-</span><span class="nx">time</span><span class="p">.</span><span class="nf">After</span><span class="p">(</span><span class="nx">time</span><span class="p">.</span><span class="nx">Minute</span><span class="p">):</span>
+			<span class="nx">notRun</span><span class="p">.</span><span class="nf">Close</span><span class="p">()</span>
+			<span class="k">continue</span>
+		<span class="k">case</span> <span class="o">&lt;-</span><span class="nx">notRun</span><span class="p">.</span><span class="nx">run</span><span class="p">:</span>
+			<span class="nx">notRun</span><span class="p">.</span><span class="nf">Close</span><span class="p">()</span>
+			<span class="k">return</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div><ul>
+<li>notRun 发送消息频率过快，而每次select都会调用到time.After，而time.After又会NewTimer，而每次NewTimer都必须在1分钟后才能释放。</li>
+<li>当notRun的频率很高时，会在内存中堆积非常多的无用的Timer。导致内存暴涨。</li>
+</ul>
+<h1 id="解决方法">解决方法</h1>
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">Function</span><span class="p">(</span><span class="nx">notRun</span> <span class="nx">notRun</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">afterTime</span> <span class="o">:=</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Minute</span>
+	<span class="nx">after</span> <span class="o">:=</span> <span class="nx">time</span><span class="p">.</span><span class="nf">NewTimer</span><span class="p">(</span><span class="nx">afterTime</span><span class="p">)</span>
+	<span class="k">defer</span> <span class="nx">after</span><span class="p">.</span><span class="nf">Stop</span><span class="p">()</span>
+	<span class="k">for</span> <span class="p">{</span>
+		<span class="nx">after</span><span class="p">.</span><span class="nf">Reset</span><span class="p">(</span><span class="nx">afterTime</span><span class="p">)</span>
+		<span class="k">select</span> <span class="p">{</span>
+		<span class="k">case</span> <span class="o">&lt;-</span><span class="nx">notRun</span><span class="p">.</span><span class="nx">notRun</span><span class="p">:</span>
+		<span class="k">case</span> <span class="o">&lt;-</span><span class="nx">after</span><span class="p">.</span><span class="nx">C</span><span class="p">:</span>
+			<span class="nx">notRun</span><span class="p">.</span><span class="nf">Close</span><span class="p">()</span>
+			<span class="k">continue</span>
+		<span class="k">case</span> <span class="o">&lt;-</span><span class="nx">notRun</span><span class="p">.</span><span class="nx">run</span><span class="p">:</span>
+			<span class="nx">notRun</span><span class="p">.</span><span class="nf">Close</span><span class="p">()</span>
+			<span class="k">return</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div><ul>
+<li>自己 NewTimer 在每次 select 之前 reset，使 timer 重新计时，从而避免每次都 new timer。</li>
+</ul>
+]]></content>
+        </item>
+        
+        <item>
+            <title>Golang HTTP包传输文件</title>
+            <link>https://blog.moyrn.com/posts/20210127_http_file/</link>
+            <pubDate>Wed, 27 Jan 2021 13:02:39 +0800</pubDate>
+            
+            <guid>https://blog.moyrn.com/posts/20210127_http_file/</guid>
+            <description>文件传输 Content-Type http://tool.oschina.net/commons?type=22013-05-17multipart/form-data：既可以提交普通键值对，也可以提交(多个)文件键值对。application/octet-stream：只能提交二进制，而且只能提交一个二进制，如果提交文件的话，只能提交一个文件,后台接收参数只能有一个，而且只能是流（或者字节数组）application/x-www-form-urlencoded不属于http content-type规范，通常用于浏览器表单提交，数据组织格式:name1=value1&amp;amp;name2=value2,post时会放入http body，get时，显示在在地址栏。 // golang 实现  W.Header().Add(&amp;#34;Content-Type&amp;#34;,&amp;#34;application/octet-stream&amp;#34;) W.Header().Add(&amp;#34;Content-Disposition&amp;#34;,fmt.Sprintf(&amp;#34;attachment; filename=\&amp;#34;%s\&amp;#34;&amp;#34;, fileName)) </description>
+            <content type="html"><![CDATA[<h1 id="文件传输">文件传输</h1>
+<pre><code>Content-Type  http://tool.oschina.net/commons?type=22013-05-17
+multipart/form-data：
+    既可以提交普通键值对，也可以提交(多个)文件键值对。
+application/octet-stream：
+    只能提交二进制，而且只能提交一个二进制，如果提交文件的话，只能提交一个文件,后台接收参数只能有一个，而且只能是流（或者字节数组）
+application/x-www-form-urlencoded
+    不属于http content-type规范，通常用于浏览器表单提交，数据组织格式:name1=value1&amp;name2=value2,post时会放入http body，get时，显示在在地址栏。
+</code></pre>
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go">    <span class="c1">// golang 实现
+</span><span class="c1"></span>    <span class="nx">W</span><span class="p">.</span><span class="nf">Header</span><span class="p">().</span><span class="nf">Add</span><span class="p">(</span><span class="s">&#34;Content-Type&#34;</span><span class="p">,</span><span class="s">&#34;application/octet-stream&#34;</span><span class="p">)</span>
+    <span class="nx">W</span><span class="p">.</span><span class="nf">Header</span><span class="p">().</span><span class="nf">Add</span><span class="p">(</span><span class="s">&#34;Content-Disposition&#34;</span><span class="p">,</span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Sprintf</span><span class="p">(</span><span class="s">&#34;attachment; filename=\&#34;%s\&#34;&#34;</span><span class="p">,</span> <span class="nx">fileName</span><span class="p">))</span>
+</code></pre></div>]]></content>
+        </item>
+        
+        <item>
+            <title>Golang 编译</title>
+            <link>https://blog.moyrn.com/posts/20210127_build/</link>
+            <pubDate>Wed, 27 Jan 2021 12:04:51 +0800</pubDate>
+            
+            <guid>https://blog.moyrn.com/posts/20210127_build/</guid>
+            <description>编译 编译其他系统 CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build# 不能复制空格set CGO_ENABLED=0set GOOS=linuxset GOARCH=amd64go build 图标制作 第一步：Windows 下载MinGW第二步：新建一个.rc文件，加入文件名为 demo.rc 输入内容 IDI_ICON1 ICON &amp;quot;cefclient.ico&amp;quot;其中 cefclient.ico 是你的ico的地址第三步:MinGW 执行windres -o demo.syso demo.rc第四步:将生成的demo.syso 放到项目目录下go build 隐藏命令行 go build -i -ldflags=&amp;quot;-H windowsgui&amp;quot; </description>
+            <content type="html"><![CDATA[<h1 id="编译">编译</h1>
+<h2 id="编译其他系统">编译其他系统</h2>
+<pre><code>CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build
+
+
+# 不能复制空格
+set CGO_ENABLED=0
+set GOOS=linux
+set GOARCH=amd64
+go build
+</code></pre>
+<h2 id="图标制作">图标制作</h2>
+<pre><code>第一步：
+    Windows 下载MinGW
+
+第二步：
+    新建一个.rc文件，加入文件名为 demo.rc 输入内容   
+    IDI_ICON1 ICON &quot;cefclient.ico&quot;
+    其中 cefclient.ico 是你的ico的地址
+
+第三步:
+    MinGW 执行
+    windres -o demo.syso demo.rc
+
+第四步:
+    将生成的demo.syso 放到项目目录下
+    go build
+</code></pre>
+<h2 id="隐藏命令行">隐藏命令行</h2>
+<pre><code>go build -i -ldflags=&quot;-H windowsgui&quot;</code></pre>
+]]></content>
+        </item>
+        
+        <item>
+            <title>GORM 使用</title>
+            <link>https://blog.moyrn.com/posts/20210127_gorm/</link>
+            <pubDate>Wed, 27 Jan 2021 11:53:34 +0800</pubDate>
+            
+            <guid>https://blog.moyrn.com/posts/20210127_gorm/</guid>
+            <description>MYSQL 悲观锁 tx := db.DB.Begin() if err := tx.Set(&amp;#34;gorm:query_option&amp;#34;, &amp;#34;FOR UPDATE&amp;#34;). Where(&amp;#34;`xx` = ? and `xxx` = ?&amp;#34;, xx, xxx). First(&amp;amp;xx).Error; err != nil { tx.Rollback() return } 在事务中使用 Set(&amp;quot;gorm:query_option&amp;quot;, &amp;quot;FOR UPDATE&amp;quot;) + first 能将查询的这条记录锁住；在事务 rollback 或 commit 后会 unlock。  创建复合主键(当主键涉及自增时) gorm:&amp;quot;primary_key;AUTO_INCREMENT:false&amp;quot; 连接数据库 步骤分析  引入mysql数据库驱动 引入gorm包 读取配置文件中的数据库信息 将读取的数据生成为Open()需要的字符串  代码示例 package base import ( _ &amp;#34;github.com/go-sql-driver/mysql&amp;#34; _ &amp;#34;github.com/jinzhu/gorm/dialects/mysql&amp;#34; &amp;#34;github.com/jinzhu/gorm&amp;#34; &amp;#34;fmt&amp;#34; &amp;#34;log&amp;#34; ) func DBConnect() { user := &amp;#34;user&amp;#34; password := &amp;#34;password&amp;#34; dbname := &amp;#34;dbname&amp;#34; address := &amp;#34;address&amp;#34; port := &amp;#34;port&amp;#34; str := fmt.</description>
+            <content type="html"><![CDATA[<h1 id="mysql-悲观锁">MYSQL 悲观锁</h1>
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="nx">tx</span> <span class="o">:=</span> <span class="nx">db</span><span class="p">.</span><span class="nx">DB</span><span class="p">.</span><span class="nf">Begin</span><span class="p">()</span>
+<span class="k">if</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">tx</span><span class="p">.</span><span class="nf">Set</span><span class="p">(</span><span class="s">&#34;gorm:query_option&#34;</span><span class="p">,</span> <span class="s">&#34;FOR UPDATE&#34;</span><span class="p">).</span>
+	<span class="nf">Where</span><span class="p">(</span><span class="s">&#34;`xx` = ? and `xxx` = ?&#34;</span><span class="p">,</span> <span class="nx">xx</span><span class="p">,</span> <span class="nx">xxx</span><span class="p">).</span>
+	<span class="nf">First</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">xx</span><span class="p">).</span><span class="nx">Error</span><span class="p">;</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+	<span class="nx">tx</span><span class="p">.</span><span class="nf">Rollback</span><span class="p">()</span>
+	<span class="k">return</span>
+<span class="p">}</span>
+</code></pre></div><pre><code>在事务中使用 Set(&quot;gorm:query_option&quot;, &quot;FOR UPDATE&quot;) + first 能将查询的这条记录锁住；
+在事务 rollback 或 commit 后会 unlock。
+</code></pre>
+<hr>
+<h1 id="创建复合主键当主键涉及自增时">创建复合主键(当主键涉及自增时)</h1>
+<pre><code>gorm:&quot;primary_key;AUTO_INCREMENT:false&quot;
+</code></pre><hr>
+<h1 id="连接数据库">连接数据库</h1>
+<h2 id="步骤分析">步骤分析</h2>
+<ul>
+<li>引入mysql数据库驱动</li>
+<li>引入gorm包</li>
+<li>读取配置文件中的数据库信息</li>
+<li>将读取的数据生成为Open()需要的字符串</li>
+</ul>
+<h2 id="代码示例">代码示例</h2>
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">base</span>
+
+<span class="kn">import</span> <span class="p">(</span>
+	<span class="nx">_</span> <span class="s">&#34;github.com/go-sql-driver/mysql&#34;</span>
+	<span class="nx">_</span> <span class="s">&#34;github.com/jinzhu/gorm/dialects/mysql&#34;</span>
+	<span class="s">&#34;github.com/jinzhu/gorm&#34;</span>
+	<span class="s">&#34;fmt&#34;</span>
+	<span class="s">&#34;log&#34;</span>
+<span class="p">)</span>
+
+<span class="kd">func</span> <span class="nf">DBConnect</span><span class="p">()</span> <span class="p">{</span>
+	<span class="nx">user</span> <span class="o">:=</span> <span class="s">&#34;user&#34;</span>
+	<span class="nx">password</span> <span class="o">:=</span> <span class="s">&#34;password&#34;</span>
+	<span class="nx">dbname</span> <span class="o">:=</span> <span class="s">&#34;dbname&#34;</span>
+	<span class="nx">address</span> <span class="o">:=</span> <span class="s">&#34;address&#34;</span>
+	<span class="nx">port</span> <span class="o">:=</span> <span class="s">&#34;port&#34;</span>
+	<span class="nx">str</span> <span class="o">:=</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Sprintf</span><span class="p">(</span><span class="s">&#34;%s&#34;</span><span class="p">,</span><span class="nx">user</span><span class="o">+</span><span class="s">&#34;:&#34;</span><span class="o">+</span><span class="nx">password</span><span class="o">+</span> <span class="s">&#34;@tcp(&#34;</span><span class="o">+</span><span class="nx">address</span><span class="o">+</span>
+		<span class="s">&#34;:&#34;</span><span class="o">+</span><span class="nx">port</span><span class="o">+</span><span class="s">&#34;)/&#34;</span><span class="o">+</span><span class="nx">dbname</span><span class="o">+</span><span class="s">&#34;?charset=utf8&amp;parseTime=True&amp;loc=Local&#34;</span><span class="p">)</span>
+	<span class="nx">db</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">gorm</span><span class="p">.</span><span class="nf">Open</span><span class="p">(</span><span class="s">&#34;mysql&#34;</span><span class="p">,</span> <span class="nx">str</span><span class="p">)</span>
+	<span class="c1">//&#34;user:password@/dbname?charset=utf8&amp;parseTime=True&amp;loc=Local&#34;
+</span><span class="c1"></span>	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="nx">log</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;Opening mysql error is :&#34;</span><span class="p">,</span><span class="nx">err</span><span class="p">)</span>
+		<span class="k">return</span>
+	<span class="p">}</span>
+	<span class="k">defer</span> <span class="nx">db</span><span class="p">.</span><span class="nf">Close</span><span class="p">()</span>
+<span class="p">}</span>
+</code></pre></div>]]></content>
+        </item>
+        
+        <item>
+            <title>手动构建 OMNI-USDT 请求</title>
+            <link>https://blog.moyrn.com/posts/20190810_btc_usdt/</link>
+            <pubDate>Sat, 10 Aug 2019 14:01:07 +0800</pubDate>
+            
+            <guid>https://blog.moyrn.com/posts/20190810_btc_usdt/</guid>
+            <description>手动构建 omni usdt 划转  [2021-03-09] 从有道云笔记搬运至 github pages 在实习期间写的，程序中有打印的这类问题，请忽略。（当时debug用的）  package btc import ( &amp;#34;bytes&amp;#34; &amp;#34;encoding/hex&amp;#34; &amp;#34;errors&amp;#34; &amp;#34;fmt&amp;#34; &amp;#34;github.com/astaxie/beego&amp;#34; &amp;#34;github.com/btcsuite/btcd/chaincfg&amp;#34; &amp;#34;github.com/btcsuite/btcd/chaincfg/chainhash&amp;#34; &amp;#34;github.com/btcsuite/btcd/txscript&amp;#34; &amp;#34;github.com/btcsuite/btcd/wire&amp;#34; &amp;#34;github.com/btcsuite/btcutil&amp;#34; &amp;#34;github.com/ethereum/go-ethereum/common/math&amp;#34; &amp;#34;log&amp;#34; &amp;#34;math/big&amp;#34; &amp;#34;$project/db&amp;#34; &amp;#34;$project/models&amp;#34; &amp;#34;$project/node/btc&amp;#34; btc2 &amp;#34;$project/wallet/btc&amp;#34; ) var hexLength = 16 func calAmountUSDT(amount *big.Int) (amountHex string) { amountHexBef := fmt.Sprintf(&amp;#34;%x&amp;#34;, amount) amountHexLen := len(amountHexBef) var amountHexBytes []byte amountHexBytes = make([]byte, hexLength-amountHexLen) for i := range amountHexBytes { amountHexBytes[i] = &amp;#39;0&amp;#39; } for _, v := range amountHexBef { amountHexBytes = append(amountHexBytes, byte(v)) } amountHex = string(amountHexBytes) return } // 发起usdt转账前先确认usdt余额 func SendTransactionUSDT(from, to, amountUSDT, totalFee string) (txHash string, err error) { var ( //Decimal = &amp;#34;00000000&amp;#34; 	//omni = &amp;#34;6f6d6e69&amp;#34; 	minBTCTrans = &amp;#34;546&amp;#34; omni = &amp;#34;6f6d6e69&amp;#34; transactionVarsion = &amp;#34;0000&amp;#34; // 2 byte 	transactionType = &amp;#34;0000&amp;#34; // 2 byte 	currencyIdentifier = &amp;#34;0000001f&amp;#34; // 4 byte 	//currencyIdentifier = &amp;#34;0000001f&amp;#34; // 4 byte 	//amountUSDT // 8 byte 	) var address models.</description>
+            <content type="html"><![CDATA[<h2 id="手动构建-omni-usdt-划转">手动构建 omni usdt 划转</h2>
+<ul>
+<li>[2021-03-09] 从有道云笔记搬运至 <code>github pages</code></li>
+<li>在实习期间写的，程序中有打印的这类问题，请忽略。（当时debug用的）</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">btc</span>
+
+<span class="kn">import</span> <span class="p">(</span>
+	<span class="s">&#34;bytes&#34;</span>
+	<span class="s">&#34;encoding/hex&#34;</span>
+	<span class="s">&#34;errors&#34;</span>
+	<span class="s">&#34;fmt&#34;</span>
+	<span class="s">&#34;github.com/astaxie/beego&#34;</span>
+	<span class="s">&#34;github.com/btcsuite/btcd/chaincfg&#34;</span>
+	<span class="s">&#34;github.com/btcsuite/btcd/chaincfg/chainhash&#34;</span>
+	<span class="s">&#34;github.com/btcsuite/btcd/txscript&#34;</span>
+	<span class="s">&#34;github.com/btcsuite/btcd/wire&#34;</span>
+	<span class="s">&#34;github.com/btcsuite/btcutil&#34;</span>
+	<span class="s">&#34;github.com/ethereum/go-ethereum/common/math&#34;</span>
+	<span class="s">&#34;log&#34;</span>
+	<span class="s">&#34;math/big&#34;</span>
+	<span class="s">&#34;$project/db&#34;</span>
+	<span class="s">&#34;$project/models&#34;</span>
+	<span class="s">&#34;$project/node/btc&#34;</span>
+	<span class="nx">btc2</span> <span class="s">&#34;$project/wallet/btc&#34;</span>
+<span class="p">)</span>
+
+<span class="kd">var</span> <span class="nx">hexLength</span> <span class="p">=</span> <span class="mi">16</span>
+
+<span class="kd">func</span> <span class="nf">calAmountUSDT</span><span class="p">(</span><span class="nx">amount</span> <span class="o">*</span><span class="nx">big</span><span class="p">.</span><span class="nx">Int</span><span class="p">)</span> <span class="p">(</span><span class="nx">amountHex</span> <span class="kt">string</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">amountHexBef</span> <span class="o">:=</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Sprintf</span><span class="p">(</span><span class="s">&#34;%x&#34;</span><span class="p">,</span> <span class="nx">amount</span><span class="p">)</span>
+	<span class="nx">amountHexLen</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="nx">amountHexBef</span><span class="p">)</span>
+
+	<span class="kd">var</span> <span class="nx">amountHexBytes</span> <span class="p">[]</span><span class="kt">byte</span>
+	<span class="nx">amountHexBytes</span> <span class="p">=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">byte</span><span class="p">,</span> <span class="nx">hexLength</span><span class="o">-</span><span class="nx">amountHexLen</span><span class="p">)</span>
+	<span class="k">for</span> <span class="nx">i</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">amountHexBytes</span> <span class="p">{</span>
+		<span class="nx">amountHexBytes</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="p">=</span> <span class="sc">&#39;0&#39;</span>
+	<span class="p">}</span>
+	<span class="k">for</span> <span class="nx">_</span><span class="p">,</span> <span class="nx">v</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">amountHexBef</span> <span class="p">{</span>
+		<span class="nx">amountHexBytes</span> <span class="p">=</span> <span class="nb">append</span><span class="p">(</span><span class="nx">amountHexBytes</span><span class="p">,</span> <span class="nb">byte</span><span class="p">(</span><span class="nx">v</span><span class="p">))</span>
+	<span class="p">}</span>
+	<span class="nx">amountHex</span> <span class="p">=</span> <span class="nb">string</span><span class="p">(</span><span class="nx">amountHexBytes</span><span class="p">)</span>
+	<span class="k">return</span>
+<span class="p">}</span>
+
+<span class="c1">// 发起usdt转账前先确认usdt余额
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">SendTransactionUSDT</span><span class="p">(</span><span class="nx">from</span><span class="p">,</span> <span class="nx">to</span><span class="p">,</span> <span class="nx">amountUSDT</span><span class="p">,</span> <span class="nx">totalFee</span> <span class="kt">string</span><span class="p">)</span> <span class="p">(</span><span class="nx">txHash</span> <span class="kt">string</span><span class="p">,</span> <span class="nx">err</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
+	<span class="kd">var</span> <span class="p">(</span>
+		<span class="c1">//Decimal            = &#34;00000000&#34;
+</span><span class="c1"></span>		<span class="c1">//omni               = &#34;6f6d6e69&#34;
+</span><span class="c1"></span>		<span class="nx">minBTCTrans</span>        <span class="p">=</span> <span class="s">&#34;546&#34;</span>
+		<span class="nx">omni</span>               <span class="p">=</span> <span class="s">&#34;6f6d6e69&#34;</span>
+		<span class="nx">transactionVarsion</span> <span class="p">=</span> <span class="s">&#34;0000&#34;</span>     <span class="c1">// 2 byte
+</span><span class="c1"></span>		<span class="nx">transactionType</span>    <span class="p">=</span> <span class="s">&#34;0000&#34;</span>     <span class="c1">// 2 byte
+</span><span class="c1"></span>		<span class="nx">currencyIdentifier</span> <span class="p">=</span> <span class="s">&#34;0000001f&#34;</span> <span class="c1">// 4 byte
+</span><span class="c1"></span>		<span class="c1">//currencyIdentifier = &#34;0000001f&#34; // 4 byte
+</span><span class="c1"></span>		<span class="c1">//amountUSDT                	 // 8 byte
+</span><span class="c1"></span>	<span class="p">)</span>
+
+	<span class="kd">var</span> <span class="nx">address</span> <span class="nx">models</span><span class="p">.</span><span class="nx">Address</span>
+	<span class="k">if</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">db</span><span class="p">.</span><span class="nx">DB</span><span class="p">.</span><span class="nf">Where</span><span class="p">(</span><span class="s">&#34;address=? and chain_coin=?&#34;</span><span class="p">,</span> <span class="nx">from</span><span class="p">,</span> <span class="s">&#34;btc&#34;</span><span class="p">).</span>
+		<span class="nf">First</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">address</span><span class="p">).</span><span class="nx">Error</span><span class="p">;</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="s">&#34;&#34;</span><span class="p">,</span> <span class="nx">err</span>
+	<span class="p">}</span>
+
+	<span class="nx">amountUSDTToSend</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">math</span><span class="p">.</span><span class="nf">ParseBig256</span><span class="p">(</span><span class="nx">amountUSDT</span><span class="p">)</span>
+	<span class="nx">amountUSDTHex</span> <span class="o">:=</span> <span class="nf">calAmountUSDT</span><span class="p">(</span><span class="nx">amountUSDTToSend</span><span class="p">)</span>
+
+	<span class="nx">chainParams</span> <span class="o">:=</span> <span class="o">&amp;</span><span class="nx">chaincfg</span><span class="p">.</span><span class="nx">MainNetParams</span>
+
+	<span class="nx">log</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;total fee: %s&#34;</span><span class="p">,</span> <span class="nx">totalFee</span><span class="p">)</span>
+	<span class="nx">totalFeeBig</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">math</span><span class="p">.</span><span class="nf">ParseBig256</span><span class="p">(</span><span class="nx">totalFee</span><span class="p">)</span>
+
+	<span class="nx">amountToSend</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">math</span><span class="p">.</span><span class="nf">ParseBig256</span><span class="p">(</span><span class="nx">minBTCTrans</span><span class="p">)</span>
+
+	<span class="nx">feeRate</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">btc2</span><span class="p">.</span><span class="nf">GetCurrentFeeRate</span><span class="p">()</span>
+	<span class="nx">log</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;current fee rate: %v&#34;</span><span class="p">,</span> <span class="nx">feeRate</span><span class="p">)</span>
+	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="nx">beego</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="s">&#34;GetCurrentFeeRate&#34;</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
+		<span class="k">return</span> <span class="s">&#34;&#34;</span><span class="p">,</span> <span class="nx">err</span>
+	<span class="p">}</span>
+
+	<span class="nx">fromWalletPublicAddress</span> <span class="o">:=</span> <span class="nx">from</span>
+	<span class="nx">log</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;from wallet public address: %s&#34;</span><span class="p">,</span> <span class="nx">fromWalletPublicAddress</span><span class="p">)</span>
+
+	<span class="nx">unspentTXOs</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">btc2</span><span class="p">.</span><span class="nf">ListUnspentTXOs</span><span class="p">(</span><span class="nx">fromWalletPublicAddress</span><span class="p">)</span>
+	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="nx">beego</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="s">&#34;ListUnspentTXOs&#34;</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
+		<span class="k">return</span> <span class="s">&#34;&#34;</span><span class="p">,</span> <span class="nx">err</span>
+	<span class="p">}</span>
+	<span class="k">if</span> <span class="nx">unspentTXOs</span> <span class="o">==</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="nx">beego</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="s">&#34;marshalUTXOs unspentTXOs is nil&#34;</span><span class="p">)</span>
+		<span class="k">return</span> <span class="s">&#34;&#34;</span><span class="p">,</span> <span class="nx">errors</span><span class="p">.</span><span class="nf">New</span><span class="p">(</span><span class="s">&#34;marshalUTXOs unspentTXOs is nil&#34;</span><span class="p">)</span>
+	<span class="p">}</span>
+
+	<span class="c1">//UTXOsAmount := big.NewInt(0)
+</span><span class="c1"></span>	<span class="c1">//for _, unspentTXO := range unspentTXOs {
+</span><span class="c1"></span>	<span class="c1">//	UTXOsAmount = new(big.Int).Add(UTXOsAmount, unspentTXO.Amount)
+</span><span class="c1"></span>	<span class="c1">//}
+</span><span class="c1"></span>	<span class="c1">// TODO:marshalUTXOs 存在问题，筛选后UTXOsAmount与unspentTXO不对应，
+</span><span class="c1"></span>	<span class="c1">//  unspentTXO中金额过低，疑似选错了UTXO
+</span><span class="c1"></span>	<span class="nx">unspentTXOs</span><span class="p">,</span> <span class="nx">UTXOsAmount</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">btc2</span><span class="p">.</span><span class="nf">MarshalUTXOs</span><span class="p">(</span><span class="nx">unspentTXOs</span><span class="p">,</span> <span class="nx">amountToSend</span><span class="p">,</span> <span class="nx">feeRate</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
+	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="nx">beego</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="s">&#34;marshalUTXOs&#34;</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
+		<span class="k">return</span> <span class="s">&#34;&#34;</span><span class="p">,</span> <span class="nx">err</span>
+	<span class="p">}</span>
+
+	<span class="c1">// prepare unspent transaction outputs with its privatekey.
+</span><span class="c1"></span>	<span class="nx">log</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;unspent UTXOs&#34;</span><span class="p">,</span> <span class="nx">unspentTXOs</span><span class="p">,</span> <span class="nx">UTXOsAmount</span><span class="p">)</span>
+
+	<span class="nx">tx</span> <span class="o">:=</span> <span class="nx">wire</span><span class="p">.</span><span class="nf">NewMsgTx</span><span class="p">(</span><span class="nx">wire</span><span class="p">.</span><span class="nx">TxVersion</span><span class="p">)</span>
+
+	<span class="kd">var</span> <span class="nx">sourceUTXOs</span> <span class="p">[]</span><span class="o">*</span><span class="nx">btc2</span><span class="p">.</span><span class="nx">UTXO</span>
+	<span class="c1">// prepare tx ins
+</span><span class="c1"></span>	<span class="k">for</span> <span class="nx">idx</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">unspentTXOs</span> <span class="p">{</span>
+		<span class="nx">hashStr</span> <span class="o">:=</span> <span class="nx">unspentTXOs</span><span class="p">[</span><span class="nx">idx</span><span class="p">].</span><span class="nx">Hash</span>
+
+		<span class="nx">sourceUTXOHash</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">chainhash</span><span class="p">.</span><span class="nf">NewHashFromStr</span><span class="p">(</span><span class="nx">hashStr</span><span class="p">)</span>
+		<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+			<span class="nx">beego</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+			<span class="k">return</span> <span class="s">&#34;&#34;</span><span class="p">,</span> <span class="nx">err</span>
+		<span class="p">}</span>
+
+		<span class="nx">sourceUTXOIndex</span> <span class="o">:=</span> <span class="nb">uint32</span><span class="p">(</span><span class="nx">unspentTXOs</span><span class="p">[</span><span class="nx">idx</span><span class="p">].</span><span class="nx">TxIndex</span><span class="p">)</span>
+		<span class="nx">sourceUTXO</span> <span class="o">:=</span> <span class="nx">wire</span><span class="p">.</span><span class="nf">NewOutPoint</span><span class="p">(</span><span class="nx">sourceUTXOHash</span><span class="p">,</span> <span class="nx">sourceUTXOIndex</span><span class="p">)</span>
+		<span class="nx">sourceUTXOs</span> <span class="p">=</span> <span class="nb">append</span><span class="p">(</span><span class="nx">sourceUTXOs</span><span class="p">,</span> <span class="nx">unspentTXOs</span><span class="p">[</span><span class="nx">idx</span><span class="p">])</span>
+		<span class="nx">sourceTxIn</span> <span class="o">:=</span> <span class="nx">wire</span><span class="p">.</span><span class="nf">NewTxIn</span><span class="p">(</span><span class="nx">sourceUTXO</span><span class="p">,</span> <span class="kc">nil</span><span class="p">,</span> <span class="kc">nil</span><span class="p">)</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">sourceTxIn</span><span class="p">)</span>
+		<span class="nx">tx</span><span class="p">.</span><span class="nf">AddTxIn</span><span class="p">(</span><span class="nx">sourceTxIn</span><span class="p">)</span>
+	<span class="p">}</span>
+
+	<span class="c1">// calculate the change
+</span><span class="c1"></span>	<span class="nx">change</span> <span class="o">:=</span> <span class="nb">new</span><span class="p">(</span><span class="nx">big</span><span class="p">.</span><span class="nx">Int</span><span class="p">).</span><span class="nf">Set</span><span class="p">(</span><span class="nx">UTXOsAmount</span><span class="p">)</span>
+	<span class="nx">change</span> <span class="p">=</span> <span class="nb">new</span><span class="p">(</span><span class="nx">big</span><span class="p">.</span><span class="nx">Int</span><span class="p">).</span><span class="nf">Sub</span><span class="p">(</span><span class="nx">change</span><span class="p">,</span> <span class="nx">amountToSend</span><span class="p">)</span>
+	<span class="nx">change</span> <span class="p">=</span> <span class="nb">new</span><span class="p">(</span><span class="nx">big</span><span class="p">.</span><span class="nx">Int</span><span class="p">).</span><span class="nf">Sub</span><span class="p">(</span><span class="nx">change</span><span class="p">,</span> <span class="nx">totalFeeBig</span><span class="p">)</span>
+	<span class="k">if</span> <span class="nx">change</span><span class="p">.</span><span class="nf">Cmp</span><span class="p">(</span><span class="nx">big</span><span class="p">.</span><span class="nf">NewInt</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="s">&#34;&#34;</span><span class="p">,</span> <span class="nx">err</span>
+	<span class="p">}</span>
+
+	<span class="nx">destinationAddress</span> <span class="o">:=</span> <span class="nx">to</span>
+
+	<span class="c1">// create the tx outs
+</span><span class="c1"></span>	<span class="nx">destAddress</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">btcutil</span><span class="p">.</span><span class="nf">DecodeAddress</span><span class="p">(</span><span class="nx">destinationAddress</span><span class="p">,</span> <span class="nx">chainParams</span><span class="p">)</span>
+	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="nx">beego</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+		<span class="k">return</span> <span class="s">&#34;&#34;</span><span class="p">,</span> <span class="nx">err</span>
+	<span class="p">}</span>
+
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">destAddress</span><span class="p">.</span><span class="nf">EncodeAddress</span><span class="p">(),</span> <span class="nx">destAddress</span><span class="p">.</span><span class="nf">String</span><span class="p">())</span>
+
+	<span class="nx">destScript</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">txscript</span><span class="p">.</span><span class="nf">PayToAddrScript</span><span class="p">(</span><span class="nx">destAddress</span><span class="p">)</span>
+	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="nx">beego</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+		<span class="k">return</span> <span class="s">&#34;&#34;</span><span class="p">,</span> <span class="nx">err</span>
+	<span class="p">}</span>
+
+	<span class="c1">// tx out to send btc to user
+</span><span class="c1"></span>	<span class="nx">destOutput</span> <span class="o">:=</span> <span class="nx">wire</span><span class="p">.</span><span class="nf">NewTxOut</span><span class="p">(</span><span class="nx">amountToSend</span><span class="p">.</span><span class="nf">Int64</span><span class="p">(),</span> <span class="nx">destScript</span><span class="p">)</span>
+	<span class="nx">tx</span><span class="p">.</span><span class="nf">AddTxOut</span><span class="p">(</span><span class="nx">destOutput</span><span class="p">)</span>
+	<span class="c1">//txscript.OP_RETURN
+</span><span class="c1"></span>	<span class="c1">// usdt转账   OP_RETURN 备注
+</span><span class="c1"></span>	<span class="c1">//usdtOut, err := txscript.NullDataScript([]byte(&#34;OP_RETURN &#34; + omni + transactionVarsion + transactionType + currencyIdentifier + amountUSDTHex))
+</span><span class="c1"></span>
+	<span class="nx">op_return</span> <span class="p">,</span><span class="nx">err</span> <span class="o">:=</span> <span class="nx">hex</span><span class="p">.</span><span class="nf">DecodeString</span><span class="p">(</span><span class="nx">omni</span> <span class="o">+</span> <span class="nx">transactionVarsion</span> <span class="o">+</span> <span class="nx">transactionType</span> <span class="o">+</span> <span class="nx">currencyIdentifier</span> <span class="o">+</span> <span class="nx">amountUSDTHex</span><span class="p">)</span>
+	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="nx">beego</span><span class="p">.</span><span class="nf">Debug</span><span class="p">(</span><span class="s">&#34;SendTransactionUSDT DecodeString error&#34;</span><span class="p">,</span><span class="nx">err</span><span class="p">)</span>
+		<span class="k">return</span>
+	<span class="p">}</span>
+
+	<span class="nx">usdtOut</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">txscript</span><span class="p">.</span><span class="nf">NullDataScript</span><span class="p">(</span><span class="nx">op_return</span><span class="p">)</span>
+	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="nx">beego</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="s">&#34;SendTransactionUSDT txscript.NullDataScript error&#34;</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
+		<span class="k">return</span>
+	<span class="p">}</span>
+	<span class="c1">//fmt.Println(&#34;usdtout:&#34;, hex.EncodeToString(usdtOut))
+</span><span class="c1"></span>	<span class="nx">usdtOutput</span> <span class="o">:=</span> <span class="nx">wire</span><span class="p">.</span><span class="nf">NewTxOut</span><span class="p">(</span><span class="nb">int64</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="nx">usdtOut</span><span class="p">)</span>
+	<span class="nx">tx</span><span class="p">.</span><span class="nf">AddTxOut</span><span class="p">(</span><span class="nx">usdtOutput</span><span class="p">)</span>
+
+	<span class="c1">// our change address
+</span><span class="c1"></span>	<span class="nx">changeSendToAddress</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">btcutil</span><span class="p">.</span><span class="nf">DecodeAddress</span><span class="p">(</span><span class="nx">fromWalletPublicAddress</span><span class="p">,</span> <span class="nx">chainParams</span><span class="p">)</span>
+	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="nx">beego</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+		<span class="k">return</span> <span class="s">&#34;&#34;</span><span class="p">,</span> <span class="nx">err</span>
+	<span class="p">}</span>
+
+	<span class="nx">changeSendToScript</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">txscript</span><span class="p">.</span><span class="nf">PayToAddrScript</span><span class="p">(</span><span class="nx">changeSendToAddress</span><span class="p">)</span>
+	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="nx">beego</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+		<span class="k">return</span> <span class="s">&#34;&#34;</span><span class="p">,</span> <span class="nx">err</span>
+	<span class="p">}</span>
+
+	<span class="c1">// tx out to send change back to us
+</span><span class="c1"></span>	<span class="nx">changeOutput</span> <span class="o">:=</span> <span class="nx">wire</span><span class="p">.</span><span class="nf">NewTxOut</span><span class="p">(</span><span class="nx">change</span><span class="p">.</span><span class="nf">Int64</span><span class="p">(),</span> <span class="nx">changeSendToScript</span><span class="p">)</span>
+	<span class="nx">tx</span><span class="p">.</span><span class="nf">AddTxOut</span><span class="p">(</span><span class="nx">changeOutput</span><span class="p">)</span>
+
+	<span class="nx">privWif</span> <span class="o">:=</span> <span class="nx">address</span><span class="p">.</span><span class="nx">PrivateKey</span>
+
+	<span class="nx">decodedWif</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">btcutil</span><span class="p">.</span><span class="nf">DecodeWIF</span><span class="p">(</span><span class="nx">privWif</span><span class="p">)</span>
+	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="nx">beego</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+		<span class="k">return</span> <span class="s">&#34;&#34;</span><span class="p">,</span> <span class="nx">err</span>
+	<span class="p">}</span>
+
+	<span class="nx">addressPubKey</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">btcutil</span><span class="p">.</span><span class="nf">NewAddressPubKey</span><span class="p">(</span><span class="nx">decodedWif</span><span class="p">.</span><span class="nx">PrivKey</span><span class="p">.</span><span class="nf">PubKey</span><span class="p">().</span><span class="nf">SerializeCompressed</span><span class="p">(),</span> <span class="nx">chainParams</span><span class="p">)</span>
+	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="nx">beego</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+		<span class="k">return</span> <span class="s">&#34;&#34;</span><span class="p">,</span> <span class="nx">err</span>
+	<span class="p">}</span>
+	<span class="nx">sourceAddress</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">btcutil</span><span class="p">.</span><span class="nf">DecodeAddress</span><span class="p">(</span><span class="nx">addressPubKey</span><span class="p">.</span><span class="nf">EncodeAddress</span><span class="p">(),</span> <span class="nx">chainParams</span><span class="p">)</span>
+	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="nx">beego</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+		<span class="k">return</span> <span class="s">&#34;&#34;</span><span class="p">,</span> <span class="nx">err</span>
+	<span class="p">}</span>
+
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;Source Address: %s\n&#34;</span><span class="p">,</span> <span class="nx">sourceAddress</span><span class="p">)</span>
+
+	<span class="nx">sourcePkScript</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">txscript</span><span class="p">.</span><span class="nf">PayToAddrScript</span><span class="p">(</span><span class="nx">sourceAddress</span><span class="p">)</span>
+	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="nx">beego</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+		<span class="k">return</span> <span class="s">&#34;&#34;</span><span class="p">,</span> <span class="nx">err</span>
+	<span class="p">}</span>
+
+	<span class="k">for</span> <span class="nx">i</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">sourceUTXOs</span> <span class="p">{</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;sourceUTXOs[i]:&#34;</span><span class="p">,</span> <span class="nx">sourceUTXOs</span><span class="p">[</span><span class="nx">i</span><span class="p">])</span>
+		<span class="nx">sigScript</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">txscript</span><span class="p">.</span><span class="nf">SignatureScript</span><span class="p">(</span><span class="nx">tx</span><span class="p">,</span> <span class="nx">i</span><span class="p">,</span> <span class="nx">sourcePkScript</span><span class="p">,</span> <span class="nx">txscript</span><span class="p">.</span><span class="nx">SigHashAll</span><span class="p">,</span> <span class="nx">decodedWif</span><span class="p">.</span><span class="nx">PrivKey</span><span class="p">,</span> <span class="kc">true</span><span class="p">)</span>
+		<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+			<span class="nx">beego</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+			<span class="k">return</span> <span class="s">&#34;&#34;</span><span class="p">,</span> <span class="nx">err</span>
+		<span class="p">}</span>
+		<span class="nx">tx</span><span class="p">.</span><span class="nx">TxIn</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">SignatureScript</span> <span class="p">=</span> <span class="nx">sigScript</span>
+	<span class="p">}</span>
+	<span class="k">for</span> <span class="nx">_</span><span class="p">,</span> <span class="nx">tx</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">tx</span><span class="p">.</span><span class="nx">TxIn</span> <span class="p">{</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;TxIn[i]:&#34;</span><span class="p">,</span> <span class="nx">tx</span><span class="p">)</span>
+	<span class="p">}</span>
+
+	<span class="nx">buf</span> <span class="o">:=</span> <span class="nx">bytes</span><span class="p">.</span><span class="nf">NewBuffer</span><span class="p">(</span><span class="nb">make</span><span class="p">([]</span><span class="kt">byte</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">tx</span><span class="p">.</span><span class="nf">SerializeSize</span><span class="p">()))</span>
+	<span class="nx">_</span> <span class="p">=</span> <span class="nx">tx</span><span class="p">.</span><span class="nf">Serialize</span><span class="p">(</span><span class="nx">buf</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;Redeem Tx: %v\n&#34;</span><span class="p">,</span> <span class="nx">hex</span><span class="p">.</span><span class="nf">EncodeToString</span><span class="p">(</span><span class="nx">buf</span><span class="p">.</span><span class="nf">Bytes</span><span class="p">()))</span>
+
+	<span class="nx">txHash</span><span class="p">,</span> <span class="nx">err</span> <span class="p">=</span> <span class="nx">btc</span><span class="p">.</span><span class="nf">CastTransaction</span><span class="p">(</span><span class="nx">tx</span><span class="p">)</span>
+	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="nx">beego</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+		<span class="k">return</span> <span class="s">&#34;&#34;</span><span class="p">,</span> <span class="nx">err</span>
+	<span class="p">}</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;tx hash: %s\n&#34;</span><span class="p">,</span> <span class="nx">txHash</span><span class="p">)</span>
+	<span class="k">return</span> <span class="nx">txHash</span><span class="p">,</span> <span class="kc">nil</span>
+<span class="p">}</span>
+</code></pre></div>]]></content>
+        </item>
+        
+    </channel>
+</rss>

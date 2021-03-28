@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>USDT on Moyrne&#39;Blog</title>
+    <link>https://blog.moyrn.com/tags/usdt/</link>
+    <description>Recent content in USDT on Moyrne&#39;Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
+    <lastBuildDate>Sat, 10 Aug 2019 14:01:07 +0800</lastBuildDate><atom:link href="https://blog.moyrn.com/tags/usdt/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>手动构建 OMNI-USDT 请求</title>
+      <link>https://blog.moyrn.com/posts/20190810_btc_usdt/</link>
+      <pubDate>Sat, 10 Aug 2019 14:01:07 +0800</pubDate>
+      
+      <guid>https://blog.moyrn.com/posts/20190810_btc_usdt/</guid>
+      <description>手动构建 omni usdt 划转  [2021-03-09] 从有道云笔记搬运至 github pages 在实习期间写的，程序中有打印的这类问题，请忽略。（当时debug用的）  package btc import ( &amp;#34;bytes&amp;#34; &amp;#34;encoding/hex&amp;#34; &amp;#34;errors&amp;#34; &amp;#34;fmt&amp;#34; &amp;#34;github.com/astaxie/beego&amp;#34; &amp;#34;github.com/btcsuite/btcd/chaincfg&amp;#34; &amp;#34;github.com/btcsuite/btcd/chaincfg/chainhash&amp;#34; &amp;#34;github.com/btcsuite/btcd/txscript&amp;#34; &amp;#34;github.com/btcsuite/btcd/wire&amp;#34; &amp;#34;github.com/btcsuite/btcutil&amp;#34; &amp;#34;github.com/ethereum/go-ethereum/common/math&amp;#34; &amp;#34;log&amp;#34; &amp;#34;math/big&amp;#34; &amp;#34;$project/db&amp;#34; &amp;#34;$project/models&amp;#34; &amp;#34;$project/node/btc&amp;#34; btc2 &amp;#34;$project/wallet/btc&amp;#34; ) var hexLength = 16 func calAmountUSDT(amount *big.Int) (amountHex string) { amountHexBef := fmt.Sprintf(&amp;#34;%x&amp;#34;, amount) amountHexLen := len(amountHexBef) var amountHexBytes []byte amountHexBytes = make([]byte, hexLength-amountHexLen) for i := range amountHexBytes { amountHexBytes[i] = &amp;#39;0&amp;#39; } for _, v := range amountHexBef { amountHexBytes = append(amountHexBytes, byte(v)) } amountHex = string(amountHexBytes) return } // 发起usdt转账前先确认usdt余额 func SendTransactionUSDT(from, to, amountUSDT, totalFee string) (txHash string, err error) { var ( //Decimal = &amp;#34;00000000&amp;#34; 	//omni = &amp;#34;6f6d6e69&amp;#34; 	minBTCTrans = &amp;#34;546&amp;#34; omni = &amp;#34;6f6d6e69&amp;#34; transactionVarsion = &amp;#34;0000&amp;#34; // 2 byte 	transactionType = &amp;#34;0000&amp;#34; // 2 byte 	currencyIdentifier = &amp;#34;0000001f&amp;#34; // 4 byte 	//currencyIdentifier = &amp;#34;0000001f&amp;#34; // 4 byte 	//amountUSDT // 8 byte 	) var address models.</description>
+    </item>
+    
+  </channel>
+</rss>
