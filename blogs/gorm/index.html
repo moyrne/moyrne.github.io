@@ -8,7 +8,7 @@
 	<meta name="theme-color" content="#494f5c">
 	<meta name="msapplication-TileColor" content="#494f5c">
 <meta itemprop="name" content="GORM 使用">
-<meta itemprop="description" content="MYSQL 悲观锁 tx := db.DB.Begin()if err := tx.Set(&quot;gorm:query_option&quot;, &quot;FOR UPDATE&quot;).Where(&quot;`xx` = ? and `xxx` = ?&quot;, xx, xxx).First(&amp;xx).Error; err != nil {tx.Rollback()return}在事务中使用 Set(&quot;gorm:query_option&quot;, &quot;FOR UPDATE&quot;) &#43; first 能将查询的这条记录锁住；在事务 rollback 或 commit 后会 unlock。  创建复合主键(当主键涉及自增时) gorm:&quot;primary_key;AUTO_INCREMENT:false&quot; 连接数据库 步骤分析  引入mysql数据库驱动 引入gorm包 读取配置文件中的数据库信息 将读取的数据生成为Open()需要的字符串  代码示例 package baseimport (_ &quot;github.com/go-sql-driver/mysql&quot;_ &quot;github.com/jinzhu/gorm/dialects/mysql&quot;&quot;github.com/jinzhu/gorm&quot;&quot;fmt&quot;&quot;log&quot;)func DBConnect() {user := &quot;user&quot;password := &quot;password&quot;dbname := &quot;dbname&quot;address := &quot;address&quot;port := &quot;port&quot;str := fmt.">
+<meta itemprop="description" content="MYSQL 悲观锁 tx := db.DB.Begin() if err := tx.Set(&#34;gorm:query_option&#34;, &#34;FOR UPDATE&#34;). Where(&#34;`xx` = ? and `xxx` = ?&#34;, xx, xxx). First(&amp;xx).Error; err != nil { tx.Rollback() return } 在事务中使用 Set(&quot;gorm:query_option&quot;, &quot;FOR UPDATE&quot;) &#43; first 能将查询的这条记录锁住；在事务 rollback 或 commit 后会 unlock。  创建复合主键(当主键涉及自增时) gorm:&quot;primary_key;AUTO_INCREMENT:false&quot; 连接数据库 步骤分析  引入mysql数据库驱动 引入gorm包 读取配置文件中的数据库信息 将读取的数据生成为Open()需要的字符串  代码示例 package base import ( _ &#34;github.com/go-sql-driver/mysql&#34; _ &#34;github.com/jinzhu/gorm/dialects/mysql&#34; &#34;github.com/jinzhu/gorm&#34; &#34;fmt&#34; &#34;log&#34; ) func DBConnect() { user := &#34;user&#34; password := &#34;password&#34; dbname := &#34;dbname&#34; address := &#34;address&#34; port := &#34;port&#34; str := fmt.">
 <meta itemprop="datePublished" content="2021-01-27T11:53:34+08:00" />
 <meta itemprop="dateModified" content="2021-01-27T11:53:34+08:00" />
 <meta itemprop="wordCount" content="106">
@@ -17,14 +17,14 @@
 
 <meta itemprop="keywords" content="golang," />
 <meta property="og:title" content="GORM 使用" />
-<meta property="og:description" content="MYSQL 悲观锁 tx := db.DB.Begin()if err := tx.Set(&quot;gorm:query_option&quot;, &quot;FOR UPDATE&quot;).Where(&quot;`xx` = ? and `xxx` = ?&quot;, xx, xxx).First(&amp;xx).Error; err != nil {tx.Rollback()return}在事务中使用 Set(&quot;gorm:query_option&quot;, &quot;FOR UPDATE&quot;) &#43; first 能将查询的这条记录锁住；在事务 rollback 或 commit 后会 unlock。  创建复合主键(当主键涉及自增时) gorm:&quot;primary_key;AUTO_INCREMENT:false&quot; 连接数据库 步骤分析  引入mysql数据库驱动 引入gorm包 读取配置文件中的数据库信息 将读取的数据生成为Open()需要的字符串  代码示例 package baseimport (_ &quot;github.com/go-sql-driver/mysql&quot;_ &quot;github.com/jinzhu/gorm/dialects/mysql&quot;&quot;github.com/jinzhu/gorm&quot;&quot;fmt&quot;&quot;log&quot;)func DBConnect() {user := &quot;user&quot;password := &quot;password&quot;dbname := &quot;dbname&quot;address := &quot;address&quot;port := &quot;port&quot;str := fmt." />
+<meta property="og:description" content="MYSQL 悲观锁 tx := db.DB.Begin() if err := tx.Set(&#34;gorm:query_option&#34;, &#34;FOR UPDATE&#34;). Where(&#34;`xx` = ? and `xxx` = ?&#34;, xx, xxx). First(&amp;xx).Error; err != nil { tx.Rollback() return } 在事务中使用 Set(&quot;gorm:query_option&quot;, &quot;FOR UPDATE&quot;) &#43; first 能将查询的这条记录锁住；在事务 rollback 或 commit 后会 unlock。  创建复合主键(当主键涉及自增时) gorm:&quot;primary_key;AUTO_INCREMENT:false&quot; 连接数据库 步骤分析  引入mysql数据库驱动 引入gorm包 读取配置文件中的数据库信息 将读取的数据生成为Open()需要的字符串  代码示例 package base import ( _ &#34;github.com/go-sql-driver/mysql&#34; _ &#34;github.com/jinzhu/gorm/dialects/mysql&#34; &#34;github.com/jinzhu/gorm&#34; &#34;fmt&#34; &#34;log&#34; ) func DBConnect() { user := &#34;user&#34; password := &#34;password&#34; dbname := &#34;dbname&#34; address := &#34;address&#34; port := &#34;port&#34; str := fmt." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://blog.moyrn.com/blogs/gorm/" />
 <meta property="article:published_time" content="2021-01-27T11:53:34+08:00" />
 <meta property="article:modified_time" content="2021-01-27T11:53:34+08:00" />
 <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="GORM 使用"/>
-<meta name="twitter:description" content="MYSQL 悲观锁 tx := db.DB.Begin()if err := tx.Set(&quot;gorm:query_option&quot;, &quot;FOR UPDATE&quot;).Where(&quot;`xx` = ? and `xxx` = ?&quot;, xx, xxx).First(&amp;xx).Error; err != nil {tx.Rollback()return}在事务中使用 Set(&quot;gorm:query_option&quot;, &quot;FOR UPDATE&quot;) &#43; first 能将查询的这条记录锁住；在事务 rollback 或 commit 后会 unlock。  创建复合主键(当主键涉及自增时) gorm:&quot;primary_key;AUTO_INCREMENT:false&quot; 连接数据库 步骤分析  引入mysql数据库驱动 引入gorm包 读取配置文件中的数据库信息 将读取的数据生成为Open()需要的字符串  代码示例 package baseimport (_ &quot;github.com/go-sql-driver/mysql&quot;_ &quot;github.com/jinzhu/gorm/dialects/mysql&quot;&quot;github.com/jinzhu/gorm&quot;&quot;fmt&quot;&quot;log&quot;)func DBConnect() {user := &quot;user&quot;password := &quot;password&quot;dbname := &quot;dbname&quot;address := &quot;address&quot;port := &quot;port&quot;str := fmt."/>
+<meta name="twitter:description" content="MYSQL 悲观锁 tx := db.DB.Begin() if err := tx.Set(&#34;gorm:query_option&#34;, &#34;FOR UPDATE&#34;). Where(&#34;`xx` = ? and `xxx` = ?&#34;, xx, xxx). First(&amp;xx).Error; err != nil { tx.Rollback() return } 在事务中使用 Set(&quot;gorm:query_option&quot;, &quot;FOR UPDATE&quot;) &#43; first 能将查询的这条记录锁住；在事务 rollback 或 commit 后会 unlock。  创建复合主键(当主键涉及自增时) gorm:&quot;primary_key;AUTO_INCREMENT:false&quot; 连接数据库 步骤分析  引入mysql数据库驱动 引入gorm包 读取配置文件中的数据库信息 将读取的数据生成为Open()需要的字符串  代码示例 package base import ( _ &#34;github.com/go-sql-driver/mysql&#34; _ &#34;github.com/jinzhu/gorm/dialects/mysql&#34; &#34;github.com/jinzhu/gorm&#34; &#34;fmt&#34; &#34;log&#34; ) func DBConnect() { user := &#34;user&#34; password := &#34;password&#34; dbname := &#34;dbname&#34; address := &#34;address&#34; port := &#34;port&#34; str := fmt."/>
 
 	<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 	<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -72,14 +72,14 @@
 		<h1>GORM 使用</h1>
 		<div class="content">
 			<h1 id="mysql-悲观锁">MYSQL 悲观锁<a href="#mysql-悲观锁" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h1>
-<pre><code>tx := db.DB.Begin()
-if err := tx.Set(&quot;gorm:query_option&quot;, &quot;FOR UPDATE&quot;).
-	Where(&quot;`xx` = ? and `xxx` = ?&quot;, xx, xxx).
-	First(&amp;xx).Error; err != nil {
-	tx.Rollback()
-	return
-}
-</code></pre><pre><code>在事务中使用 Set(&quot;gorm:query_option&quot;, &quot;FOR UPDATE&quot;) + first 能将查询的这条记录锁住；
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="nx">tx</span> <span class="o">:=</span> <span class="nx">db</span><span class="p">.</span><span class="nx">DB</span><span class="p">.</span><span class="nf">Begin</span><span class="p">()</span>
+<span class="k">if</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">tx</span><span class="p">.</span><span class="nf">Set</span><span class="p">(</span><span class="s">&#34;gorm:query_option&#34;</span><span class="p">,</span> <span class="s">&#34;FOR UPDATE&#34;</span><span class="p">).</span>
+	<span class="nf">Where</span><span class="p">(</span><span class="s">&#34;`xx` = ? and `xxx` = ?&#34;</span><span class="p">,</span> <span class="nx">xx</span><span class="p">,</span> <span class="nx">xxx</span><span class="p">).</span>
+	<span class="nf">First</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">xx</span><span class="p">).</span><span class="nx">Error</span><span class="p">;</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+	<span class="nx">tx</span><span class="p">.</span><span class="nf">Rollback</span><span class="p">()</span>
+	<span class="k">return</span>
+<span class="p">}</span>
+</code></pre></div><pre><code>在事务中使用 Set(&quot;gorm:query_option&quot;, &quot;FOR UPDATE&quot;) + first 能将查询的这条记录锁住；
 在事务 rollback 或 commit 后会 unlock。
 </code></pre>
 <hr>
@@ -95,37 +95,37 @@ if err := tx.Set(&quot;gorm:query_option&quot;, &quot;FOR UPDATE&quot;).
 <li>将读取的数据生成为Open()需要的字符串</li>
 </ul>
 <h2 id="代码示例">代码示例<a href="#代码示例" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
-<pre><code>package base
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">base</span>
 
-import (
-	_ &quot;github.com/go-sql-driver/mysql&quot;
-	_ &quot;github.com/jinzhu/gorm/dialects/mysql&quot;
-	&quot;github.com/jinzhu/gorm&quot;
-	&quot;fmt&quot;
-	&quot;log&quot;
-)
+<span class="kn">import</span> <span class="p">(</span>
+	<span class="nx">_</span> <span class="s">&#34;github.com/go-sql-driver/mysql&#34;</span>
+	<span class="nx">_</span> <span class="s">&#34;github.com/jinzhu/gorm/dialects/mysql&#34;</span>
+	<span class="s">&#34;github.com/jinzhu/gorm&#34;</span>
+	<span class="s">&#34;fmt&#34;</span>
+	<span class="s">&#34;log&#34;</span>
+<span class="p">)</span>
 
-func DBConnect() {
-	user := &quot;user&quot;
-	password := &quot;password&quot;
-	dbname := &quot;dbname&quot;
-	address := &quot;address&quot;
-	port := &quot;port&quot;
-	str := fmt.Sprintf(&quot;%s&quot;,user+&quot;:&quot;+password+ &quot;@tcp(&quot;+address+
-		&quot;:&quot;+port+&quot;)/&quot;+dbname+&quot;?charset=utf8&amp;parseTime=True&amp;loc=Local&quot;)
-	db, err := gorm.Open(&quot;mysql&quot;, str)
-	//&quot;user:password@/dbname?charset=utf8&amp;parseTime=True&amp;loc=Local&quot;
-	if err != nil {
-		log.Println(&quot;Opening mysql error is :&quot;,err)
-		return
-	}
-	defer db.Close()
-}
-</code></pre>
+<span class="kd">func</span> <span class="nf">DBConnect</span><span class="p">()</span> <span class="p">{</span>
+	<span class="nx">user</span> <span class="o">:=</span> <span class="s">&#34;user&#34;</span>
+	<span class="nx">password</span> <span class="o">:=</span> <span class="s">&#34;password&#34;</span>
+	<span class="nx">dbname</span> <span class="o">:=</span> <span class="s">&#34;dbname&#34;</span>
+	<span class="nx">address</span> <span class="o">:=</span> <span class="s">&#34;address&#34;</span>
+	<span class="nx">port</span> <span class="o">:=</span> <span class="s">&#34;port&#34;</span>
+	<span class="nx">str</span> <span class="o">:=</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Sprintf</span><span class="p">(</span><span class="s">&#34;%s&#34;</span><span class="p">,</span><span class="nx">user</span><span class="o">+</span><span class="s">&#34;:&#34;</span><span class="o">+</span><span class="nx">password</span><span class="o">+</span> <span class="s">&#34;@tcp(&#34;</span><span class="o">+</span><span class="nx">address</span><span class="o">+</span>
+		<span class="s">&#34;:&#34;</span><span class="o">+</span><span class="nx">port</span><span class="o">+</span><span class="s">&#34;)/&#34;</span><span class="o">+</span><span class="nx">dbname</span><span class="o">+</span><span class="s">&#34;?charset=utf8&amp;parseTime=True&amp;loc=Local&#34;</span><span class="p">)</span>
+	<span class="nx">db</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">gorm</span><span class="p">.</span><span class="nf">Open</span><span class="p">(</span><span class="s">&#34;mysql&#34;</span><span class="p">,</span> <span class="nx">str</span><span class="p">)</span>
+	<span class="c1">//&#34;user:password@/dbname?charset=utf8&amp;parseTime=True&amp;loc=Local&#34;
+</span><span class="c1"></span>	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="nx">log</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;Opening mysql error is :&#34;</span><span class="p">,</span><span class="nx">err</span><span class="p">)</span>
+		<span class="k">return</span>
+	<span class="p">}</span>
+	<span class="k">defer</span> <span class="nx">db</span><span class="p">.</span><span class="nf">Close</span><span class="p">()</span>
+<span class="p">}</span>
+</code></pre></div>
 		</div>
 	</main>
 
-
+	
 <section class="comments">
 	<script src="https://utteranc.es/client.js"
 					repo="moyrne/hugo-comment"
