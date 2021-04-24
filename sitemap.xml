@@ -3,27 +3,37 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://blog.moyrn.com/</loc>
+    <lastmod>2021-04-24T16:18:28+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://blog.moyrn.com/posts/</loc>
+    <lastmod>2021-04-24T16:18:28+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://blog.moyrn.com/tags/shell/</loc>
+    <lastmod>2021-04-24T16:18:28+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://blog.moyrn.com/tags/</loc>
+    <lastmod>2021-04-24T16:18:28+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://blog.moyrn.com/posts/20210423_ubuntu_zsh/</loc>
+    <lastmod>2021-04-24T16:18:28+08:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://blog.moyrn.com/tags/golang/</loc>
     <lastmod>2021-03-16T11:51:54+08:00</lastmod>
   </url>
   
   <url>
     <loc>https://blog.moyrn.com/posts/20210316_go_features/</loc>
-    <lastmod>2021-03-16T11:51:54+08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://blog.moyrn.com/</loc>
-    <lastmod>2021-03-16T11:51:54+08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://blog.moyrn.com/posts/</loc>
-    <lastmod>2021-03-16T11:51:54+08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://blog.moyrn.com/tags/</loc>
     <lastmod>2021-03-16T11:51:54+08:00</lastmod>
   </url>
   

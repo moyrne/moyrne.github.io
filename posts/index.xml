@@ -6,8 +6,40 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-CN</language>
         <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
-        <lastBuildDate>Tue, 16 Mar 2021 11:51:54 +0800</lastBuildDate>
+        <lastBuildDate>Sat, 24 Apr 2021 16:18:28 +0800</lastBuildDate>
         <atom:link href="https://blog.moyrn.com/posts/index.xml" rel="self" type="application/rss+xml" />
+        
+        <item>
+            <title>zsh,oh-my-zsh安装</title>
+            <link>https://blog.moyrn.com/posts/20210423_ubuntu_zsh/</link>
+            <pubDate>Sat, 24 Apr 2021 16:18:28 +0800</pubDate>
+            
+            <guid>https://blog.moyrn.com/posts/20210423_ubuntu_zsh/</guid>
+            <description># 安装zsh sudo apt-get install zsh # 将zsh切换成默认shell chsh -s /bin/zsh # 安装 oh-my-zsh sh -c &amp;#34;$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)&amp;#34; # Add powerlevel10k to the list of Oh My Zsh themes. git clone --depth=1 https://github.com/romkatv/powerlevel10k.git $ZSH_CUSTOM/themes/powerlevel10k # Replace ZSH_THEME=&amp;#34;powerlevel9k/powerlevel9k&amp;#34; with ZSH_THEME=&amp;#34;powerlevel10k/powerlevel10k&amp;#34;. sed -i.bak &amp;#39;s/powerlevel9k/powerlevel10k/g&amp;#39; ~/.zshrc # 安装插件 git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting vim ~/.zshrc # 修改文件内容 plugins=(git autojump zsh-autosuggestions zsh-syntax-highlighting) # 保存,执行文件 source ~/.zshrc </description>
+            <content type="html"><![CDATA[<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 安装zsh</span>
+sudo apt-get install zsh
+<span class="c1"># 将zsh切换成默认shell</span>
+chsh -s /bin/zsh
+
+<span class="c1"># 安装 oh-my-zsh</span>
+sh -c <span class="s2">&#34;</span><span class="k">$(</span>curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh<span class="k">)</span><span class="s2">&#34;</span>
+
+<span class="c1"># Add powerlevel10k to the list of Oh My Zsh themes.</span>
+git clone --depth<span class="o">=</span><span class="m">1</span> https://github.com/romkatv/powerlevel10k.git <span class="nv">$ZSH_CUSTOM</span>/themes/powerlevel10k
+<span class="c1"># Replace ZSH_THEME=&#34;powerlevel9k/powerlevel9k&#34; with ZSH_THEME=&#34;powerlevel10k/powerlevel10k&#34;.</span>
+sed -i.bak <span class="s1">&#39;s/powerlevel9k/powerlevel10k/g&#39;</span> ~/.zshrc
+
+<span class="c1"># 安装插件</span>
+git clone https://github.com/zsh-users/zsh-autosuggestions <span class="si">${</span><span class="nv">ZSH_CUSTOM</span><span class="k">:-</span><span class="p">~/.oh-my-zsh/custom</span><span class="si">}</span>/plugins/zsh-autosuggestions
+git clone https://github.com/zsh-users/zsh-syntax-highlighting.git <span class="si">${</span><span class="nv">ZSH_CUSTOM</span><span class="k">:-</span><span class="p">~/.oh-my-zsh/custom</span><span class="si">}</span>/plugins/zsh-syntax-highlighting
+
+vim ~/.zshrc
+<span class="c1"># 修改文件内容</span>
+<span class="nv">plugins</span><span class="o">=(</span>git autojump zsh-autosuggestions zsh-syntax-highlighting<span class="o">)</span>
+<span class="c1"># 保存,执行文件</span>
+<span class="nb">source</span> ~/.zshrc
+</code></pre></div>]]></content>
+        </item>
         
         <item>
             <title>Go特性记录</title>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>shell on Moyrne&#39;Blog</title>
+    <link>https://blog.moyrn.com/tags/shell/</link>
+    <description>Recent content in shell on Moyrne&#39;Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
+    <lastBuildDate>Sat, 24 Apr 2021 16:18:28 +0800</lastBuildDate><atom:link href="https://blog.moyrn.com/tags/shell/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>zsh,oh-my-zsh安装</title>
+      <link>https://blog.moyrn.com/posts/20210423_ubuntu_zsh/</link>
+      <pubDate>Sat, 24 Apr 2021 16:18:28 +0800</pubDate>
+      
+      <guid>https://blog.moyrn.com/posts/20210423_ubuntu_zsh/</guid>
+      <description># 安装zsh sudo apt-get install zsh # 将zsh切换成默认shell chsh -s /bin/zsh # 安装 oh-my-zsh sh -c &amp;#34;$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)&amp;#34; # Add powerlevel10k to the list of Oh My Zsh themes. git clone --depth=1 https://github.com/romkatv/powerlevel10k.git $ZSH_CUSTOM/themes/powerlevel10k # Replace ZSH_THEME=&amp;#34;powerlevel9k/powerlevel9k&amp;#34; with ZSH_THEME=&amp;#34;powerlevel10k/powerlevel10k&amp;#34;. sed -i.bak &amp;#39;s/powerlevel9k/powerlevel10k/g&amp;#39; ~/.zshrc # 安装插件 git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting vim ~/.zshrc # 修改文件内容 plugins=(git autojump zsh-autosuggestions zsh-syntax-highlighting) # 保存,执行文件 source ~/.zshrc </description>
+    </item>
+    
+  </channel>
+</rss>

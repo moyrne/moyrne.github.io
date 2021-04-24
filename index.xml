@@ -7,7 +7,16 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
     <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
-    <lastBuildDate>Tue, 16 Mar 2021 11:51:54 +0800</lastBuildDate><atom:link href="https://blog.moyrn.com/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 24 Apr 2021 16:18:28 +0800</lastBuildDate><atom:link href="https://blog.moyrn.com/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>zsh,oh-my-zsh安装</title>
+      <link>https://blog.moyrn.com/posts/20210423_ubuntu_zsh/</link>
+      <pubDate>Sat, 24 Apr 2021 16:18:28 +0800</pubDate>
+      
+      <guid>https://blog.moyrn.com/posts/20210423_ubuntu_zsh/</guid>
+      <description># 安装zsh sudo apt-get install zsh # 将zsh切换成默认shell chsh -s /bin/zsh # 安装 oh-my-zsh sh -c &amp;#34;$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)&amp;#34; # Add powerlevel10k to the list of Oh My Zsh themes. git clone --depth=1 https://github.com/romkatv/powerlevel10k.git $ZSH_CUSTOM/themes/powerlevel10k # Replace ZSH_THEME=&amp;#34;powerlevel9k/powerlevel9k&amp;#34; with ZSH_THEME=&amp;#34;powerlevel10k/powerlevel10k&amp;#34;. sed -i.bak &amp;#39;s/powerlevel9k/powerlevel10k/g&amp;#39; ~/.zshrc # 安装插件 git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting vim ~/.zshrc # 修改文件内容 plugins=(git autojump zsh-autosuggestions zsh-syntax-highlighting) # 保存,执行文件 source ~/.zshrc </description>
+    </item>
+    
     <item>
       <title>Go特性记录</title>
       <link>https://blog.moyrn.com/posts/20210316_go_features/</link>
@@ -94,15 +103,6 @@ $ kubectl get pod test-liveness-exec NAME READY STATUS RESTARTS AGE liveness-exe
       
       <guid>https://blog.moyrn.com/posts/20210127_time_after_oom/</guid>
       <description>select + time.After 导致内存暴涨 func Function(notRun notRun) { for { select { case &amp;lt;-notRun.notRun: // 大多数情况都是有notRun的输入 	case &amp;lt;-time.After(time.Minute): notRun.Close() continue case &amp;lt;-notRun.run: notRun.Close() return } } }  notRun 发送消息频率过快，而每次select都会调用到time.After，而time.After又会NewTimer，而每次NewTimer都必须在1分钟后才能释放。 当notRun的频率很高时，会在内存中堆积非常多的无用的Timer。导致内存暴涨。  解决方法 func Function(notRun notRun) { afterTime := time.Minute after := time.NewTimer(afterTime) defer after.Stop() for { after.Reset(afterTime) select { case &amp;lt;-notRun.notRun: case &amp;lt;-after.C: notRun.Close() continue case &amp;lt;-notRun.run: notRun.Close() return } } }  自己 NewTimer 在每次 select 之前 reset，使 timer 重新计时，从而避免每次都 new timer。  </description>
-    </item>
-    
-    <item>
-      <title>Golang HTTP包传输文件</title>
-      <link>https://blog.moyrn.com/posts/20210127_http_file/</link>
-      <pubDate>Wed, 27 Jan 2021 13:02:39 +0800</pubDate>
-      
-      <guid>https://blog.moyrn.com/posts/20210127_http_file/</guid>
-      <description>文件传输 Content-Type http://tool.oschina.net/commons?type=22013-05-17multipart/form-data：既可以提交普通键值对，也可以提交(多个)文件键值对。application/octet-stream：只能提交二进制，而且只能提交一个二进制，如果提交文件的话，只能提交一个文件,后台接收参数只能有一个，而且只能是流（或者字节数组）application/x-www-form-urlencoded不属于http content-type规范，通常用于浏览器表单提交，数据组织格式:name1=value1&amp;amp;name2=value2,post时会放入http body，get时，显示在在地址栏。 // golang 实现  W.Header().Add(&amp;#34;Content-Type&amp;#34;,&amp;#34;application/octet-stream&amp;#34;) W.Header().Add(&amp;#34;Content-Disposition&amp;#34;,fmt.Sprintf(&amp;#34;attachment; filename=\&amp;#34;%s\&amp;#34;&amp;#34;, fileName)) </description>
     </item>
     
   </channel>
