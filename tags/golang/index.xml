@@ -29,37 +29,19 @@
     <item>
       <title>time.After() 导致内存暴涨</title>
       <link>https://blog.moyrn.com/posts/20210127_time_after_oom/</link>
-      <pubDate>Wed, 27 Jan 2021 13:04:41 +0800</pubDate>
+      <pubDate>Thu, 31 Oct 2019 13:04:41 +0800</pubDate>
       
       <guid>https://blog.moyrn.com/posts/20210127_time_after_oom/</guid>
       <description>select + time.After 导致内存暴涨 func Function(notRun notRun) { for { select { case &amp;lt;-notRun.notRun: // 大多数情况都是有notRun的输入 	case &amp;lt;-time.After(time.Minute): notRun.Close() continue case &amp;lt;-notRun.run: notRun.Close() return } } }  notRun 发送消息频率过快，而每次select都会调用到time.After，而time.After又会NewTimer，而每次NewTimer都必须在1分钟后才能释放。 当notRun的频率很高时，会在内存中堆积非常多的无用的Timer。导致内存暴涨。  解决方法 func Function(notRun notRun) { afterTime := time.Minute after := time.NewTimer(afterTime) defer after.Stop() for { after.Reset(afterTime) select { case &amp;lt;-notRun.notRun: case &amp;lt;-after.C: notRun.Close() continue case &amp;lt;-notRun.run: notRun.Close() return } } }  自己 NewTimer 在每次 select 之前 reset，使 timer 重新计时，从而避免每次都 new timer。  </description>
     </item>
     
     <item>
-      <title>Golang HTTP包传输文件</title>
-      <link>https://blog.moyrn.com/posts/20210127_http_file/</link>
-      <pubDate>Wed, 27 Jan 2021 13:02:39 +0800</pubDate>
-      
-      <guid>https://blog.moyrn.com/posts/20210127_http_file/</guid>
-      <description>文件传输 Content-Type http://tool.oschina.net/commons?type=22013-05-17multipart/form-data：既可以提交普通键值对，也可以提交(多个)文件键值对。application/octet-stream：只能提交二进制，而且只能提交一个二进制，如果提交文件的话，只能提交一个文件,后台接收参数只能有一个，而且只能是流（或者字节数组）application/x-www-form-urlencoded不属于http content-type规范，通常用于浏览器表单提交，数据组织格式:name1=value1&amp;amp;name2=value2,post时会放入http body，get时，显示在在地址栏。 // golang 实现  W.Header().Add(&amp;#34;Content-Type&amp;#34;,&amp;#34;application/octet-stream&amp;#34;) W.Header().Add(&amp;#34;Content-Disposition&amp;#34;,fmt.Sprintf(&amp;#34;attachment; filename=\&amp;#34;%s\&amp;#34;&amp;#34;, fileName)) </description>
-    </item>
-    
-    <item>
       <title>Golang 编译</title>
-      <link>https://blog.moyrn.com/posts/20210127_build/</link>
-      <pubDate>Wed, 27 Jan 2021 12:04:51 +0800</pubDate>
+      <link>https://blog.moyrn.com/posts/20191029_build/</link>
+      <pubDate>Tue, 29 Oct 2019 09:41:51 +0800</pubDate>
       
-      <guid>https://blog.moyrn.com/posts/20210127_build/</guid>
+      <guid>https://blog.moyrn.com/posts/20191029_build/</guid>
       <description>编译 编译其他系统 CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build# 不能复制空格set CGO_ENABLED=0set GOOS=linuxset GOARCH=amd64go build 图标制作 第一步：Windows 下载MinGW第二步：新建一个.rc文件，加入文件名为 demo.rc 输入内容 IDI_ICON1 ICON &amp;quot;cefclient.ico&amp;quot;其中 cefclient.ico 是你的ico的地址第三步:MinGW 执行windres -o demo.syso demo.rc第四步:将生成的demo.syso 放到项目目录下go build 隐藏命令行 go build -i -ldflags=&amp;quot;-H windowsgui&amp;quot; </description>
-    </item>
-    
-    <item>
-      <title>GORM 使用</title>
-      <link>https://blog.moyrn.com/posts/20210127_gorm/</link>
-      <pubDate>Wed, 27 Jan 2021 11:53:34 +0800</pubDate>
-      
-      <guid>https://blog.moyrn.com/posts/20210127_gorm/</guid>
-      <description>MYSQL 悲观锁 tx := db.DB.Begin() if err := tx.Set(&amp;#34;gorm:query_option&amp;#34;, &amp;#34;FOR UPDATE&amp;#34;). Where(&amp;#34;`xx` = ? and `xxx` = ?&amp;#34;, xx, xxx). First(&amp;amp;xx).Error; err != nil { tx.Rollback() return } 在事务中使用 Set(&amp;quot;gorm:query_option&amp;quot;, &amp;quot;FOR UPDATE&amp;quot;) + first 能将查询的这条记录锁住；在事务 rollback 或 commit 后会 unlock。  创建复合主键(当主键涉及自增时) gorm:&amp;quot;primary_key;AUTO_INCREMENT:false&amp;quot; 连接数据库 步骤分析  引入mysql数据库驱动 引入gorm包 读取配置文件中的数据库信息 将读取的数据生成为Open()需要的字符串  代码示例 package base import ( _ &amp;#34;github.com/go-sql-driver/mysql&amp;#34; _ &amp;#34;github.com/jinzhu/gorm/dialects/mysql&amp;#34; &amp;#34;github.com/jinzhu/gorm&amp;#34; &amp;#34;fmt&amp;#34; &amp;#34;log&amp;#34; ) func DBConnect() { user := &amp;#34;user&amp;#34; password := &amp;#34;password&amp;#34; dbname := &amp;#34;dbname&amp;#34; address := &amp;#34;address&amp;#34; port := &amp;#34;port&amp;#34; str := fmt.</description>
     </item>
     
     <item>
@@ -69,6 +51,24 @@
       
       <guid>https://blog.moyrn.com/posts/20190810_btc_usdt/</guid>
       <description>手动构建 omni usdt 划转  [2021-03-09] 从有道云笔记搬运至 github pages 在实习期间写的，程序中有打印的这类问题，请忽略。（当时debug用的）  package btc import ( &amp;#34;bytes&amp;#34; &amp;#34;encoding/hex&amp;#34; &amp;#34;errors&amp;#34; &amp;#34;fmt&amp;#34; &amp;#34;github.com/astaxie/beego&amp;#34; &amp;#34;github.com/btcsuite/btcd/chaincfg&amp;#34; &amp;#34;github.com/btcsuite/btcd/chaincfg/chainhash&amp;#34; &amp;#34;github.com/btcsuite/btcd/txscript&amp;#34; &amp;#34;github.com/btcsuite/btcd/wire&amp;#34; &amp;#34;github.com/btcsuite/btcutil&amp;#34; &amp;#34;github.com/ethereum/go-ethereum/common/math&amp;#34; &amp;#34;log&amp;#34; &amp;#34;math/big&amp;#34; &amp;#34;$project/db&amp;#34; &amp;#34;$project/models&amp;#34; &amp;#34;$project/node/btc&amp;#34; btc2 &amp;#34;$project/wallet/btc&amp;#34; ) var hexLength = 16 func calAmountUSDT(amount *big.Int) (amountHex string) { amountHexBef := fmt.Sprintf(&amp;#34;%x&amp;#34;, amount) amountHexLen := len(amountHexBef) var amountHexBytes []byte amountHexBytes = make([]byte, hexLength-amountHexLen) for i := range amountHexBytes { amountHexBytes[i] = &amp;#39;0&amp;#39; } for _, v := range amountHexBef { amountHexBytes = append(amountHexBytes, byte(v)) } amountHex = string(amountHexBytes) return } // 发起usdt转账前先确认usdt余额 func SendTransactionUSDT(from, to, amountUSDT, totalFee string) (txHash string, err error) { var ( //Decimal = &amp;#34;00000000&amp;#34; 	//omni = &amp;#34;6f6d6e69&amp;#34; 	minBTCTrans = &amp;#34;546&amp;#34; omni = &amp;#34;6f6d6e69&amp;#34; transactionVarsion = &amp;#34;0000&amp;#34; // 2 byte 	transactionType = &amp;#34;0000&amp;#34; // 2 byte 	currencyIdentifier = &amp;#34;0000001f&amp;#34; // 4 byte 	//currencyIdentifier = &amp;#34;0000001f&amp;#34; // 4 byte 	//amountUSDT // 8 byte 	) var address models.</description>
+    </item>
+    
+    <item>
+      <title>GORM 使用</title>
+      <link>https://blog.moyrn.com/posts/20190810_gorm/</link>
+      <pubDate>Sat, 10 Aug 2019 11:53:34 +0800</pubDate>
+      
+      <guid>https://blog.moyrn.com/posts/20190810_gorm/</guid>
+      <description>MYSQL 悲观锁 tx := db.DB.Begin() if err := tx.Set(&amp;#34;gorm:query_option&amp;#34;, &amp;#34;FOR UPDATE&amp;#34;). Where(&amp;#34;`xx` = ? and `xxx` = ?&amp;#34;, xx, xxx). First(&amp;amp;xx).Error; err != nil { tx.Rollback() return } 在事务中使用 Set(&amp;quot;gorm:query_option&amp;quot;, &amp;quot;FOR UPDATE&amp;quot;) + first 能将查询的这条记录锁住；在事务 rollback 或 commit 后会 unlock。  创建复合主键(当主键涉及自增时) gorm:&amp;quot;primary_key;AUTO_INCREMENT:false&amp;quot; 连接数据库 步骤分析  引入mysql数据库驱动 引入gorm包 读取配置文件中的数据库信息 将读取的数据生成为Open()需要的字符串  代码示例 package base import ( _ &amp;#34;github.com/go-sql-driver/mysql&amp;#34; _ &amp;#34;github.com/jinzhu/gorm/dialects/mysql&amp;#34; &amp;#34;github.com/jinzhu/gorm&amp;#34; &amp;#34;fmt&amp;#34; &amp;#34;log&amp;#34; ) var ( DB *gorm.</description>
+    </item>
+    
+    <item>
+      <title>Golang HTTP包传输文件</title>
+      <link>https://blog.moyrn.com/posts/20190724_http_file/</link>
+      <pubDate>Wed, 24 Jul 2019 17:02:39 +0800</pubDate>
+      
+      <guid>https://blog.moyrn.com/posts/20190724_http_file/</guid>
+      <description>文件传输 Content-Type http://tool.oschina.net/commons?type=22013-05-17multipart/form-data：既可以提交普通键值对，也可以提交(多个)文件键值对。application/octet-stream：只能提交二进制，而且只能提交一个二进制，如果提交文件的话，只能提交一个文件,后台接收参数只能有一个，而且只能是流（或者字节数组）application/x-www-form-urlencoded不属于http content-type规范，通常用于浏览器表单提交，数据组织格式:name1=value1&amp;amp;name2=value2,post时会放入http body，get时，显示在在地址栏。 // golang 实现  W.Header().Add(&amp;#34;Content-Type&amp;#34;,&amp;#34;application/octet-stream&amp;#34;) W.Header().Add(&amp;#34;Content-Disposition&amp;#34;,fmt.Sprintf(&amp;#34;attachment; filename=\&amp;#34;%s\&amp;#34;&amp;#34;, fileName)) </description>
     </item>
     
   </channel>

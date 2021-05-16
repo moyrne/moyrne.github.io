@@ -78,43 +78,23 @@
   </url>
   
   <url>
-    <loc>https://blog.moyrn.com/tags/nginx/</loc>
-    <lastmod>2021-01-27T13:34:41+08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://blog.moyrn.com/posts/20210127_nginx_proxy/</loc>
-    <lastmod>2021-01-27T13:34:41+08:00</lastmod>
-  </url>
-  
-  <url>
     <loc>https://blog.moyrn.com/tags/memory/</loc>
-    <lastmod>2021-01-27T13:04:41+08:00</lastmod>
+    <lastmod>2019-10-31T13:04:41+08:00</lastmod>
   </url>
   
   <url>
     <loc>https://blog.moyrn.com/posts/20210127_time_after_oom/</loc>
-    <lastmod>2021-01-27T13:04:41+08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://blog.moyrn.com/posts/20210127_http_file/</loc>
-    <lastmod>2021-01-27T13:02:39+08:00</lastmod>
+    <lastmod>2019-10-31T13:04:41+08:00</lastmod>
   </url>
   
   <url>
     <loc>https://blog.moyrn.com/tags/build/</loc>
-    <lastmod>2021-01-27T12:04:51+08:00</lastmod>
+    <lastmod>2019-10-29T09:41:51+08:00</lastmod>
   </url>
   
   <url>
-    <loc>https://blog.moyrn.com/posts/20210127_build/</loc>
-    <lastmod>2021-01-27T12:04:51+08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://blog.moyrn.com/posts/20210127_gorm/</loc>
-    <lastmod>2021-01-27T11:53:34+08:00</lastmod>
+    <loc>https://blog.moyrn.com/posts/20191029_build/</loc>
+    <lastmod>2019-10-29T09:41:51+08:00</lastmod>
   </url>
   
   <url>
@@ -130,6 +110,26 @@
   <url>
     <loc>https://blog.moyrn.com/tags/%E6%AF%94%E7%89%B9%E5%B8%81/</loc>
     <lastmod>2019-08-10T14:01:07+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://blog.moyrn.com/posts/20190810_gorm/</loc>
+    <lastmod>2019-08-10T11:53:34+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://blog.moyrn.com/posts/20190724_http_file/</loc>
+    <lastmod>2019-07-24T17:02:39+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://blog.moyrn.com/tags/nginx/</loc>
+    <lastmod>2018-03-31T13:34:41+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://blog.moyrn.com/posts/20180331_nginx_proxy/</loc>
+    <lastmod>2018-03-31T13:34:41+08:00</lastmod>
   </url>
   
 </urlset>
