@@ -6,8 +6,144 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-CN</language>
         <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
-        <lastBuildDate>Sat, 24 Apr 2021 16:18:28 +0800</lastBuildDate>
+        <lastBuildDate>Sun, 23 May 2021 14:25:33 +0800</lastBuildDate>
         <atom:link href="https://blog.moyrn.com/posts/index.xml" rel="self" type="application/rss+xml" />
+        
+        <item>
+            <title>False Sharing</title>
+            <link>https://blog.moyrn.com/posts/20210523_false_sharing/</link>
+            <pubDate>Sun, 23 May 2021 14:25:33 +0800</pubDate>
+            
+            <guid>https://blog.moyrn.com/posts/20210523_false_sharing/</guid>
+            <description>CPU-Cache 结构图  多数的CPU缓冲结构(Intel)  缓存行大小 32/64/128(现在多数为64)  解释（下面假设所有的线程都在不同的核心上）  在 不同的线程上读写某段连续的内存不同索引的值, 可能导致高速缓冲miss, 导致重复拷贝   a = [1,1,1,1,1,1]# thread 1for {a[0]++}# thread 2for {a[1]++}# thread 3for {a[2]++}# thread 3for {a[4]++}  线程写入某个值之后, 会导致其他其他的线程的缓存失效
+例如 thread 1 修改了a[0]
+其它线程虽然没有使用a[0], 但缓存也会失效, 需要重新获取, 会产生额外的拷贝的开销
+如果需要解决这个问题, 需要将各个元素分隔到不同的缓存行, 也就是上一个元素的开始地址到下一个元素的开始地址, 间隔32/64/128
+  代码 package false_sharing import ( &amp;#34;runtime&amp;#34; &amp;#34;sync&amp;#34; &amp;#34;testing&amp;#34; &amp;#34;unsafe&amp;#34; ) const numCpu = 12 type increase interface { Increase(idx int) Len() int } func BenchmarkNoPadIncrease(b *testing.</description>
+            <content type="html"><![CDATA[<h4 id="cpu-cache-结构图">CPU-Cache 结构图</h4>
+<ul>
+<li>多数的CPU缓冲结构(Intel)
+<img src="/images/cpu-cache.png" alt="avatar"></li>
+<li>缓存行大小 32/64/128(现在多数为64)</li>
+</ul>
+<h4 id="解释下面假设所有的线程都在不同的核心上">解释（下面假设所有的线程都在不同的核心上）</h4>
+<ul>
+<li>在 不同的线程上读写某段连续的内存不同索引的值, 可能导致高速缓冲miss, 导致重复拷贝</li>
+</ul>
+<pre><code>    a = [1,1,1,1,1,1]
+    # thread 1
+    for {a[0]++}
+    # thread 2
+    for {a[1]++}
+    # thread 3
+    for {a[2]++}
+    # thread 3
+    for {a[4]++}
+</code></pre><ul>
+<li>
+<p>线程写入某个值之后, 会导致其他其他的线程的缓存失效</p>
+<p>例如 thread 1 修改了a[0]</p>
+<p>其它线程虽然没有使用a[0], 但缓存也会失效, 需要重新获取, 会产生额外的拷贝的开销</p>
+<p>如果需要解决这个问题, 需要将各个元素分隔到不同的缓存行, 也就是上一个元素的开始地址到下一个元素的开始地址, 间隔32/64/128</p>
+</li>
+</ul>
+<h4 id="代码">代码</h4>
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">false_sharing</span>
+
+<span class="kn">import</span> <span class="p">(</span>
+	<span class="s">&#34;runtime&#34;</span>
+	<span class="s">&#34;sync&#34;</span>
+	<span class="s">&#34;testing&#34;</span>
+	<span class="s">&#34;unsafe&#34;</span>
+<span class="p">)</span>
+
+<span class="kd">const</span> <span class="nx">numCpu</span> <span class="p">=</span> <span class="mi">12</span>
+
+<span class="kd">type</span> <span class="nx">increase</span> <span class="kd">interface</span> <span class="p">{</span>
+	<span class="nf">Increase</span><span class="p">(</span><span class="nx">idx</span> <span class="kt">int</span><span class="p">)</span>
+	<span class="nf">Len</span><span class="p">()</span> <span class="kt">int</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="nf">BenchmarkNoPadIncrease</span><span class="p">(</span><span class="nx">b</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">B</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nf">falseSharing</span><span class="p">(</span><span class="nx">b</span><span class="p">,</span> <span class="nf">NewNoPadSlice</span><span class="p">(</span><span class="nx">numCpu</span><span class="p">))</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="nf">BenchmarkPadIncrease</span><span class="p">(</span><span class="nx">b</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">B</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nf">falseSharing</span><span class="p">(</span><span class="nx">b</span><span class="p">,</span> <span class="nf">NewPadSlice</span><span class="p">(</span><span class="nx">numCpu</span><span class="p">))</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="nf">falseSharing</span><span class="p">(</span><span class="nx">b</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">B</span><span class="p">,</span> <span class="nx">increase</span> <span class="nx">increase</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">wg</span> <span class="o">:=</span> <span class="nx">sync</span><span class="p">.</span><span class="nx">WaitGroup</span><span class="p">{}</span>
+	<span class="nf">PreSet</span><span class="p">(</span><span class="nx">b</span><span class="p">)</span>
+	<span class="k">for</span> <span class="nx">i</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="p">&lt;</span> <span class="nx">increase</span><span class="p">.</span><span class="nf">Len</span><span class="p">();</span> <span class="nx">i</span><span class="o">++</span> <span class="p">{</span>
+		<span class="nx">wg</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+		<span class="k">go</span> <span class="kd">func</span><span class="p">(</span><span class="nx">idx</span> <span class="kt">int</span><span class="p">)</span> <span class="p">{</span>
+			<span class="k">defer</span> <span class="nx">wg</span><span class="p">.</span><span class="nf">Done</span><span class="p">()</span>
+			<span class="k">for</span> <span class="nx">j</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">j</span> <span class="p">&lt;</span> <span class="nx">b</span><span class="p">.</span><span class="nx">N</span><span class="p">;</span> <span class="nx">j</span><span class="o">++</span> <span class="p">{</span>
+				<span class="nx">increase</span><span class="p">.</span><span class="nf">Increase</span><span class="p">(</span><span class="nx">idx</span><span class="p">)</span>
+			<span class="p">}</span>
+		<span class="p">}(</span><span class="nx">i</span><span class="p">)</span>
+	<span class="p">}</span>
+	<span class="nx">wg</span><span class="p">.</span><span class="nf">Wait</span><span class="p">()</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="nf">PreSet</span><span class="p">(</span><span class="nx">b</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">B</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">runtime</span><span class="p">.</span><span class="nf">GOMAXPROCS</span><span class="p">(</span><span class="nx">numCpu</span><span class="p">)</span>
+	<span class="nx">b</span><span class="p">.</span><span class="nf">ResetTimer</span><span class="p">()</span>
+<span class="p">}</span>
+
+<span class="kd">type</span> <span class="p">(</span>
+	<span class="nx">NoPadSlice</span> <span class="p">[]</span><span class="nx">NoPadItem</span>
+	<span class="nx">NoPadItem</span>  <span class="kd">struct</span> <span class="p">{</span>
+		<span class="nx">Value</span>
+	<span class="p">}</span>
+	<span class="nx">PadSlice</span> <span class="p">[]</span><span class="nx">PadItem</span>
+	<span class="nx">PadItem</span>  <span class="kd">struct</span> <span class="p">{</span>
+		<span class="nx">Value</span>
+		<span class="nx">pad</span> <span class="p">[</span><span class="mi">128</span> <span class="o">-</span> <span class="nx">unsafe</span><span class="p">.</span><span class="nf">Sizeof</span><span class="p">(</span><span class="nx">Value</span><span class="p">{})</span><span class="o">%</span><span class="mi">128</span><span class="p">]</span><span class="kt">byte</span>
+	<span class="p">}</span>
+	<span class="nx">Value</span> <span class="kd">struct</span> <span class="p">{</span>
+		<span class="nx">Int</span> <span class="kt">uint64</span>
+		<span class="nx">Str</span> <span class="kt">string</span>
+	<span class="p">}</span>
+<span class="p">)</span>
+
+<span class="kd">func</span> <span class="nf">NewNoPadSlice</span><span class="p">(</span><span class="nx">length</span> <span class="kt">int</span><span class="p">)</span> <span class="o">*</span><span class="nx">NoPadSlice</span> <span class="p">{</span>
+	<span class="nx">s</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">(</span><span class="nx">NoPadSlice</span><span class="p">,</span> <span class="nx">length</span><span class="p">)</span>
+	<span class="k">return</span> <span class="o">&amp;</span><span class="nx">s</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="p">(</span><span class="nx">s</span> <span class="o">*</span><span class="nx">NoPadSlice</span><span class="p">)</span> <span class="nf">Len</span><span class="p">()</span> <span class="kt">int</span> <span class="p">{</span>
+	<span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="o">*</span><span class="nx">s</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="kd">func</span> <span class="p">(</span><span class="nx">s</span> <span class="o">*</span><span class="nx">NoPadSlice</span><span class="p">)</span> <span class="nf">Increase</span><span class="p">(</span><span class="nx">idx</span> <span class="kt">int</span><span class="p">)</span> <span class="p">{</span>
+	<span class="p">(</span><span class="o">*</span><span class="nx">s</span><span class="p">)[</span><span class="nx">idx</span><span class="p">].</span><span class="nx">Value</span><span class="p">.</span><span class="nx">Int</span><span class="o">++</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="nf">NewPadSlice</span><span class="p">(</span><span class="nx">length</span> <span class="kt">int</span><span class="p">)</span> <span class="o">*</span><span class="nx">PadSlice</span> <span class="p">{</span>
+	<span class="nx">s</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">(</span><span class="nx">PadSlice</span><span class="p">,</span> <span class="nx">length</span><span class="p">)</span>
+	<span class="k">return</span> <span class="o">&amp;</span><span class="nx">s</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="p">(</span><span class="nx">s</span> <span class="o">*</span><span class="nx">PadSlice</span><span class="p">)</span> <span class="nf">Len</span><span class="p">()</span> <span class="kt">int</span> <span class="p">{</span>
+	<span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="o">*</span><span class="nx">s</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="kd">func</span> <span class="p">(</span><span class="nx">s</span> <span class="o">*</span><span class="nx">PadSlice</span><span class="p">)</span> <span class="nf">Increase</span><span class="p">(</span><span class="nx">idx</span> <span class="kt">int</span><span class="p">)</span> <span class="p">{</span>
+	<span class="p">(</span><span class="o">*</span><span class="nx">s</span><span class="p">)[</span><span class="nx">idx</span><span class="p">].</span><span class="nx">Value</span><span class="p">.</span><span class="nx">Int</span><span class="o">++</span>
+<span class="p">}</span>
+</code></pre></div><pre><code>goos: windows
+goarch: amd64
+pkg: demo/false_sharing
+cpu: AMD Ryzen 5 3600 6-Core Processor              
+BenchmarkNoPadIncrease
+BenchmarkNoPadIncrease-12    	1000000000	         0.3561 ns/op
+BenchmarkPadIncrease
+BenchmarkPadIncrease-12      	1000000000	         0.06356 ns/op
+PASS
+
+Process finished with exit code 0
+</code></pre>]]></content>
+        </item>
         
         <item>
             <title>zsh,oh-my-zsh安装</title>
