@@ -18,6 +18,7 @@
 例如 thread 1 修改了a[0]
 其它线程虽然没有使用a[0], 但缓存也会失效, 需要重新获取, 会产生额外的拷贝的开销
 如果需要解决这个问题, 需要将各个元素分隔到不同的缓存行, 也就是上一个元素的开始地址到下一个元素的开始地址, 间隔32/64/128
+如 [1,x,x,x,x,2,x,x,x,x] 的形式进行填充
   代码 package false_sharing import ( &amp;#34;runtime&amp;#34; &amp;#34;sync&amp;#34; &amp;#34;testing&amp;#34; &amp;#34;unsafe&amp;#34; ) const numCpu = 12 type increase interface { Increase(idx int) Len() int } func BenchmarkNoPadIncrease(b *testing.</description>
     </item>
     

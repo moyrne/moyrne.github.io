@@ -12,10 +12,11 @@
 例如 thread 1 修改了a[0]
 其它线程虽然没有使用a[0], 但缓存也会失效, 需要重新获取, 会产生额外的拷贝的开销
 如果需要解决这个问题, 需要将各个元素分隔到不同的缓存行, 也就是上一个元素的开始地址到下一个元素的开始地址, 间隔32/64/128
+如 [1,x,x,x,x,2,x,x,x,x] 的形式进行填充
   代码 package false_sharing import ( &#34;runtime&#34; &#34;sync&#34; &#34;testing&#34; &#34;unsafe&#34; ) const numCpu = 12 type increase interface { Increase(idx int) Len() int } func BenchmarkNoPadIncrease(b *testing.">
 <meta itemprop="datePublished" content="2021-05-23T14:25:33+08:00" />
 <meta itemprop="dateModified" content="2021-05-23T14:25:33+08:00" />
-<meta itemprop="wordCount" content="249">
+<meta itemprop="wordCount" content="252">
 
 
 
@@ -25,6 +26,7 @@
 例如 thread 1 修改了a[0]
 其它线程虽然没有使用a[0], 但缓存也会失效, 需要重新获取, 会产生额外的拷贝的开销
 如果需要解决这个问题, 需要将各个元素分隔到不同的缓存行, 也就是上一个元素的开始地址到下一个元素的开始地址, 间隔32/64/128
+如 [1,x,x,x,x,2,x,x,x,x] 的形式进行填充
   代码 package false_sharing import ( &#34;runtime&#34; &#34;sync&#34; &#34;testing&#34; &#34;unsafe&#34; ) const numCpu = 12 type increase interface { Increase(idx int) Len() int } func BenchmarkNoPadIncrease(b *testing." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://blog.moyrn.com/posts/20210523_false_sharing/" />
@@ -36,6 +38,7 @@
 例如 thread 1 修改了a[0]
 其它线程虽然没有使用a[0], 但缓存也会失效, 需要重新获取, 会产生额外的拷贝的开销
 如果需要解决这个问题, 需要将各个元素分隔到不同的缓存行, 也就是上一个元素的开始地址到下一个元素的开始地址, 间隔32/64/128
+如 [1,x,x,x,x,2,x,x,x,x] 的形式进行填充
   代码 package false_sharing import ( &#34;runtime&#34; &#34;sync&#34; &#34;testing&#34; &#34;unsafe&#34; ) const numCpu = 12 type increase interface { Increase(idx int) Len() int } func BenchmarkNoPadIncrease(b *testing."/>
 
 	<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
@@ -112,6 +115,7 @@
 <p>例如 thread 1 修改了a[0]</p>
 <p>其它线程虽然没有使用a[0], 但缓存也会失效, 需要重新获取, 会产生额外的拷贝的开销</p>
 <p>如果需要解决这个问题, 需要将各个元素分隔到不同的缓存行, 也就是上一个元素的开始地址到下一个元素的开始地址, 间隔32/64/128</p>
+<p>如 [1,x,x,x,x,2,x,x,x,x] 的形式进行填充</p>
 </li>
 </ul>
 <h4 id="代码">代码<a href="#代码" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h4>
