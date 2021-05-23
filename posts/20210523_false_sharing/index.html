@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="theme-color" content="#494f5c">
+    <meta name="msapplication-TileColor" content="#494f5c">
+<meta itemprop="name" content="False Sharing">
+<meta itemprop="description" content="CPU-Cache 结构图  多数的CPU缓冲结构(Intel)  缓存行大小 32/64/128(现在多数为64)  解释（下面假设所有的线程都在不同的核心上）  在 不同的线程上读写某段连续的内存不同索引的值, 可能导致高速缓冲miss, 导致重复拷贝   a = [1,1,1,1,1,1]# thread 1for {a[0]&#43;&#43;}# thread 2for {a[1]&#43;&#43;}# thread 3for {a[2]&#43;&#43;}# thread 3for {a[4]&#43;&#43;}  线程写入某个值之后, 会导致其他其他的线程的缓存失效
+例如 thread 1 修改了a[0]
+其它线程虽然没有使用a[0], 但缓存也会失效, 需要重新获取, 会产生额外的拷贝的开销
+如果需要解决这个问题, 需要将各个元素分隔到不同的缓存行, 也就是上一个元素的开始地址到下一个元素的开始地址, 间隔32/64/128
+  代码 package false_sharing import ( &#34;runtime&#34; &#34;sync&#34; &#34;testing&#34; &#34;unsafe&#34; ) const numCpu = 12 type increase interface { Increase(idx int) Len() int } func BenchmarkNoPadIncrease(b *testing.">
+<meta itemprop="datePublished" content="2021-05-23T14:25:33+08:00" />
+<meta itemprop="dateModified" content="2021-05-23T14:25:33+08:00" />
+<meta itemprop="wordCount" content="249">
+
+
+
+<meta itemprop="keywords" content="golang," />
+<meta property="og:title" content="False Sharing" />
+<meta property="og:description" content="CPU-Cache 结构图  多数的CPU缓冲结构(Intel)  缓存行大小 32/64/128(现在多数为64)  解释（下面假设所有的线程都在不同的核心上）  在 不同的线程上读写某段连续的内存不同索引的值, 可能导致高速缓冲miss, 导致重复拷贝   a = [1,1,1,1,1,1]# thread 1for {a[0]&#43;&#43;}# thread 2for {a[1]&#43;&#43;}# thread 3for {a[2]&#43;&#43;}# thread 3for {a[4]&#43;&#43;}  线程写入某个值之后, 会导致其他其他的线程的缓存失效
+例如 thread 1 修改了a[0]
+其它线程虽然没有使用a[0], 但缓存也会失效, 需要重新获取, 会产生额外的拷贝的开销
+如果需要解决这个问题, 需要将各个元素分隔到不同的缓存行, 也就是上一个元素的开始地址到下一个元素的开始地址, 间隔32/64/128
+  代码 package false_sharing import ( &#34;runtime&#34; &#34;sync&#34; &#34;testing&#34; &#34;unsafe&#34; ) const numCpu = 12 type increase interface { Increase(idx int) Len() int } func BenchmarkNoPadIncrease(b *testing." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://blog.moyrn.com/posts/20210523_false_sharing/" />
+<meta property="article:published_time" content="2021-05-23T14:25:33+08:00" />
+<meta property="article:modified_time" content="2021-05-23T14:25:33+08:00" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="False Sharing"/>
+<meta name="twitter:description" content="CPU-Cache 结构图  多数的CPU缓冲结构(Intel)  缓存行大小 32/64/128(现在多数为64)  解释（下面假设所有的线程都在不同的核心上）  在 不同的线程上读写某段连续的内存不同索引的值, 可能导致高速缓冲miss, 导致重复拷贝   a = [1,1,1,1,1,1]# thread 1for {a[0]&#43;&#43;}# thread 2for {a[1]&#43;&#43;}# thread 3for {a[2]&#43;&#43;}# thread 3for {a[4]&#43;&#43;}  线程写入某个值之后, 会导致其他其他的线程的缓存失效
+例如 thread 1 修改了a[0]
+其它线程虽然没有使用a[0], 但缓存也会失效, 需要重新获取, 会产生额外的拷贝的开销
+如果需要解决这个问题, 需要将各个元素分隔到不同的缓存行, 也就是上一个元素的开始地址到下一个元素的开始地址, 间隔32/64/128
+  代码 package false_sharing import ( &#34;runtime&#34; &#34;sync&#34; &#34;testing&#34; &#34;unsafe&#34; ) const numCpu = 12 type increase interface { Increase(idx int) Len() int } func BenchmarkNoPadIncrease(b *testing."/>
+
+	<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+	<link rel="manifest" href="/site.webmanifest">
+	<link rel="mask-icon" href="/safari-pinned-tab.svg" color="">
+	<link rel="shortcut icon" href="/favicon.ico">
+
+    <title>False Sharing</title>
+    <link rel="stylesheet" href="https://blog.moyrn.com/css/style.min.eac77496566fd7d5768fd650ddb0b2b181ca6a2d7c5fdd6fe6b8ba4bf47e566f.css">
+
+</head>
+
+<body id="page">
+
+	<header id="site-header" class="animated slideInUp">
+		<div class="hdr-wrapper section-inner">
+			<div class="hdr-left">
+				<div class="site-branding">
+					<a href="https://blog.moyrn.com/">Moyrne&#39;Blog</a>
+				</div>
+				<nav class="site-nav hide-in-mobile">
+					
+				<a href="https://blog.moyrn.com/posts/">文章</a>
+				<a href="https://blog.moyrn.com/tags/">标签</a>
+				<a href="https://blog.moyrn.com/about">关于</a>
+
+				</nav>
+			</div>
+			<div class="hdr-right hdr-icons">
+				<span class="hdr-social hide-in-mobile"><a href="https://github.com/moyrne" target="_blank" rel="noopener me" title="Github"><svg xmlns="http://www.w3.org/2000/svg" class="feather" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg></a></span><button id="menu-btn" class="hdr-btn" title=""><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></button>
+			</div>
+		</div>
+	</header>
+	<div id="mobile-menu" class="animated fast">
+		<ul>
+			<li><a href="https://blog.moyrn.com/posts/">文章</a></li>
+			<li><a href="https://blog.moyrn.com/tags/">标签</a></li>
+			<li><a href="https://blog.moyrn.com/about">关于</a></li>
+		</ul>
+	</div>
+
+
+<main class="site-main section-inner animated fadeIn faster">
+    <article class="thin">
+        <header class="post-header">
+            <div class="post-meta"><span>May 23, 2021</span></div>
+            <h1>False Sharing</h1>
+        </header>
+        <div class="content">
+            <h4 id="cpu-cache-结构图">CPU-Cache 结构图<a href="#cpu-cache-结构图" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h4>
+<ul>
+<li>多数的CPU缓冲结构(Intel)
+<img src="/images/cpu-cache.png" alt="avatar"></li>
+<li>缓存行大小 32/64/128(现在多数为64)</li>
+</ul>
+<h4 id="解释下面假设所有的线程都在不同的核心上">解释（下面假设所有的线程都在不同的核心上）<a href="#解释下面假设所有的线程都在不同的核心上" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h4>
+<ul>
+<li>在 不同的线程上读写某段连续的内存不同索引的值, 可能导致高速缓冲miss, 导致重复拷贝</li>
+</ul>
+<pre><code>    a = [1,1,1,1,1,1]
+    # thread 1
+    for {a[0]++}
+    # thread 2
+    for {a[1]++}
+    # thread 3
+    for {a[2]++}
+    # thread 3
+    for {a[4]++}
+</code></pre><ul>
+<li>
+<p>线程写入某个值之后, 会导致其他其他的线程的缓存失效</p>
+<p>例如 thread 1 修改了a[0]</p>
+<p>其它线程虽然没有使用a[0], 但缓存也会失效, 需要重新获取, 会产生额外的拷贝的开销</p>
+<p>如果需要解决这个问题, 需要将各个元素分隔到不同的缓存行, 也就是上一个元素的开始地址到下一个元素的开始地址, 间隔32/64/128</p>
+</li>
+</ul>
+<h4 id="代码">代码<a href="#代码" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h4>
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">false_sharing</span>
+
+<span class="kn">import</span> <span class="p">(</span>
+	<span class="s">&#34;runtime&#34;</span>
+	<span class="s">&#34;sync&#34;</span>
+	<span class="s">&#34;testing&#34;</span>
+	<span class="s">&#34;unsafe&#34;</span>
+<span class="p">)</span>
+
+<span class="kd">const</span> <span class="nx">numCpu</span> <span class="p">=</span> <span class="mi">12</span>
+
+<span class="kd">type</span> <span class="nx">increase</span> <span class="kd">interface</span> <span class="p">{</span>
+	<span class="nf">Increase</span><span class="p">(</span><span class="nx">idx</span> <span class="kt">int</span><span class="p">)</span>
+	<span class="nf">Len</span><span class="p">()</span> <span class="kt">int</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="nf">BenchmarkNoPadIncrease</span><span class="p">(</span><span class="nx">b</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">B</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nf">falseSharing</span><span class="p">(</span><span class="nx">b</span><span class="p">,</span> <span class="nf">NewNoPadSlice</span><span class="p">(</span><span class="nx">numCpu</span><span class="p">))</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="nf">BenchmarkPadIncrease</span><span class="p">(</span><span class="nx">b</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">B</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nf">falseSharing</span><span class="p">(</span><span class="nx">b</span><span class="p">,</span> <span class="nf">NewPadSlice</span><span class="p">(</span><span class="nx">numCpu</span><span class="p">))</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="nf">falseSharing</span><span class="p">(</span><span class="nx">b</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">B</span><span class="p">,</span> <span class="nx">increase</span> <span class="nx">increase</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">wg</span> <span class="o">:=</span> <span class="nx">sync</span><span class="p">.</span><span class="nx">WaitGroup</span><span class="p">{}</span>
+	<span class="nf">PreSet</span><span class="p">(</span><span class="nx">b</span><span class="p">)</span>
+	<span class="k">for</span> <span class="nx">i</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="p">&lt;</span> <span class="nx">increase</span><span class="p">.</span><span class="nf">Len</span><span class="p">();</span> <span class="nx">i</span><span class="o">++</span> <span class="p">{</span>
+		<span class="nx">wg</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+		<span class="k">go</span> <span class="kd">func</span><span class="p">(</span><span class="nx">idx</span> <span class="kt">int</span><span class="p">)</span> <span class="p">{</span>
+			<span class="k">defer</span> <span class="nx">wg</span><span class="p">.</span><span class="nf">Done</span><span class="p">()</span>
+			<span class="k">for</span> <span class="nx">j</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">j</span> <span class="p">&lt;</span> <span class="nx">b</span><span class="p">.</span><span class="nx">N</span><span class="p">;</span> <span class="nx">j</span><span class="o">++</span> <span class="p">{</span>
+				<span class="nx">increase</span><span class="p">.</span><span class="nf">Increase</span><span class="p">(</span><span class="nx">idx</span><span class="p">)</span>
+			<span class="p">}</span>
+		<span class="p">}(</span><span class="nx">i</span><span class="p">)</span>
+	<span class="p">}</span>
+	<span class="nx">wg</span><span class="p">.</span><span class="nf">Wait</span><span class="p">()</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="nf">PreSet</span><span class="p">(</span><span class="nx">b</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">B</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">runtime</span><span class="p">.</span><span class="nf">GOMAXPROCS</span><span class="p">(</span><span class="nx">numCpu</span><span class="p">)</span>
+	<span class="nx">b</span><span class="p">.</span><span class="nf">ResetTimer</span><span class="p">()</span>
+<span class="p">}</span>
+
+<span class="kd">type</span> <span class="p">(</span>
+	<span class="nx">NoPadSlice</span> <span class="p">[]</span><span class="nx">NoPadItem</span>
+	<span class="nx">NoPadItem</span>  <span class="kd">struct</span> <span class="p">{</span>
+		<span class="nx">Value</span>
+	<span class="p">}</span>
+	<span class="nx">PadSlice</span> <span class="p">[]</span><span class="nx">PadItem</span>
+	<span class="nx">PadItem</span>  <span class="kd">struct</span> <span class="p">{</span>
+		<span class="nx">Value</span>
+		<span class="nx">pad</span> <span class="p">[</span><span class="mi">128</span> <span class="o">-</span> <span class="nx">unsafe</span><span class="p">.</span><span class="nf">Sizeof</span><span class="p">(</span><span class="nx">Value</span><span class="p">{})</span><span class="o">%</span><span class="mi">128</span><span class="p">]</span><span class="kt">byte</span>
+	<span class="p">}</span>
+	<span class="nx">Value</span> <span class="kd">struct</span> <span class="p">{</span>
+		<span class="nx">Int</span> <span class="kt">uint64</span>
+		<span class="nx">Str</span> <span class="kt">string</span>
+	<span class="p">}</span>
+<span class="p">)</span>
+
+<span class="kd">func</span> <span class="nf">NewNoPadSlice</span><span class="p">(</span><span class="nx">length</span> <span class="kt">int</span><span class="p">)</span> <span class="o">*</span><span class="nx">NoPadSlice</span> <span class="p">{</span>
+	<span class="nx">s</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">(</span><span class="nx">NoPadSlice</span><span class="p">,</span> <span class="nx">length</span><span class="p">)</span>
+	<span class="k">return</span> <span class="o">&amp;</span><span class="nx">s</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="p">(</span><span class="nx">s</span> <span class="o">*</span><span class="nx">NoPadSlice</span><span class="p">)</span> <span class="nf">Len</span><span class="p">()</span> <span class="kt">int</span> <span class="p">{</span>
+	<span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="o">*</span><span class="nx">s</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="kd">func</span> <span class="p">(</span><span class="nx">s</span> <span class="o">*</span><span class="nx">NoPadSlice</span><span class="p">)</span> <span class="nf">Increase</span><span class="p">(</span><span class="nx">idx</span> <span class="kt">int</span><span class="p">)</span> <span class="p">{</span>
+	<span class="p">(</span><span class="o">*</span><span class="nx">s</span><span class="p">)[</span><span class="nx">idx</span><span class="p">].</span><span class="nx">Value</span><span class="p">.</span><span class="nx">Int</span><span class="o">++</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="nf">NewPadSlice</span><span class="p">(</span><span class="nx">length</span> <span class="kt">int</span><span class="p">)</span> <span class="o">*</span><span class="nx">PadSlice</span> <span class="p">{</span>
+	<span class="nx">s</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">(</span><span class="nx">PadSlice</span><span class="p">,</span> <span class="nx">length</span><span class="p">)</span>
+	<span class="k">return</span> <span class="o">&amp;</span><span class="nx">s</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="p">(</span><span class="nx">s</span> <span class="o">*</span><span class="nx">PadSlice</span><span class="p">)</span> <span class="nf">Len</span><span class="p">()</span> <span class="kt">int</span> <span class="p">{</span>
+	<span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="o">*</span><span class="nx">s</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="kd">func</span> <span class="p">(</span><span class="nx">s</span> <span class="o">*</span><span class="nx">PadSlice</span><span class="p">)</span> <span class="nf">Increase</span><span class="p">(</span><span class="nx">idx</span> <span class="kt">int</span><span class="p">)</span> <span class="p">{</span>
+	<span class="p">(</span><span class="o">*</span><span class="nx">s</span><span class="p">)[</span><span class="nx">idx</span><span class="p">].</span><span class="nx">Value</span><span class="p">.</span><span class="nx">Int</span><span class="o">++</span>
+<span class="p">}</span>
+</code></pre></div><pre><code>goos: windows
+goarch: amd64
+pkg: demo/false_sharing
+cpu: AMD Ryzen 5 3600 6-Core Processor              
+BenchmarkNoPadIncrease
+BenchmarkNoPadIncrease-12    	1000000000	         0.3561 ns/op
+BenchmarkPadIncrease
+BenchmarkPadIncrease-12      	1000000000	         0.06356 ns/op
+PASS
+
+Process finished with exit code 0
+</code></pre>
+        </div>
+        <div class="content"><br>
+
+        </div>
+        <hr class="post-end">
+        <footer class="post-info">
+            <p>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7" y2="7"></line></svg><span class="tag"><a href="https://blog.moyrn.com/tags/golang">golang</a></span>
+            </p>
+
+            <p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>2021-05-23 14:25 &#43;0800</p>
+        </footer>
+    </article>
+    <div class="post-nav thin">
+        <a class="prev-post" href="https://blog.moyrn.com/posts/20210423_ubuntu_zsh/">
+            <span class="post-nav-label">&nbsp;<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span><br><span>zsh,oh-my-zsh安装</span>
+        </a>
+    </div>
+    <div id="comments" class="thin">
+                <script src="https://utteranc.es/client.js"
+                repo="moyrne/hugo-comment"
+                issue-term="title"
+                theme="github-dark-orange"
+                crossorigin="anonymous"
+                async>
+        </script>
+    </div>
+</main>
+
+<footer id="site-footer" class="section-inner thin animated fadeIn faster">
+    <p>&copy; 2018 - 2021 <a href="https://blog.moyrn.com/">Moyrne</a> &#183; <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC BY-NC 4.0</a></p>
+    <p>
+        Made with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> &#183; Theme <a href="https://github.com/Track3/hermit" target="_blank" rel="noopener">Hermit</a> &#183; <a href="https://blog.moyrn.com/post/index.xml" target="_blank" title="rss"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-rss"><path d="M4 11a9 9 0 0 1 9 9"></path><path d="M4 4a16 16 0 0 1 16 16"></path><circle cx="5" cy="19" r="1"></circle></svg></a>
+    </p>
+</footer>
+
+<script src="https://blog.moyrn.com/js/main.min.35ccbf1cdceb91e4c64c06b5d009d6e2977fafe56beda7762febd4e67528d2ac.js"></script>
+</body>
+
+</html>
