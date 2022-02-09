@@ -3,6 +3,26 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://blog.moyrn.com/posts/</loc>
+    <lastmod>2022-02-09T11:02:32+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://blog.moyrn.com/tags/shell/</loc>
+    <lastmod>2022-02-09T11:02:32+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://blog.moyrn.com/tags/</loc>
+    <lastmod>2022-02-09T11:02:32+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://blog.moyrn.com/posts/20220209_powershell/</loc>
+    <lastmod>2022-02-09T11:02:32+08:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://blog.moyrn.com/posts/20210523_false_sharing/</loc>
     <lastmod>2021-05-23T14:25:33+08:00</lastmod>
   </url>
@@ -10,21 +30,6 @@
   <url>
     <loc>https://blog.moyrn.com/tags/golang/</loc>
     <lastmod>2021-05-23T14:25:33+08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://blog.moyrn.com/posts/</loc>
-    <lastmod>2021-05-23T14:25:33+08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://blog.moyrn.com/tags/</loc>
-    <lastmod>2021-05-23T14:25:33+08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://blog.moyrn.com/tags/shell/</loc>
-    <lastmod>2021-04-24T16:18:28+08:00</lastmod>
   </url>
   
   <url>

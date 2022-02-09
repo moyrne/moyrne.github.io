@@ -7,10 +7,19 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
     <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
-    <lastBuildDate>Sun, 23 May 2021 14:25:33 +0800</lastBuildDate>
+    <lastBuildDate>Wed, 09 Feb 2022 11:02:32 +0800</lastBuildDate>
     
 	<atom:link href="https://blog.moyrn.com/tags/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>shell</title>
+      <link>https://blog.moyrn.com/tags/shell/</link>
+      <pubDate>Wed, 09 Feb 2022 11:02:32 +0800</pubDate>
+      
+      <guid>https://blog.moyrn.com/tags/shell/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>golang</title>
@@ -18,15 +27,6 @@
       <pubDate>Sun, 23 May 2021 14:25:33 +0800</pubDate>
       
       <guid>https://blog.moyrn.com/tags/golang/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>shell</title>
-      <link>https://blog.moyrn.com/tags/shell/</link>
-      <pubDate>Sat, 24 Apr 2021 16:18:28 +0800</pubDate>
-      
-      <guid>https://blog.moyrn.com/tags/shell/</guid>
       <description></description>
     </item>
     

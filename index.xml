@@ -13,6 +13,21 @@
     
     
     <item>
+      <title>Windows Powershell 美化</title>
+      <link>https://blog.moyrn.com/posts/20220209_powershell/</link>
+      <pubDate>Wed, 09 Feb 2022 11:02:32 +0800</pubDate>
+      
+      <guid>https://blog.moyrn.com/posts/20220209_powershell/</guid>
+      <description>原始链接 https://zhuanlan.zhihu.com/p/137595941   安装 Windows Terminal
+MicroSoft 应用商店
+  安装字体 Fira Code Nerd Font
+https://github.com/ryanoasis/nerd-fonts/releases   安装新的 PowerShell
+https://github.com/PowerShell/PowerShell/releases/tag/v7.2.1   安装 PowerShell 插件
+# 1. 安装 PSReadline 包，该插件可以让命令行很好用，类似 zsh Install-Module -Name PSReadLine -Scope CurrentUser # 2. 安装 posh-git 包，让你的 git 更好用 Install-Module posh-git -Scope CurrentUser # 3. 安装 oh-my-posh 包，让你的命令行更酷炫、优雅 Install-Module oh-my-posh -Scope CurrentUser   添加 Powershell 启动参数
+ 输入命令  notepad.exe $Profile 在文本框装填入以下内容  #------------------------------- Import Modules BEGIN ------------------------------- # 引入 posh-git Import-Module posh-git # 引入 oh-my-posh Import-Module oh-my-posh # 引入 ps-read-line Import-Module PSReadLine # 设置 PowerShell 主题 # Set-PoshPrompt ys Set-PoshPrompt paradox #------------------------------- Import Modules END ------------------------------- #------------------------------- Set Hot-keys BEGIN ------------------------------- # 设置预测文本来源为历史记录 Set-PSReadLineOption -PredictionSource History # 每次回溯输入历史，光标定位于输入内容末尾 Set-PSReadLineOption -HistorySearchCursorMovesToEnd # 设置 Tab 为菜单补全和 Intellisense Set-PSReadLineKeyHandler -Key &amp;#34;Tab&amp;#34; -Function MenuComplete # 设置 Ctrl+d 为退出 PowerShell Set-PSReadlineKeyHandler -Key &amp;#34;Ctrl+d&amp;#34; -Function ViExit # 设置 Ctrl+z 为撤销 Set-PSReadLineKeyHandler -Key &amp;#34;Ctrl+z&amp;#34; -Function Undo # 设置向上键为后向搜索历史记录 Set-PSReadLineKeyHandler -Key UpArrow -Function HistorySearchBackward # 设置向下键为前向搜索历史纪录 Set-PSReadLineKeyHandler -Key DownArrow -Function HistorySearchForward #------------------------------- Set Hot-keys END -------------------------------   </description>
+    </item>
+    
+    <item>
       <title>False Sharing</title>
       <link>https://blog.moyrn.com/posts/20210523_false_sharing/</link>
       <pubDate>Sun, 23 May 2021 14:25:33 +0800</pubDate>
@@ -103,15 +118,6 @@ $ kubectl get pod test-liveness-exec NAME READY STATUS RESTARTS AGE liveness-exe
       
       <guid>https://blog.moyrn.com/posts/20210128_string_join_benchmark/</guid>
       <description>// splicing_test.go package splicing import ( &amp;#34;strconv&amp;#34; &amp;#34;strings&amp;#34; &amp;#34;testing&amp;#34; ) func Str(str []string) string { var rst string for _, s := range str { rst += s } return rst } func BuilderStr(str []string) string { var builder strings.Builder for _, s := range str { builder.WriteString(s) } return builder.String() } func BenchmarkStr(b *testing.B) { srcStr := make([]string, 0, 100000) b.Run(&amp;#34;Append-10000&amp;#34;, func(b *testing.B) { for i := 0; i &amp;lt; 10000; i++ { srcStr = append(srcStr, strconv.</description>
-    </item>
-    
-    <item>
-      <title>time.After() 导致内存暴涨</title>
-      <link>https://blog.moyrn.com/posts/20210127_time_after_oom/</link>
-      <pubDate>Thu, 31 Oct 2019 13:04:41 +0800</pubDate>
-      
-      <guid>https://blog.moyrn.com/posts/20210127_time_after_oom/</guid>
-      <description>select + time.After 导致内存暴涨 func Function(notRun notRun) {for {select {case &amp;lt;-notRun.notRun:// 大多数情况都是有notRun的输入	case &amp;lt;-time.After(time.Minute):notRun.Close()continuecase &amp;lt;-notRun.run:notRun.Close()return}}} notRun 发送消息频率过快，而每次select都会调用到time.After，而time.After又会NewTimer，而每次NewTimer都必须在1分钟后才能释放。 当notRun的频率很高时，会在内存中堆积非常多的无用的Timer。导致内存暴涨。  解决方法 func Function(notRun notRun) {afterTime := time.Minuteafter := time.NewTimer(afterTime)defer after.Stop()for {after.Reset(afterTime)select {case &amp;lt;-notRun.notRun:case &amp;lt;-after.C:notRun.Close()continuecase &amp;lt;-notRun.run:notRun.Close()return}}} 自己 NewTimer 在每次 select 之前 reset，使 timer 重新计时，从而避免每次都 new timer。  </description>
     </item>
     
   </channel>
