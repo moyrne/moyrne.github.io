@@ -8,21 +8,20 @@
     <meta name="theme-color" content="#494f5c">
     <meta name="msapplication-TileColor" content="#494f5c">
 <meta itemprop="name" content="False Sharing">
-<meta itemprop="description" content="CPU-Cache 结构图  多数的CPU缓冲结构(Intel)  缓存行大小 32/64/128(现在多数为64)  解释（下面假设所有的线程都在不同的核心上）  在 不同的线程上读写某段连续的内存不同索引的值, 可能导致高速缓冲miss, 导致重复拷贝   a = [1,1,1,1,1,1]# thread 1for {a[0]&#43;&#43;}# thread 2for {a[1]&#43;&#43;}# thread 3for {a[2]&#43;&#43;}# thread 3for {a[4]&#43;&#43;}  线程写入某个值之后, 会导致其他其他的线程的缓存失效
+<meta itemprop="description" content="CPU-Cache 结构图  多数的CPU缓冲结构(Intel)  缓存行大小 32/64/128(现在多数为64)  解释（下面假设所有的线程都在不同的核心上）  在 不同的线程上读写某段连续的内存不同索引的值, 可能导致高速缓冲miss, 导致重复拷贝   a = [1,1,1,1,1,1] # thread 1 for {a[0]&#43;&#43;} # thread 2 for {a[1]&#43;&#43;} # thread 3 for {a[2]&#43;&#43;} # thread 3 for {a[4]&#43;&#43;}   线程写入某个值之后, 会导致其他其他的线程的缓存失效
 例如 thread 1 修改了a[0]
 其它线程虽然没有使用a[0], 但缓存也会失效, 需要重新获取, 会产生额外的拷贝的开销
 如果需要解决这个问题, 需要将各个元素分隔到不同的缓存行, 也就是上一个元素的开始地址到下一个元素的开始地址, 间隔32/64/128
 如 [1,x,x,x,x,2,x,x,x,x] 的形式进行填充
   代码 package false_sharing import ( &#34;runtime&#34; &#34;sync&#34; &#34;testing&#34; &#34;unsafe&#34; ) const numCpu = 12 type increase interface { Increase(idx int) Len() int } func BenchmarkNoPadIncrease(b *testing.">
-<meta itemprop="datePublished" content="2021-05-23T14:25:33+08:00" />
-<meta itemprop="dateModified" content="2021-05-23T14:25:33+08:00" />
+<meta itemprop="datePublished" content="2021-05-23T14:25:33&#43;08:00" />
+<meta itemprop="dateModified" content="2021-05-23T14:25:33&#43;08:00" />
 <meta itemprop="wordCount" content="252">
 
 
 
-<meta itemprop="keywords" content="golang," />
-<meta property="og:title" content="False Sharing" />
-<meta property="og:description" content="CPU-Cache 结构图  多数的CPU缓冲结构(Intel)  缓存行大小 32/64/128(现在多数为64)  解释（下面假设所有的线程都在不同的核心上）  在 不同的线程上读写某段连续的内存不同索引的值, 可能导致高速缓冲miss, 导致重复拷贝   a = [1,1,1,1,1,1]# thread 1for {a[0]&#43;&#43;}# thread 2for {a[1]&#43;&#43;}# thread 3for {a[2]&#43;&#43;}# thread 3for {a[4]&#43;&#43;}  线程写入某个值之后, 会导致其他其他的线程的缓存失效
+<meta itemprop="keywords" content="golang," /><meta property="og:title" content="False Sharing" />
+<meta property="og:description" content="CPU-Cache 结构图  多数的CPU缓冲结构(Intel)  缓存行大小 32/64/128(现在多数为64)  解释（下面假设所有的线程都在不同的核心上）  在 不同的线程上读写某段连续的内存不同索引的值, 可能导致高速缓冲miss, 导致重复拷贝   a = [1,1,1,1,1,1] # thread 1 for {a[0]&#43;&#43;} # thread 2 for {a[1]&#43;&#43;} # thread 3 for {a[2]&#43;&#43;} # thread 3 for {a[4]&#43;&#43;}   线程写入某个值之后, 会导致其他其他的线程的缓存失效
 例如 thread 1 修改了a[0]
 其它线程虽然没有使用a[0], 但缓存也会失效, 需要重新获取, 会产生额外的拷贝的开销
 如果需要解决这个问题, 需要将各个元素分隔到不同的缓存行, 也就是上一个元素的开始地址到下一个元素的开始地址, 间隔32/64/128
@@ -34,7 +33,7 @@
 <meta property="article:modified_time" content="2021-05-23T14:25:33+08:00" />
 <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="False Sharing"/>
-<meta name="twitter:description" content="CPU-Cache 结构图  多数的CPU缓冲结构(Intel)  缓存行大小 32/64/128(现在多数为64)  解释（下面假设所有的线程都在不同的核心上）  在 不同的线程上读写某段连续的内存不同索引的值, 可能导致高速缓冲miss, 导致重复拷贝   a = [1,1,1,1,1,1]# thread 1for {a[0]&#43;&#43;}# thread 2for {a[1]&#43;&#43;}# thread 3for {a[2]&#43;&#43;}# thread 3for {a[4]&#43;&#43;}  线程写入某个值之后, 会导致其他其他的线程的缓存失效
+<meta name="twitter:description" content="CPU-Cache 结构图  多数的CPU缓冲结构(Intel)  缓存行大小 32/64/128(现在多数为64)  解释（下面假设所有的线程都在不同的核心上）  在 不同的线程上读写某段连续的内存不同索引的值, 可能导致高速缓冲miss, 导致重复拷贝   a = [1,1,1,1,1,1] # thread 1 for {a[0]&#43;&#43;} # thread 2 for {a[1]&#43;&#43;} # thread 3 for {a[2]&#43;&#43;} # thread 3 for {a[4]&#43;&#43;}   线程写入某个值之后, 会导致其他其他的线程的缓存失效
 例如 thread 1 修改了a[0]
 其它线程虽然没有使用a[0], 但缓存也会失效, 需要重新获取, 会产生额外的拷贝的开销
 如果需要解决这个问题, 需要将各个元素分隔到不同的缓存行, 也就是上一个元素的开始地址到下一个元素的开始地址, 间隔32/64/128
@@ -49,28 +48,26 @@
 	<link rel="shortcut icon" href="/favicon.ico">
 
     <title>False Sharing</title>
-    <link rel="stylesheet" href="https://blog.moyrn.com/css/style.min.eac77496566fd7d5768fd650ddb0b2b181ca6a2d7c5fdd6fe6b8ba4bf47e566f.css">
+    <link rel="stylesheet" href="https://blog.moyrn.com/css/style.min.d3141168199607bf3a517216ce3c263814eecdbc8fca72a9a88700799a838219.css">
 
 </head>
 
 <body id="page">
 
-	<header id="site-header" class="animated slideInUp">
+	<header id="site-header" class="animated slideInUp faster">
 		<div class="hdr-wrapper section-inner">
 			<div class="hdr-left">
 				<div class="site-branding">
 					<a href="https://blog.moyrn.com/">Moyrne&#39;Blog</a>
 				</div>
 				<nav class="site-nav hide-in-mobile">
-					
-				<a href="https://blog.moyrn.com/posts/">文章</a>
-				<a href="https://blog.moyrn.com/tags/">标签</a>
-				<a href="https://blog.moyrn.com/about">关于</a>
-
+					<a href="https://blog.moyrn.com/posts/">文章</a>
+					<a href="https://blog.moyrn.com/tags/">标签</a>
+					<a href="https://blog.moyrn.com/about">关于</a>
 				</nav>
 			</div>
 			<div class="hdr-right hdr-icons">
-				<span class="hdr-social hide-in-mobile"><a href="https://github.com/moyrne" target="_blank" rel="noopener me" title="Github"><svg xmlns="http://www.w3.org/2000/svg" class="feather" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg></a></span><button id="menu-btn" class="hdr-btn" title=""><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></button>
+				<span class="hdr-social hide-in-mobile"><a href="https://github.com/moyrne" target="_blank" rel="noopener me" title="Github"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-github"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg></a></span><button id="menu-btn" class="hdr-btn" title=""><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></button>
 			</div>
 		</div>
 	</header>
@@ -244,13 +241,13 @@ Process finished with exit code 0
 </main>
 
 <footer id="site-footer" class="section-inner thin animated fadeIn faster">
-    <p>&copy; 2018 - 2021 <a href="https://blog.moyrn.com/">Moyrne</a> &#183; <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC BY-NC 4.0</a></p>
+    <p>&copy; 2018 - 2022 <a href="https://blog.moyrn.com/">Moyrne</a> &#183; <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC BY-NC 4.0</a></p>
     <p>
         Made with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> &#183; Theme <a href="https://github.com/Track3/hermit" target="_blank" rel="noopener">Hermit</a> &#183; <a href="https://blog.moyrn.com/post/index.xml" target="_blank" title="rss"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-rss"><path d="M4 11a9 9 0 0 1 9 9"></path><path d="M4 4a16 16 0 0 1 16 16"></path><circle cx="5" cy="19" r="1"></circle></svg></a>
     </p>
 </footer>
 
-<script src="https://blog.moyrn.com/js/main.min.35ccbf1cdceb91e4c64c06b5d009d6e2977fafe56beda7762febd4e67528d2ac.js"></script>
+<script src="https://blog.moyrn.com/js/main.min.784417f5847151f848c339cf0acb13a06cbb648b1483435a28ed4556c4ead69b.js"></script>
 </body>
 
 </html>

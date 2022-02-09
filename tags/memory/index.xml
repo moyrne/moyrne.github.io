@@ -7,14 +7,18 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
     <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
-    <lastBuildDate>Thu, 31 Oct 2019 13:04:41 +0800</lastBuildDate><atom:link href="https://blog.moyrn.com/tags/memory/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 31 Oct 2019 13:04:41 +0800</lastBuildDate>
+    
+	<atom:link href="https://blog.moyrn.com/tags/memory/index.xml" rel="self" type="application/rss+xml" />
+    
+    
     <item>
       <title>time.After() 导致内存暴涨</title>
       <link>https://blog.moyrn.com/posts/20210127_time_after_oom/</link>
       <pubDate>Thu, 31 Oct 2019 13:04:41 +0800</pubDate>
       
       <guid>https://blog.moyrn.com/posts/20210127_time_after_oom/</guid>
-      <description>select + time.After 导致内存暴涨 func Function(notRun notRun) { for { select { case &amp;lt;-notRun.notRun: // 大多数情况都是有notRun的输入 	case &amp;lt;-time.After(time.Minute): notRun.Close() continue case &amp;lt;-notRun.run: notRun.Close() return } } }  notRun 发送消息频率过快，而每次select都会调用到time.After，而time.After又会NewTimer，而每次NewTimer都必须在1分钟后才能释放。 当notRun的频率很高时，会在内存中堆积非常多的无用的Timer。导致内存暴涨。  解决方法 func Function(notRun notRun) { afterTime := time.Minute after := time.NewTimer(afterTime) defer after.Stop() for { after.Reset(afterTime) select { case &amp;lt;-notRun.notRun: case &amp;lt;-after.C: notRun.Close() continue case &amp;lt;-notRun.run: notRun.Close() return } } }  自己 NewTimer 在每次 select 之前 reset，使 timer 重新计时，从而避免每次都 new timer。  </description>
+      <description>select + time.After 导致内存暴涨 func Function(notRun notRun) {for {select {case &amp;lt;-notRun.notRun:// 大多数情况都是有notRun的输入	case &amp;lt;-time.After(time.Minute):notRun.Close()continuecase &amp;lt;-notRun.run:notRun.Close()return}}} notRun 发送消息频率过快，而每次select都会调用到time.After，而time.After又会NewTimer，而每次NewTimer都必须在1分钟后才能释放。 当notRun的频率很高时，会在内存中堆积非常多的无用的Timer。导致内存暴涨。  解决方法 func Function(notRun notRun) {afterTime := time.Minuteafter := time.NewTimer(afterTime)defer after.Stop()for {after.Reset(afterTime)select {case &amp;lt;-notRun.notRun:case &amp;lt;-after.C:notRun.Close()continuecase &amp;lt;-notRun.run:notRun.Close()return}}} 自己 NewTimer 在每次 select 之前 reset，使 timer 重新计时，从而避免每次都 new timer。  </description>
     </item>
     
   </channel>

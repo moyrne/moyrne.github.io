@@ -15,7 +15,7 @@
             <pubDate>Sun, 23 May 2021 14:25:33 +0800</pubDate>
             
             <guid>https://blog.moyrn.com/posts/20210523_false_sharing/</guid>
-            <description>CPU-Cache 结构图  多数的CPU缓冲结构(Intel)  缓存行大小 32/64/128(现在多数为64)  解释（下面假设所有的线程都在不同的核心上）  在 不同的线程上读写某段连续的内存不同索引的值, 可能导致高速缓冲miss, 导致重复拷贝   a = [1,1,1,1,1,1]# thread 1for {a[0]++}# thread 2for {a[1]++}# thread 3for {a[2]++}# thread 3for {a[4]++}  线程写入某个值之后, 会导致其他其他的线程的缓存失效
+            <description>CPU-Cache 结构图  多数的CPU缓冲结构(Intel)  缓存行大小 32/64/128(现在多数为64)  解释（下面假设所有的线程都在不同的核心上）  在 不同的线程上读写某段连续的内存不同索引的值, 可能导致高速缓冲miss, 导致重复拷贝   a = [1,1,1,1,1,1] # thread 1 for {a[0]++} # thread 2 for {a[1]++} # thread 3 for {a[2]++} # thread 3 for {a[4]++}   线程写入某个值之后, 会导致其他其他的线程的缓存失效
 例如 thread 1 修改了a[0]
 其它线程虽然没有使用a[0], 但缓存也会失效, 需要重新获取, 会产生额外的拷贝的开销
 如果需要解决这个问题, 需要将各个元素分隔到不同的缓存行, 也就是上一个元素的开始地址到下一个元素的开始地址, 间隔32/64/128
@@ -187,7 +187,7 @@ vim ~/.zshrc
             <pubDate>Tue, 16 Mar 2021 11:51:54 +0800</pubDate>
             
             <guid>https://blog.moyrn.com/posts/20210316_go_features/</guid>
-            <description>internal 包 [20210316] /go/src/xxx/package/internal  internal 包中的内容，无法在package外被导入，否则编译不通过。  </description>
+            <description>internal 包 [20210316] /go/src/xxx/package/internal   internal 包中的内容，无法在package外被导入，否则编译不通过。  </description>
             <content type="html"><![CDATA[<h3 id="internal-包-20210316">internal 包 [20210316]</h3>
 <pre><code>/go/src/xxx/package/internal
 </code></pre>
@@ -234,19 +234,19 @@ vim ~/.zshrc
 <li>
 <p>滚动更新 RollingUpdateStrategy 在“滚动更新”的过程中永远都会确保至少有 2 个 Pod 处于可用状态，至多只有 4 个 Pod 同时存在于集群中
 旧版本RS的Pod数量递减，新版本RS的Pod数量递增</p>
-<div class="highlight"><pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> 
-</span><span class="w">  </span><span class="nt">apps/v1kind</span><span class="p">:</span><span class="w"> 
-</span><span class="w">    </span><span class="nt">Deploymentmetadata</span><span class="p">:</span><span class="w"> 
-</span><span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">nginx-deployment </span><span class="w">
-</span><span class="w">      </span><span class="nt">labels</span><span class="p">:</span><span class="w"> 
-</span><span class="w">        </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l">nginx</span><span class="w">
-</span><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
-</span><span class="w"></span><span class="nn">...</span><span class="w"> 
-</span><span class="w">  </span><span class="nt">strategy</span><span class="p">:</span><span class="w"> 
-</span><span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l">RollingUpdate </span><span class="w">
-</span><span class="w">    </span><span class="nt">rollingUpdate</span><span class="p">:</span><span class="w"> 
-</span><span class="w">      </span><span class="nt">maxSurge</span><span class="p">:</span><span class="w"> </span><span class="m">1</span><span class="w"> 
-</span><span class="w">      </span><span class="nt">maxUnavailable</span><span class="p">:</span><span class="w"> </span><span class="m">1</span><span class="w">
+<div class="highlight"><pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="k">apiVersion</span><span class="p">:</span><span class="w"> 
+</span><span class="w">  </span><span class="k">apps/v1kind</span><span class="p">:</span><span class="w"> 
+</span><span class="w">    </span><span class="k">Deploymentmetadata</span><span class="p">:</span><span class="w"> 
+</span><span class="w">      </span><span class="k">name</span><span class="p">:</span><span class="w"> </span>nginx-deployment<span class="w"> 
+</span><span class="w">      </span><span class="k">labels</span><span class="p">:</span><span class="w"> 
+</span><span class="w">        </span><span class="k">app</span><span class="p">:</span><span class="w"> </span>nginx<span class="w">
+</span><span class="w"></span><span class="k">spec</span><span class="p">:</span><span class="w">
+</span><span class="w"></span>...<span class="w"> 
+</span><span class="w">  </span><span class="k">strategy</span><span class="p">:</span><span class="w"> 
+</span><span class="w">    </span><span class="k">type</span><span class="p">:</span><span class="w"> </span>RollingUpdate<span class="w"> 
+</span><span class="w">    </span><span class="k">rollingUpdate</span><span class="p">:</span><span class="w"> 
+</span><span class="w">      </span><span class="k">maxSurge</span><span class="p">:</span><span class="w"> </span><span class="m">1</span><span class="w"> 
+</span><span class="w">      </span><span class="k">maxUnavailable</span><span class="p">:</span><span class="w"> </span><span class="m">1</span><span class="w">
 </span></code></pre></div></li>
 <li>
 <p>金丝雀发布和蓝绿发布，示例： <a href="https://github.com/ContainerSolutions/k8s-deployment-strategies/tree/master/canary">https://github.com/ContainerSolutions/k8s-deployment-strategies/tree/master/canary</a></p>
@@ -289,7 +289,7 @@ $ kubectl create -f nginx-deployment.yaml --record
             <pubDate>Fri, 12 Feb 2021 15:07:14 +0800</pubDate>
             
             <guid>https://blog.moyrn.com/posts/20210212_pod_project/</guid>
-            <description>Volume  Projected Volume 将预先设置好的数据投射到容器中，  Secret    volumes:- name:mysql-cred projected:sources:- secret:name:user - secret:name:pass- ConfigMap - DownwardAPI - ServiceAccountToken restartPolicy livenessProbe   只要 Pod 的 restartPolicy 指定的策略允许重启异常的容器（比如：Always），那么这个 Pod 就会保持 Running 状态，并进行容器重启。否则，Pod 就会进入 Failed 状态 。
+            <description>Volume  Projected Volume 将预先设置好的数据投射到容器中，  Secret    volumes:- name:mysql-credprojected:sources:- secret:name:user- secret:name:pass- ConfigMap  - DownwardAPI  - ServiceAccountToken  restartPolicy livenessProbe   只要 Pod 的 restartPolicy 指定的策略允许重启异常的容器（比如：Always），那么这个 Pod 就会保持 Running 状态，并进行容器重启。否则，Pod 就会进入 Failed 状态 。
   对于包含多个容器的 Pod，只有它里面所有的容器都进入异常状态后，Pod 才会进入 Failed 状态。在此之前，Pod 都是 Running 状态。此时，Pod 的 READY 字段会显示正常容器的个数，比如：
 $ kubectl get pod test-liveness-exec NAME READY STATUS RESTARTS AGE liveness-exec 0/1 Running 1 1m   livenessProbe HTTP Or TCP, 多用于Web服务健康检查, Web服务中暴露出健康检查URL</description>
             <content type="html"><![CDATA[<h2 id="volume">Volume</h2>
@@ -300,14 +300,14 @@ $ kubectl get pod test-liveness-exec NAME READY STATUS RESTARTS AGE liveness-exe
 </ul>
 </li>
 </ul>
-<div class="highlight"><pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">volumes</span><span class="p">:</span><span class="w"> 
-</span><span class="w"></span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">mysql-cred </span><span class="w">
-</span><span class="w"></span><span class="nt">projected</span><span class="p">:</span><span class="w"> 
-</span><span class="w">  </span><span class="nt">sources</span><span class="p">:</span><span class="w"> 
-</span><span class="w">  </span>- <span class="nt">secret</span><span class="p">:</span><span class="w"> 
-</span><span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">user </span><span class="w">
-</span><span class="w">  </span>- <span class="nt">secret</span><span class="p">:</span><span class="w"> 
-</span><span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">pass</span><span class="w">
+<div class="highlight"><pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="k">volumes</span><span class="p">:</span><span class="w"> 
+</span><span class="w"></span>- <span class="k">name</span><span class="p">:</span><span class="w"> </span>mysql-cred<span class="w"> 
+</span><span class="w"></span><span class="k">projected</span><span class="p">:</span><span class="w"> 
+</span><span class="w">  </span><span class="k">sources</span><span class="p">:</span><span class="w"> 
+</span><span class="w">  </span>- <span class="k">secret</span><span class="p">:</span><span class="w"> 
+</span><span class="w">    </span><span class="k">name</span><span class="p">:</span><span class="w"> </span>user<span class="w"> 
+</span><span class="w">  </span>- <span class="k">secret</span><span class="p">:</span><span class="w"> 
+</span><span class="w">    </span><span class="k">name</span><span class="p">:</span><span class="w"> </span>pass<span class="w">
 </span></code></pre></div><pre><code>- ConfigMap
 </code></pre>
 <pre><code></code></pre><pre><code>- DownwardAPI
@@ -329,22 +329,22 @@ liveness-exec 0/1   Running <span class="m">1</span>        1m
 <p>livenessProbe HTTP Or TCP, 多用于Web服务健康检查, Web服务中暴露出健康检查URL</p>
 </li>
 </ol>
-<div class="highlight"><pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nn">...</span><span class="w">
-</span><span class="w"></span><span class="nt">livenessProbe</span><span class="p">:</span><span class="w">
-</span><span class="w">     </span><span class="nt">httpGet</span><span class="p">:</span><span class="w">
-</span><span class="w">       </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l">/healthz</span><span class="w">
-</span><span class="w">       </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="m">8080</span><span class="w">
-</span><span class="w">       </span><span class="nt">httpHeaders</span><span class="p">:</span><span class="w">
-</span><span class="w">       </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">X-Custom-Header</span><span class="w">
-</span><span class="w">         </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l">Awesome</span><span class="w">
-</span><span class="w">       </span><span class="nt">initialDelaySeconds</span><span class="p">:</span><span class="w"> </span><span class="m">3</span><span class="w">
-</span><span class="w">       </span><span class="nt">periodSeconds</span><span class="p">:</span><span class="w"> </span><span class="m">3</span><span class="w">
-</span></code></pre></div><div class="highlight"><pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="w">    </span><span class="l">...</span><span class="w">
-</span><span class="w">    </span><span class="nt">livenessProbe</span><span class="p">:</span><span class="w">
-</span><span class="w">      </span><span class="nt">tcpSocket</span><span class="p">:</span><span class="w">
-</span><span class="w">        </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="m">8080</span><span class="w">
-</span><span class="w">      </span><span class="nt">initialDelaySeconds</span><span class="p">:</span><span class="w"> </span><span class="m">15</span><span class="w">
-</span><span class="w">      </span><span class="nt">periodSeconds</span><span class="p">:</span><span class="w"> </span><span class="m">20</span><span class="w">
+<div class="highlight"><pre class="chroma"><code class="language-yaml" data-lang="yaml">...<span class="w">
+</span><span class="w"></span><span class="k">livenessProbe</span><span class="p">:</span><span class="w">
+</span><span class="w">     </span><span class="k">httpGet</span><span class="p">:</span><span class="w">
+</span><span class="w">       </span><span class="k">path</span><span class="p">:</span><span class="w"> </span>/healthz<span class="w">
+</span><span class="w">       </span><span class="k">port</span><span class="p">:</span><span class="w"> </span><span class="m">8080</span><span class="w">
+</span><span class="w">       </span><span class="k">httpHeaders</span><span class="p">:</span><span class="w">
+</span><span class="w">       </span>- <span class="k">name</span><span class="p">:</span><span class="w"> </span>X-Custom-Header<span class="w">
+</span><span class="w">         </span><span class="k">value</span><span class="p">:</span><span class="w"> </span>Awesome<span class="w">
+</span><span class="w">       </span><span class="k">initialDelaySeconds</span><span class="p">:</span><span class="w"> </span><span class="m">3</span><span class="w">
+</span><span class="w">       </span><span class="k">periodSeconds</span><span class="p">:</span><span class="w"> </span><span class="m">3</span><span class="w">
+</span></code></pre></div><div class="highlight"><pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="w">    </span>...<span class="w">
+</span><span class="w">    </span><span class="k">livenessProbe</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span><span class="k">tcpSocket</span><span class="p">:</span><span class="w">
+</span><span class="w">        </span><span class="k">port</span><span class="p">:</span><span class="w"> </span><span class="m">8080</span><span class="w">
+</span><span class="w">      </span><span class="k">initialDelaySeconds</span><span class="p">:</span><span class="w"> </span><span class="m">15</span><span class="w">
+</span><span class="w">      </span><span class="k">periodSeconds</span><span class="p">:</span><span class="w"> </span><span class="m">20</span><span class="w">
 </span></code></pre></div><h2 id="podpreset">PodPreset</h2>
 <p>PodPreset 里定义的内容，只会在 Pod API 对象被创建之前追加在这个对象本身上，而不会影响任何 Pod 的控制器的定义。</p>
 <p>比如，我们现在提交的是一个 nginx-deployment，那么这个 Deployment 对象本身是永远不会被 PodPreset 改变的， 被修改的只是这个 Deployment 创建出来的所有 Pod。</p>
@@ -470,15 +470,15 @@ systemctl <span class="nb">enable</span> kubelet <span class="o">&amp;&amp;</spa
 <li>创建 kubeadm init 初始化文件 (仅master)</li>
 </ul>
 <div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">vim kubeadm-init.yaml
-</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">kubeadm.k8s.io/v1beta2</span><span class="w">
-</span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">ClusterConfiguration</span><span class="w">
-</span><span class="w"></span><span class="nt">kubernetesVersion</span><span class="p">:</span><span class="w"> </span><span class="l">v1.20.0</span><span class="w">
-</span><span class="w"></span><span class="nt">imageRepository</span><span class="p">:</span><span class="w"> </span><span class="l">registry.aliyuncs.com/k8sxio</span><span class="w">
-</span><span class="w"></span><span class="nt">controlPlaneEndpoint</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;192.168.111.128:6443&#34;</span><span class="w">
-</span><span class="w"></span><span class="nt">networking</span><span class="p">:</span><span class="w">
-</span><span class="w">  </span><span class="nt">serviceSubnet</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;10.96.0.0/16&#34;</span><span class="w">
-</span><span class="w">  </span><span class="nt">podSubnet</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;10.100.0.1/16&#34;</span><span class="w">
-</span><span class="w">  </span><span class="nt">dnsDomain</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;192.168.111.128&#34;</span><span class="w">
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="k">apiVersion</span><span class="p">:</span><span class="w"> </span>kubeadm.k8s.io/v1beta2<span class="w">
+</span><span class="w"></span><span class="k">kind</span><span class="p">:</span><span class="w"> </span>ClusterConfiguration<span class="w">
+</span><span class="w"></span><span class="k">kubernetesVersion</span><span class="p">:</span><span class="w"> </span>v1<span class="m">.20.0</span><span class="w">
+</span><span class="w"></span><span class="k">imageRepository</span><span class="p">:</span><span class="w"> </span>registry.aliyuncs.com/k8sxio<span class="w">
+</span><span class="w"></span><span class="k">controlPlaneEndpoint</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;192.168.111.128:6443&#34;</span><span class="w">
+</span><span class="w"></span><span class="k">networking</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="k">serviceSubnet</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;10.96.0.0/16&#34;</span><span class="w">
+</span><span class="w">  </span><span class="k">podSubnet</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;10.100.0.1/16&#34;</span><span class="w">
+</span><span class="w">  </span><span class="k">dnsDomain</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;192.168.111.128&#34;</span><span class="w">
 </span></code></pre></div><ul>
 <li>初始化 (仅master)</li>
 </ul>
@@ -513,24 +513,24 @@ weave
 <ul>
 <li>host-gw</li>
 </ul>
-<div class="highlight"><pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">net-conf.json</span><span class="p">:</span><span class="w"> </span><span class="p">|</span><span class="sd">
-</span><span class="sd">  {
-</span><span class="sd">    &#34;Network&#34;: &#34;10.244.0.0/16&#34;,
-</span><span class="sd">    &#34;Backend&#34;: {
-</span><span class="sd">      &#34;Type&#34;: &#34;host-gw&#34;
-</span><span class="sd">    }
-</span><span class="sd">  }</span><span class="w">  
+<div class="highlight"><pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="k">net-conf.json</span><span class="p">:</span><span class="w"> </span><span class="sd">|
+</span><span class="sd">  {</span><span class="w">
+</span><span class="w">    </span><span class="k">&#34;Network&#34;: </span><span class="s2">&#34;10.244.0.0/16&#34;</span><span class="p">,</span><span class="w">
+</span><span class="w">    </span><span class="k">&#34;Backend&#34;: </span>{<span class="w">
+</span><span class="w">      </span><span class="k">&#34;Type&#34;: </span><span class="s2">&#34;host-gw&#34;</span><span class="w">
+</span><span class="w">    </span>}<span class="w">
+</span><span class="w">  </span>}<span class="w">
 </span></code></pre></div><ul>
 <li>vxlan 要打开直接路由转发方式</li>
 </ul>
-<div class="highlight"><pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">net-conf.json</span><span class="p">:</span><span class="w"> </span><span class="p">|</span><span class="sd">
-</span><span class="sd">  {
-</span><span class="sd">    &#34;Network&#34;: &#34;10.244.0.0/16&#34;,
-</span><span class="sd">    &#34;Backend&#34;: {
-</span><span class="sd">      &#34;Type&#34;: &#34;vxlan&#34;,
-</span><span class="sd">      &#34;Directrouting&#34;: true
-</span><span class="sd">    }
-</span><span class="sd">  }</span><span class="w">  
+<div class="highlight"><pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="k">net-conf.json</span><span class="p">:</span><span class="w"> </span><span class="sd">|
+</span><span class="sd">  {</span><span class="w">
+</span><span class="w">    </span><span class="k">&#34;Network&#34;: </span><span class="s2">&#34;10.244.0.0/16&#34;</span><span class="p">,</span><span class="w">
+</span><span class="w">    </span><span class="k">&#34;Backend&#34;: </span>{<span class="w">
+</span><span class="w">      </span><span class="k">&#34;Type&#34;: </span><span class="s2">&#34;vxlan&#34;</span><span class="p">,</span><span class="w">
+</span><span class="w">      </span><span class="k">&#34;Directrouting&#34;: </span><span class="kc">true</span><span class="w">
+</span><span class="w">    </span>}<span class="w">
+</span><span class="w">  </span>}<span class="w">
 </span></code></pre></div></li>
 </ul>
 </li>
@@ -645,49 +645,49 @@ $ kubectl apply -f https://raw.githubusercontent.com/rook/rook/master/cluster/ex
 </span></code></pre></div></li>
 <li>
 <p>设置 volume</p>
-<div class="highlight"><pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">apps/v1</span><span class="w">
-</span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Deployment</span><span class="w">
-</span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
-</span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">beego-demo</span><span class="w">
-</span><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
-</span><span class="w">  </span><span class="nt">selector</span><span class="p">:</span><span class="w">
-</span><span class="w">    </span><span class="nt">matchLabels</span><span class="p">:</span><span class="w">
-</span><span class="w">      </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l">beego-demo</span><span class="w">
-</span><span class="w">  </span><span class="nt">replicas</span><span class="p">:</span><span class="w"> </span><span class="m">2</span><span class="w">
-</span><span class="w">  </span><span class="nt">template</span><span class="p">:</span><span class="w">
-</span><span class="w">    </span><span class="nt">metadata</span><span class="p">:</span><span class="w">
-</span><span class="w">      </span><span class="nt">labels</span><span class="p">:</span><span class="w">
-</span><span class="w">        </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l">beego-demo</span><span class="w">
-</span><span class="w">    </span><span class="nt">spec</span><span class="p">:</span><span class="w">
-</span><span class="w">      </span><span class="nt">containers</span><span class="p">:</span><span class="w">
-</span><span class="w">      </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">beego</span><span class="w">
-</span><span class="w">        </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">master:5000/beego</span><span class="w">
-</span><span class="w">        </span><span class="nt">ports</span><span class="p">:</span><span class="w">
-</span><span class="w">          </span>- <span class="nt">containerPort</span><span class="p">:</span><span class="w"> </span><span class="m">8080</span><span class="w">
-</span><span class="w">        </span><span class="nt">volumeMounts</span><span class="p">:</span><span class="w">
-</span><span class="w">          </span>- <span class="nt">mountPath</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;/app/views&#34;</span><span class="w">
-</span><span class="w">            </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">beego-index</span><span class="w">
-</span><span class="w">      </span><span class="nt">volumes</span><span class="p">:</span><span class="w">
-</span><span class="w">        </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">beego-index</span><span class="w">
-</span><span class="w">          </span><span class="nt">hostPath</span><span class="p">:</span><span class="w">
-</span><span class="w">            </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;/var/data/beego/views&#34;</span><span class="w">
+<div class="highlight"><pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="k">apiVersion</span><span class="p">:</span><span class="w"> </span>apps/v1<span class="w">
+</span><span class="w"></span><span class="k">kind</span><span class="p">:</span><span class="w"> </span>Deployment<span class="w">
+</span><span class="w"></span><span class="k">metadata</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="k">name</span><span class="p">:</span><span class="w"> </span>beego-demo<span class="w">
+</span><span class="w"></span><span class="k">spec</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="k">selector</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="k">matchLabels</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span><span class="k">app</span><span class="p">:</span><span class="w"> </span>beego-demo<span class="w">
+</span><span class="w">  </span><span class="k">replicas</span><span class="p">:</span><span class="w"> </span><span class="m">2</span><span class="w">
+</span><span class="w">  </span><span class="k">template</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="k">metadata</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span><span class="k">labels</span><span class="p">:</span><span class="w">
+</span><span class="w">        </span><span class="k">app</span><span class="p">:</span><span class="w"> </span>beego-demo<span class="w">
+</span><span class="w">    </span><span class="k">spec</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span><span class="k">containers</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span>- <span class="k">name</span><span class="p">:</span><span class="w"> </span>beego<span class="w">
+</span><span class="w">        </span><span class="k">image</span><span class="p">:</span><span class="w"> </span>master<span class="p">:</span><span class="m">5000</span>/beego<span class="w">
+</span><span class="w">        </span><span class="k">ports</span><span class="p">:</span><span class="w">
+</span><span class="w">          </span>- <span class="k">containerPort</span><span class="p">:</span><span class="w"> </span><span class="m">8080</span><span class="w">
+</span><span class="w">        </span><span class="k">volumeMounts</span><span class="p">:</span><span class="w">
+</span><span class="w">          </span>- <span class="k">mountPath</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;/app/views&#34;</span><span class="w">
+</span><span class="w">            </span><span class="k">name</span><span class="p">:</span><span class="w"> </span>beego-index<span class="w">
+</span><span class="w">      </span><span class="k">volumes</span><span class="p">:</span><span class="w">
+</span><span class="w">        </span>- <span class="k">name</span><span class="p">:</span><span class="w"> </span>beego-index<span class="w">
+</span><span class="w">          </span><span class="k">hostPath</span><span class="p">:</span><span class="w">
+</span><span class="w">            </span><span class="k">path</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;/var/data/beego/views&#34;</span><span class="w">
 </span></code></pre></div></li>
 <li>
 <p>nodeSelector 与 nodeAffinity</p>
 <ul>
 <li>nodeAffinity 支持更丰富的语义，如：operator</li>
 </ul>
-<div class="highlight"><pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">nodeSelector</span><span class="p">:</span><span class="w"> 
-</span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">&lt;Node名字&gt;</span><span class="w">
-</span></code></pre></div><div class="highlight"><pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">affinity</span><span class="p">:</span><span class="w">
-</span><span class="w">  </span><span class="nt">nodeAffinity</span><span class="p">:</span><span class="w">
-</span><span class="w">    </span><span class="nt">requiredDuringSchedulingIgnoredDuringExecution</span><span class="p">:</span><span class="w">
-</span><span class="w">      </span><span class="nt">nodeSelectorTerms</span><span class="p">:</span><span class="w">
-</span><span class="w">      </span>- <span class="nt">matchExpressions</span><span class="p">:</span><span class="w">
-</span><span class="w">        </span>- <span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l">metadata.name</span><span class="w">
-</span><span class="w">          </span><span class="nt">operator</span><span class="p">:</span><span class="w"> </span><span class="l">In</span><span class="w">
-</span><span class="w">          </span><span class="nt">values</span><span class="p">:</span><span class="w">
-</span><span class="w">          </span>- <span class="l">node-geektime</span><span class="w">
+<div class="highlight"><pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="k">nodeSelector</span><span class="p">:</span><span class="w"> 
+</span><span class="w">  </span><span class="k">name</span><span class="p">:</span><span class="w"> </span>&lt;Node名字&gt;<span class="w">
+</span></code></pre></div><div class="highlight"><pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="k">affinity</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="k">nodeAffinity</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="k">requiredDuringSchedulingIgnoredDuringExecution</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span><span class="k">nodeSelectorTerms</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span>- <span class="k">matchExpressions</span><span class="p">:</span><span class="w">
+</span><span class="w">        </span>- <span class="k">key</span><span class="p">:</span><span class="w"> </span>metadata.name<span class="w">
+</span><span class="w">          </span><span class="k">operator</span><span class="p">:</span><span class="w"> </span>In<span class="w">
+</span><span class="w">          </span><span class="k">values</span><span class="p">:</span><span class="w">
+</span><span class="w">          </span>- node-geektime<span class="w">
 </span></code></pre></div></li>
 <li>
 <p>xtrabackup 无法下载</p>
@@ -701,15 +701,15 @@ docker tag ist0ne/xtrabackup:latest gcr.io/google-samples/xtrabackup:1.0
 </ul>
 <div class="highlight"><pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="c"># k8s项目中，当一个节点的网络插件尚未安装时，这个节点就会被自动加上名为node.kubernetes.io/network-unavailable的“污点”</span><span class="w">
 </span><span class="w"></span><span class="c"># 例如master节点上也会有 node-role.kubernetes.io/master 这样的污点</span><span class="w">
-</span><span class="w"></span><span class="nt">template</span><span class="p">:</span><span class="w">
-</span><span class="w">  </span><span class="nt">metadata</span><span class="p">:</span><span class="w">
-</span><span class="w">    </span><span class="nt">labels</span><span class="p">:</span><span class="w">
-</span><span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">network-plugin-agent</span><span class="w">
-</span><span class="w">  </span><span class="nt">spec</span><span class="p">:</span><span class="w">
-</span><span class="w">    </span><span class="nt">tolerations</span><span class="p">:</span><span class="w">
-</span><span class="w">    </span>- <span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l">node.kubernetes.io/network-unavailable</span><span class="w">
-</span><span class="w">      </span><span class="nt">operator</span><span class="p">:</span><span class="w"> </span><span class="l">Exists</span><span class="w">
-</span><span class="w">      </span><span class="nt">effect</span><span class="p">:</span><span class="w"> </span><span class="l">NoSchedule</span><span class="w">
+</span><span class="w"></span><span class="k">template</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="k">metadata</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="k">labels</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span><span class="k">name</span><span class="p">:</span><span class="w"> </span>network-plugin-agent<span class="w">
+</span><span class="w">  </span><span class="k">spec</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="k">tolerations</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span>- <span class="k">key</span><span class="p">:</span><span class="w"> </span>node.kubernetes.io/network-unavailable<span class="w">
+</span><span class="w">      </span><span class="k">operator</span><span class="p">:</span><span class="w"> </span>Exists<span class="w">
+</span><span class="w">      </span><span class="k">effect</span><span class="p">:</span><span class="w"> </span>NoSchedule<span class="w">
 </span></code></pre></div><ul>
 <li>DaemonSet 与 DeploymentSet 一样拥有滚动更新的能力，但与 DeploymentSet 通过 ReplicaSet 管理不同版本的区别是， DaemonSet 使用的是 ControllerRevision 对象（StatefulSet 同样如此）。</li>
 </ul>
@@ -727,40 +727,40 @@ docker tag ist0ne/xtrabackup:latest gcr.io/google-samples/xtrabackup:1.0
 </li>
 </ul>
 <div class="highlight"><pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="c"># job</span><span class="w">
-</span><span class="w"></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">batch/v1</span><span class="w">
-</span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Job</span><span class="w">
-</span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
-</span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">pi</span><span class="w">
-</span><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
-</span><span class="w">  </span><span class="nt">parallelism</span><span class="p">:</span><span class="w"> </span><span class="m">2</span><span class="w">
-</span><span class="w">  </span><span class="nt">completions</span><span class="p">:</span><span class="w"> </span><span class="m">4</span><span class="w">
-</span><span class="w">  </span><span class="nt">template</span><span class="p">:</span><span class="w">
-</span><span class="w">    </span><span class="nt">spec</span><span class="p">:</span><span class="w">
-</span><span class="w">      </span><span class="nt">containers</span><span class="p">:</span><span class="w">
-</span><span class="w">      </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">pi</span><span class="w">
-</span><span class="w">        </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">resouer/ubuntu-bc</span><span class="w">
-</span><span class="w">        </span><span class="nt">command</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&#34;sh&#34;</span><span class="p">,</span><span class="w"> </span><span class="s2">&#34;-c&#34;</span><span class="p">,</span><span class="w"> </span><span class="s2">&#34;echo &#39;scale=5000; 4*a(1)&#39; | bc -l &#34;</span><span class="p">]</span><span class="w">
-</span><span class="w">      </span><span class="nt">restartPolicy</span><span class="p">:</span><span class="w"> </span><span class="l">Never</span><span class="w">
-</span><span class="w">  </span><span class="nt">backoffLimit</span><span class="p">:</span><span class="w"> </span><span class="m">4</span><span class="w">
+</span><span class="w"></span><span class="k">apiVersion</span><span class="p">:</span><span class="w"> </span>batch/v1<span class="w">
+</span><span class="w"></span><span class="k">kind</span><span class="p">:</span><span class="w"> </span>Job<span class="w">
+</span><span class="w"></span><span class="k">metadata</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="k">name</span><span class="p">:</span><span class="w"> </span>pi<span class="w">
+</span><span class="w"></span><span class="k">spec</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="k">parallelism</span><span class="p">:</span><span class="w"> </span><span class="m">2</span><span class="w">
+</span><span class="w">  </span><span class="k">completions</span><span class="p">:</span><span class="w"> </span><span class="m">4</span><span class="w">
+</span><span class="w">  </span><span class="k">template</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="k">spec</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span><span class="k">containers</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span>- <span class="k">name</span><span class="p">:</span><span class="w"> </span>pi<span class="w">
+</span><span class="w">        </span><span class="k">image</span><span class="p">:</span><span class="w"> </span>resouer/ubuntu-bc<span class="w">
+</span><span class="w">        </span><span class="k">command</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&#34;sh&#34;</span><span class="p">,</span><span class="w"> </span><span class="s2">&#34;-c&#34;</span><span class="p">,</span><span class="w"> </span><span class="s2">&#34;echo &#39;scale=5000; 4*a(1)&#39; | bc -l &#34;</span><span class="p">]</span><span class="w">
+</span><span class="w">      </span><span class="k">restartPolicy</span><span class="p">:</span><span class="w"> </span>Never<span class="w">
+</span><span class="w">  </span><span class="k">backoffLimit</span><span class="p">:</span><span class="w"> </span><span class="m">4</span><span class="w">
 </span></code></pre></div><div class="highlight"><pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="c"># cronjob</span><span class="w">
-</span><span class="w"></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">batch/v1beta1</span><span class="w">
-</span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">CronJob</span><span class="w">
-</span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
-</span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">hello</span><span class="w">
-</span><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
-</span><span class="w">  </span><span class="nt">schedule</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;*/1 * * * *&#34;</span><span class="w">
-</span><span class="w">  </span><span class="nt">jobTemplate</span><span class="p">:</span><span class="w">
-</span><span class="w">    </span><span class="nt">spec</span><span class="p">:</span><span class="w">
-</span><span class="w">      </span><span class="nt">template</span><span class="p">:</span><span class="w">
-</span><span class="w">        </span><span class="nt">spec</span><span class="p">:</span><span class="w">
-</span><span class="w">        </span><span class="nt">containers</span><span class="p">:</span><span class="w">
-</span><span class="w">        </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">hello</span><span class="w">
-</span><span class="w">          </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">busybox</span><span class="w">
-</span><span class="w">          </span><span class="nt">args</span><span class="p">:</span><span class="w">
-</span><span class="w">          </span>- <span class="l">/bin/sh</span><span class="w">
-</span><span class="w">          </span>- -<span class="l">c</span><span class="w">
-</span><span class="w">          </span>- <span class="l">date; echo Hello from the Kubernetes cluster</span><span class="w">
-</span><span class="w">        </span><span class="nt">restartPolicy</span><span class="p">:</span><span class="w"> </span><span class="l">OnFailure</span><span class="w">
+</span><span class="w"></span><span class="k">apiVersion</span><span class="p">:</span><span class="w"> </span>batch/v1beta1<span class="w">
+</span><span class="w"></span><span class="k">kind</span><span class="p">:</span><span class="w"> </span>CronJob<span class="w">
+</span><span class="w"></span><span class="k">metadata</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="k">name</span><span class="p">:</span><span class="w"> </span>hello<span class="w">
+</span><span class="w"></span><span class="k">spec</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="k">schedule</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;*/1 * * * *&#34;</span><span class="w">
+</span><span class="w">  </span><span class="k">jobTemplate</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="k">spec</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span><span class="k">template</span><span class="p">:</span><span class="w">
+</span><span class="w">        </span><span class="k">spec</span><span class="p">:</span><span class="w">
+</span><span class="w">        </span><span class="k">containers</span><span class="p">:</span><span class="w">
+</span><span class="w">        </span>- <span class="k">name</span><span class="p">:</span><span class="w"> </span>hello<span class="w">
+</span><span class="w">          </span><span class="k">image</span><span class="p">:</span><span class="w"> </span>busybox<span class="w">
+</span><span class="w">          </span><span class="k">args</span><span class="p">:</span><span class="w">
+</span><span class="w">          </span>- /bin/sh<span class="w">
+</span><span class="w">          </span>- -c<span class="w">
+</span><span class="w">          </span>- date;<span class="w"> </span>echo<span class="w"> </span>Hello<span class="w"> </span>from<span class="w"> </span>the<span class="w"> </span>Kubernetes<span class="w"> </span>cluster<span class="w">
+</span><span class="w">        </span><span class="k">restartPolicy</span><span class="p">:</span><span class="w"> </span>OnFailure<span class="w">
 </span></code></pre></div><p>还在学习的路上 。。。。。。</p>
 </li>
 </ul>
@@ -919,7 +919,7 @@ demo/splicing.BenchmarkStr.func4
             <pubDate>Thu, 31 Oct 2019 13:04:41 +0800</pubDate>
             
             <guid>https://blog.moyrn.com/posts/20210127_time_after_oom/</guid>
-            <description>select + time.After 导致内存暴涨 func Function(notRun notRun) { for { select { case &amp;lt;-notRun.notRun: // 大多数情况都是有notRun的输入 	case &amp;lt;-time.After(time.Minute): notRun.Close() continue case &amp;lt;-notRun.run: notRun.Close() return } } }  notRun 发送消息频率过快，而每次select都会调用到time.After，而time.After又会NewTimer，而每次NewTimer都必须在1分钟后才能释放。 当notRun的频率很高时，会在内存中堆积非常多的无用的Timer。导致内存暴涨。  解决方法 func Function(notRun notRun) { afterTime := time.Minute after := time.NewTimer(afterTime) defer after.Stop() for { after.Reset(afterTime) select { case &amp;lt;-notRun.notRun: case &amp;lt;-after.C: notRun.Close() continue case &amp;lt;-notRun.run: notRun.Close() return } } }  自己 NewTimer 在每次 select 之前 reset，使 timer 重新计时，从而避免每次都 new timer。  </description>
+            <description>select + time.After 导致内存暴涨 func Function(notRun notRun) {for {select {case &amp;lt;-notRun.notRun:// 大多数情况都是有notRun的输入	case &amp;lt;-time.After(time.Minute):notRun.Close()continuecase &amp;lt;-notRun.run:notRun.Close()return}}} notRun 发送消息频率过快，而每次select都会调用到time.After，而time.After又会NewTimer，而每次NewTimer都必须在1分钟后才能释放。 当notRun的频率很高时，会在内存中堆积非常多的无用的Timer。导致内存暴涨。  解决方法 func Function(notRun notRun) {afterTime := time.Minuteafter := time.NewTimer(afterTime)defer after.Stop()for {after.Reset(afterTime)select {case &amp;lt;-notRun.notRun:case &amp;lt;-after.C:notRun.Close()continuecase &amp;lt;-notRun.run:notRun.Close()return}}} 自己 NewTimer 在每次 select 之前 reset，使 timer 重新计时，从而避免每次都 new timer。  </description>
             <content type="html"><![CDATA[<h1 id="select--timeafter-导致内存暴涨">select + time.After 导致内存暴涨</h1>
 <div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">Function</span><span class="p">(</span><span class="nx">notRun</span> <span class="nx">notRun</span><span class="p">)</span> <span class="p">{</span>
 	<span class="k">for</span> <span class="p">{</span>
@@ -1266,7 +1266,7 @@ go build
             <pubDate>Sat, 10 Aug 2019 11:53:34 +0800</pubDate>
             
             <guid>https://blog.moyrn.com/posts/20190810_gorm/</guid>
-            <description>MYSQL 悲观锁 tx := db.DB.Begin() if err := tx.Set(&amp;#34;gorm:query_option&amp;#34;, &amp;#34;FOR UPDATE&amp;#34;). Where(&amp;#34;`xx` = ? and `xxx` = ?&amp;#34;, xx, xxx). First(&amp;amp;xx).Error; err != nil { tx.Rollback() return } 在事务中使用 Set(&amp;quot;gorm:query_option&amp;quot;, &amp;quot;FOR UPDATE&amp;quot;) + first 能将查询的这条记录锁住；在事务 rollback 或 commit 后会 unlock。  创建复合主键(当主键涉及自增时) gorm:&amp;quot;primary_key;AUTO_INCREMENT:false&amp;quot; 连接数据库 步骤分析  引入mysql数据库驱动 引入gorm包 读取配置文件中的数据库信息 将读取的数据生成为Open()需要的字符串  代码示例 package base import ( _ &amp;#34;github.com/go-sql-driver/mysql&amp;#34; _ &amp;#34;github.com/jinzhu/gorm/dialects/mysql&amp;#34; &amp;#34;github.com/jinzhu/gorm&amp;#34; &amp;#34;fmt&amp;#34; &amp;#34;log&amp;#34; ) var ( DB *gorm.</description>
+            <description>MYSQL 悲观锁 tx := db.DB.Begin()if err := tx.Set(&amp;#34;gorm:query_option&amp;#34;, &amp;#34;FOR UPDATE&amp;#34;).Where(&amp;#34;`xx` = ? and `xxx` = ?&amp;#34;, xx, xxx).First(&amp;amp;xx).Error; err != nil {tx.Rollback()return}在事务中使用 Set(&amp;quot;gorm:query_option&amp;quot;, &amp;quot;FOR UPDATE&amp;quot;) + first 能将查询的这条记录锁住；在事务 rollback 或 commit 后会 unlock。  创建复合主键(当主键涉及自增时) gorm:&amp;quot;primary_key;AUTO_INCREMENT:false&amp;quot; 连接数据库 步骤分析  引入mysql数据库驱动 引入gorm包 读取配置文件中的数据库信息 将读取的数据生成为Open()需要的字符串  代码示例 package baseimport (_ &amp;#34;github.com/go-sql-driver/mysql&amp;#34;_ &amp;#34;github.com/jinzhu/gorm/dialects/mysql&amp;#34;&amp;#34;github.com/jinzhu/gorm&amp;#34;&amp;#34;fmt&amp;#34;&amp;#34;log&amp;#34;)var (DB *gorm.</description>
             <content type="html"><![CDATA[<h1 id="mysql-悲观锁">MYSQL 悲观锁</h1>
 <div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="nx">tx</span> <span class="o">:=</span> <span class="nx">db</span><span class="p">.</span><span class="nx">DB</span><span class="p">.</span><span class="nf">Begin</span><span class="p">()</span>
 <span class="k">if</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">tx</span><span class="p">.</span><span class="nf">Set</span><span class="p">(</span><span class="s">&#34;gorm:query_option&#34;</span><span class="p">,</span> <span class="s">&#34;FOR UPDATE&#34;</span><span class="p">).</span>
@@ -1333,7 +1333,7 @@ go build
             <pubDate>Wed, 24 Jul 2019 17:02:39 +0800</pubDate>
             
             <guid>https://blog.moyrn.com/posts/20190724_http_file/</guid>
-            <description>文件传输 Content-Type http://tool.oschina.net/commons?type=22013-05-17multipart/form-data：既可以提交普通键值对，也可以提交(多个)文件键值对。application/octet-stream：只能提交二进制，而且只能提交一个二进制，如果提交文件的话，只能提交一个文件,后台接收参数只能有一个，而且只能是流（或者字节数组）application/x-www-form-urlencoded不属于http content-type规范，通常用于浏览器表单提交，数据组织格式:name1=value1&amp;amp;name2=value2,post时会放入http body，get时，显示在在地址栏。 // golang 实现  W.Header().Add(&amp;#34;Content-Type&amp;#34;,&amp;#34;application/octet-stream&amp;#34;) W.Header().Add(&amp;#34;Content-Disposition&amp;#34;,fmt.Sprintf(&amp;#34;attachment; filename=\&amp;#34;%s\&amp;#34;&amp;#34;, fileName)) </description>
+            <description>文件传输 Content-Type http://tool.oschina.net/commons?type=22013-05-17multipart/form-data：既可以提交普通键值对，也可以提交(多个)文件键值对。application/octet-stream：只能提交二进制，而且只能提交一个二进制，如果提交文件的话，只能提交一个文件,后台接收参数只能有一个，而且只能是流（或者字节数组）application/x-www-form-urlencoded不属于http content-type规范，通常用于浏览器表单提交，数据组织格式:name1=value1&amp;amp;name2=value2,post时会放入http body，get时，显示在在地址栏。 // golang 实现 W.Header().Add(&amp;#34;Content-Type&amp;#34;,&amp;#34;application/octet-stream&amp;#34;)W.Header().Add(&amp;#34;Content-Disposition&amp;#34;,fmt.Sprintf(&amp;#34;attachment; filename=\&amp;#34;%s\&amp;#34;&amp;#34;, fileName))</description>
             <content type="html"><![CDATA[<h1 id="文件传输">文件传输</h1>
 <pre><code>Content-Type  http://tool.oschina.net/commons?type=22013-05-17
 multipart/form-data：
