@@ -7,7 +7,7 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
     <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
-    <lastBuildDate>Wed, 09 Feb 2022 11:02:32 +0800</lastBuildDate>
+    <lastBuildDate>Sat, 21 May 2022 20:18:41 +0800</lastBuildDate>
     
 	<atom:link href="https://blog.moyrn.com/tags/index.xml" rel="self" type="application/rss+xml" />
     
@@ -15,9 +15,27 @@
     <item>
       <title>shell</title>
       <link>https://blog.moyrn.com/tags/shell/</link>
-      <pubDate>Wed, 09 Feb 2022 11:02:32 +0800</pubDate>
+      <pubDate>Sat, 21 May 2022 20:18:41 +0800</pubDate>
       
       <guid>https://blog.moyrn.com/tags/shell/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>network</title>
+      <link>https://blog.moyrn.com/tags/network/</link>
+      <pubDate>Wed, 20 Apr 2022 22:03:56 +0800</pubDate>
+      
+      <guid>https://blog.moyrn.com/tags/network/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>笔记</title>
+      <link>https://blog.moyrn.com/tags/%E7%AC%94%E8%AE%B0/</link>
+      <pubDate>Wed, 20 Apr 2022 22:03:56 +0800</pubDate>
+      
+      <guid>https://blog.moyrn.com/tags/%E7%AC%94%E8%AE%B0/</guid>
       <description></description>
     </item>
     
@@ -81,15 +99,6 @@
       <pubDate>Sat, 10 Aug 2019 14:01:07 +0800</pubDate>
       
       <guid>https://blog.moyrn.com/tags/%E6%AF%94%E7%89%B9%E5%B8%81/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>nginx</title>
-      <link>https://blog.moyrn.com/tags/nginx/</link>
-      <pubDate>Sat, 31 Mar 2018 13:34:41 +0800</pubDate>
-      
-      <guid>https://blog.moyrn.com/tags/nginx/</guid>
       <description></description>
     </item>
     

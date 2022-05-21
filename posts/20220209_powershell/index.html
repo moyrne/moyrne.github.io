@@ -108,10 +108,10 @@ https://github.com/PowerShell/PowerShell/releases/tag/v7.2.1   安装 PowerShell
 <p>安装 PowerShell 插件</p>
 <div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 1. 安装 PSReadline 包，该插件可以让命令行很好用，类似 zsh</span>
 Install-Module -Name PSReadLine  -Scope CurrentUser
-   
+
 <span class="c1"># 2. 安装 posh-git 包，让你的 git 更好用</span>
 Install-Module posh-git  -Scope CurrentUser
-   
+
 <span class="c1"># 3. 安装 oh-my-posh 包，让你的命令行更酷炫、优雅</span>
 Install-Module oh-my-posh -Scope CurrentUser
 </code></pre></div></li>
@@ -127,41 +127,41 @@ Install-Module oh-my-posh -Scope CurrentUser
 <div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">    <span class="c1">#------------------------------- Import Modules BEGIN -------------------------------</span>
     <span class="c1"># 引入 posh-git</span>
     Import-Module posh-git
-       
+
     <span class="c1"># 引入 oh-my-posh</span>
     Import-Module oh-my-posh
-       
+
     <span class="c1"># 引入 ps-read-line</span>
     Import-Module PSReadLine
-       
+
     <span class="c1"># 设置 PowerShell 主题</span>
     <span class="c1"># Set-PoshPrompt ys</span>
     Set-PoshPrompt paradox
     <span class="c1">#------------------------------- Import Modules END   -------------------------------</span>
-       
-       
-       
-       
-       
+
+
+
+
+
     <span class="c1">#-------------------------------  Set Hot-keys BEGIN  -------------------------------</span>
     <span class="c1"># 设置预测文本来源为历史记录</span>
     Set-PSReadLineOption -PredictionSource History
-       
+
     <span class="c1"># 每次回溯输入历史，光标定位于输入内容末尾</span>
     Set-PSReadLineOption -HistorySearchCursorMovesToEnd
-       
+
     <span class="c1"># 设置 Tab 为菜单补全和 Intellisense</span>
     Set-PSReadLineKeyHandler -Key <span class="s2">&#34;Tab&#34;</span> -Function MenuComplete
-       
+
     <span class="c1"># 设置 Ctrl+d 为退出 PowerShell</span>
     Set-PSReadlineKeyHandler -Key <span class="s2">&#34;Ctrl+d&#34;</span> -Function ViExit
-       
+
     <span class="c1"># 设置 Ctrl+z 为撤销</span>
     Set-PSReadLineKeyHandler -Key <span class="s2">&#34;Ctrl+z&#34;</span> -Function Undo
-       
+
     <span class="c1"># 设置向上键为后向搜索历史记录</span>
     Set-PSReadLineKeyHandler -Key UpArrow -Function HistorySearchBackward
-       
+
     <span class="c1"># 设置向下键为前向搜索历史纪录</span>
     Set-PSReadLineKeyHandler -Key DownArrow -Function HistorySearchForward
     <span class="c1">#-------------------------------  Set Hot-keys END    -------------------------------</span>
@@ -182,6 +182,9 @@ Install-Module oh-my-posh -Scope CurrentUser
         </footer>
     </article>
     <div class="post-nav thin">
+        <a class="next-post" href="https://blog.moyrn.com/posts/20220420_network_learn/">
+            <span class="post-nav-label"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>&nbsp;</span><br><span>网络排查案例</span>
+        </a>
         <a class="prev-post" href="https://blog.moyrn.com/posts/20210523_false_sharing/">
             <span class="post-nav-label">&nbsp;<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span><br><span>False Sharing</span>
         </a>

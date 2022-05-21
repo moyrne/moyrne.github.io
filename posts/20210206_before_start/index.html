@@ -12,7 +12,7 @@
 # https://ccie.lol/knowledge-base/linux-centos-route-forwarding/ # 注意事项 开启 IP 路由转发和 NAT, 未开启会导致 Pod 无法访问外网以及 Pod 间无法通信. [root@host ~]# echo &#34;net.ipv4.ip_forward = 1&#34; &gt;&gt; /etc/sysctl.conf [root@host ~]# sysctl -p [root@host ~]# sysctl -a | grep &#34;ip_forward&#34; net.ipv4.ip_forward = 1 # 开启NAT [root@host ~]# iptables -P FORWARD ACCEPT # 缺省允许 IP 转发 # 利用 iptables 实现 NAT MASQUERADE 共享上网，此处 eth0 需要是能够访问外部网络的网卡接口 [root@host ~]# iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE   CPU">
 <meta itemprop="datePublished" content="2021-02-06T10:13:46&#43;08:00" />
 <meta itemprop="dateModified" content="2021-02-06T10:13:46&#43;08:00" />
-<meta itemprop="wordCount" content="238">
+<meta itemprop="wordCount" content="229">
 
 
 
@@ -105,36 +105,36 @@ net.ipv4.ip_forward <span class="o">=</span> <span class="m">1</span>
 <p>rook 安装 按顺序执行以下命令</p>
 <div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">$ kubectl apply -f https://raw.githubusercontent.com/rook/rook/master/cluster/examples/kubernetes/ceph/common.yaml
 $ kubectl apply -f https://raw.githubusercontent.com/rook/rook/master/cluster/examples/kubernetes/ceph/operator.yaml
-  
+
 <span class="c1"># 在 apply cluster.yaml 之前, 需要先apply crds.yaml, 否则会报错 no matches for kind &#34;CephCluster&#34; in version &#34;ceph.rook.io/v1&#34;</span>
 $ kubectl apply -f https://raw.githubusercontent.com/rook/rook/master/cluster/examples/kubernetes/ceph/crds.yaml
-  
+
 $ kubectl apply -f https://raw.githubusercontent.com/rook/rook/master/cluster/examples/kubernetes/ceph/cluster.yaml
 </code></pre></div></li>
 <li>
 <p>[20210211] docker 多阶段构建,减小体积（示例）</p>
 <div class="highlight"><pre class="chroma"><code class="language-dockerfile" data-lang="dockerfile"><span class="k">FROM</span><span class="s"> golang:1.15</span><span class="err">
-</span><span class="err"></span>  <span class="err">
+</span><span class="err">
 </span><span class="err"></span><span class="k">ENV</span> <span class="nv">GOPROXY</span><span class="o">=</span>https://goproxy.cn,direct <span class="se">\
 </span><span class="se"></span>    <span class="nv">GO111MODULE</span><span class="o">=</span>on<span class="err">
-</span><span class="err"></span>  <span class="err">
+</span><span class="err">
 </span><span class="err"></span><span class="k">WORKDIR</span><span class="s"> /app</span><span class="err">
-</span><span class="err"></span>  <span class="err">
+</span><span class="err">
 </span><span class="err"></span><span class="k">COPY</span> kubernetes .<span class="err">
-</span><span class="err"></span>  <span class="err">
+</span><span class="err">
 </span><span class="err"></span><span class="k">RUN</span> go build<span class="err">
-</span><span class="err"></span>  <span class="err">
+</span><span class="err">
 </span><span class="err"></span><span class="k">FROM</span><span class="s"> ubuntu:20.04</span><span class="err">
-</span><span class="err"></span>  <span class="err">
+</span><span class="err">
 </span><span class="err"></span><span class="k">ENV</span> <span class="nv">PORT</span><span class="o">=</span><span class="m">8080</span>
-  
+
 <span class="k">WORKDIR</span><span class="s"> /app</span><span class="err">
-</span><span class="err"></span>  <span class="err">
+</span><span class="err">
 </span><span class="err"></span><span class="c"># --from=0 表示从第一阶段中获取 文件</span><span class="err">
 </span><span class="err"></span><span class="k">COPY</span> --from<span class="o">=</span><span class="m">0</span> /app .<span class="err">
-</span><span class="err"></span>  <span class="err">
+</span><span class="err">
 </span><span class="err"></span><span class="k">EXPOSE</span><span class="s"> 8080</span><span class="err">
-</span><span class="err"></span>  <span class="err">
+</span><span class="err">
 </span><span class="err"></span><span class="k">ENTRYPOINT</span> <span class="p">[</span><span class="s2">&#34;./beego&#34;</span><span class="p">]</span><span class="err">
 </span></code></pre></div></li>
 <li>
