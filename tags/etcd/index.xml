@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>etcd on Moyrne&#39;Blog</title>
+    <link>https://blog.moyrn.com/tags/etcd/</link>
+    <description>Recent content in etcd on Moyrne&#39;Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
+    <lastBuildDate>Sat, 21 May 2022 20:18:41 +0800</lastBuildDate>
+    
+	<atom:link href="https://blog.moyrn.com/tags/etcd/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Etcd</title>
+      <link>https://blog.moyrn.com/posts/20220521_etcd_config/</link>
+      <pubDate>Sat, 21 May 2022 20:18:41 +0800</pubDate>
+      
+      <guid>https://blog.moyrn.com/posts/20220521_etcd_config/</guid>
+      <description>Etcd 配置  使用apt安装etcd  sudo apt install etcd 生成证书（参考 https://www.jianshu.com/p/ba0964c41b50） 配置config文件 /etc/etcd/etcd.conf  # [Member] ETCD_NAME=&amp;quot;worker1&amp;quot; ETCD_DATA_DIR=&amp;quot;/var/lib/etcd/worker&amp;quot; ETCD_LISTEN_PEER_URLS=&amp;quot;http://yourip-1:2380&amp;quot; ETCD_LISTEN_CLIENT_URLS=&amp;quot;http://yourip-1:2379,http://127.0.0.1:2379&amp;quot; # [Clustering] ETCD_INITIAL_ADVERTISE_PEER_URLS=&amp;quot;http://yourip-1:2380&amp;quot; ETCD_ADVERTISE_CLIENT_URLS=&amp;quot;http://yourip-1:2379&amp;quot; ETCD_INITIAL_CLUSTER=&amp;quot;worker1=http://yourip-1:2380,worker2=http://yourip-2:2380&amp;quot; ETCD_INITIAL_CLUSTER_TOKEN=&amp;quot;etcd-cluster-01&amp;quot; ETCD_INITIAL_CLUSTER_STATE=&amp;quot;new&amp;quot; # [Security] ETCD_CERT_FILE=&amp;quot;/etc/etcd/cert/server.crt&amp;quot; ETCD_KEY_FILE=&amp;quot;/etc/etcd/cert/server.key&amp;quot; ETCD_TRUSTED_CA_FILE=&amp;quot;/etc/etcd/cert/ca.crt&amp;quot; ETCD_CLIENT_CERT_AUTH=true ETCD_PEER_CERT_FILE=&amp;quot;/etc/etcd/cert/server.crt&amp;quot; ETCD_PEER_KEY_FILE=&amp;quot;/etc/etcd/cert/server.key&amp;quot; ETCD_PEER_TRUSTED_CA_FILE=&amp;quot;/etc/etcd/cert/ca.crt&amp;quot; ETCD_PEER_CLIENT_CERT_AUTH=true 修改service文件 /lib/systemd/system/etcd.service  [Unit] Description=etcd - highly-available key value store Documentation=https://github.com/coreos/etcd Documentation=man:etcd After=network.target Wants=network-online.target [Service] EnvironmentFile=/etc/etcd/etcd.conf Type=notify User=etcd ExecStart=/usr/bin/etcd --name ${ETCD_NAME} \ --data-dir=${ETCD_DATA_DIR} \ --listen-peer-urls=${ETCD_LISTEN_PEER_URLS} \ --listen-client-urls=${ETCD_LISTEN_CLIENT_URLS} \ --advertise-client-urls=${ETCD_ADVERTISE_CLIENT_URLS} \ --initial-advertise-peer-urls=${ETCD_INITIAL_ADVERTISE_PEER_URLS} \ --initial-cluster=${ETCD_INITIAL_CLUSTER} \ --initial-cluster-token=${ETCD_INITIAL_CLUSTER_TOKEN} \ --initial-cluster-state=${ETCD_INITIAL_CLUSTER_STATE} \ --cert-file=${ETCD_CERT_FILE} \ --key-file=${ETCD_KEY_FILE} \ --peer-cert-file=${ETCD_PEER_CERT_FILE} \ --peer-key-file=${ETCD_PEER_KEY_FILE} \ --trusted-ca-file=${ETCD_TRUSTED_CA_FILE} \ --client-cert-auth=${ETCD_CLIENT_CERT_AUTH} \ --peer-client-cert-auth=${ETCD_PEER_CLIENT_CERT_AUTH} \ --peer-trusted-ca-file=${ETCD_PEER_TRUSTED_CA_FILE} Restart=on-abnormal LimitNOFILE=65536 [Install] WantedBy=multi-user.</description>
+    </item>
+    
+  </channel>
+</rss>
