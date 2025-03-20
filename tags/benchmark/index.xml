@@ -1,25 +1,19 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
-    <title>benchmark on Moyrne&#39;Blog</title>
+    <title>Benchmark on Moyrne&#39;Blog</title>
     <link>https://blog.moyrn.com/tags/benchmark/</link>
-    <description>Recent content in benchmark on Moyrne&#39;Blog</description>
-    <generator>Hugo -- gohugo.io</generator>
+    <description>Recent content in Benchmark on Moyrne&#39;Blog</description>
+    <generator>Hugo -- 0.128.0</generator>
     <language>zh-CN</language>
-    <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
     <lastBuildDate>Thu, 28 Jan 2021 13:31:45 +0800</lastBuildDate>
-    
-	<atom:link href="https://blog.moyrn.com/tags/benchmark/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <atom:link href="https://blog.moyrn.com/tags/benchmark/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>字符串拼接性能测试</title>
       <link>https://blog.moyrn.com/posts/20210128_string_join_benchmark/</link>
       <pubDate>Thu, 28 Jan 2021 13:31:45 +0800</pubDate>
-      
       <guid>https://blog.moyrn.com/posts/20210128_string_join_benchmark/</guid>
       <description>// splicing_test.go package splicing import ( &amp;#34;strconv&amp;#34; &amp;#34;strings&amp;#34; &amp;#34;testing&amp;#34; ) func Str(str []string) string { var rst string for _, s := range str { rst += s } return rst } func BuilderStr(str []string) string { var builder strings.Builder for _, s := range str { builder.WriteString(s) } return builder.String() } func BenchmarkStr(b *testing.B) { srcStr := make([]string, 0, 100000) b.Run(&amp;#34;Append-10000&amp;#34;, func(b *testing.B) { for i := 0; i &amp;lt; 10000; i++ { srcStr = append(srcStr, strconv.</description>
     </item>
-    
   </channel>
 </rss>

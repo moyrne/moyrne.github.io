@@ -1,25 +1,19 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
-    <title>network on Moyrne&#39;Blog</title>
+    <title>Network on Moyrne&#39;Blog</title>
     <link>https://blog.moyrn.com/tags/network/</link>
-    <description>Recent content in network on Moyrne&#39;Blog</description>
-    <generator>Hugo -- gohugo.io</generator>
+    <description>Recent content in Network on Moyrne&#39;Blog</description>
+    <generator>Hugo -- 0.128.0</generator>
     <language>zh-CN</language>
-    <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
     <lastBuildDate>Wed, 20 Apr 2022 22:03:56 +0800</lastBuildDate>
-    
-	<atom:link href="https://blog.moyrn.com/tags/network/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <atom:link href="https://blog.moyrn.com/tags/network/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>网络排查案例</title>
       <link>https://blog.moyrn.com/posts/20220420_network_learn/</link>
       <pubDate>Wed, 20 Apr 2022 22:03:56 +0800</pubDate>
-      
       <guid>https://blog.moyrn.com/posts/20220420_network_learn/</guid>
-      <description>预习  traceroute 查看路由跳转  Nginx 日志报 connection reset by peer  Wireshark 抓包分析  过滤IP：ip.addr eq my_ip, ip.src eq my_ip或者ip.dst eq my_ip 找到RST报文：tcp.flags.reset eq 1 过滤序列号：tcp.ack eq my_num 过滤时间：frame.time &amp;gt;= &amp;quot;dec 01,2015 15:49:48&amp;quot; 过滤表达式前添加 ! 或者 not 表示取反 多个条件可以使用 and 或者 or 形成复合过滤器    定位防火墙问题  客户端和服务端在同一时间开始抓包 使用IP过滤 查看Wireshark的Expert Information，关注可疑的（如Warning）报文并追踪TCP流 对比两侧文件，如何找到另一端对应的TCP流：TCP序列号（裸序列号）  设置去掉 Wireshark -&amp;gt; Preferences -&amp;gt; Protocols -&amp;gt; Relative sequence numbers   Wireshark 支持自定义列，在主窗口中显示。进入详情之后，右键需要在主窗口中显示的数据，选择 Apply as column 同样的服务端，在三次握手中（SYN+ACK 报文）的 TTL 是 59，在导致连接中断的 RST 包里却变成了 64！显然，这个 RST 包并不是跟我们握手的那个服务端发出的（防火墙）      长肥管道  带宽很大、RTT 很长的网络，被冠以一个特定的名词，叫做长肥网络，英文是 Long Fat Network TCP 传输的核心公式：速度 = 窗口 / 往返时间 传输速度的上限就是 window/RTT = 64KB/134ms = 478KB/s  TCP Window Full  一般说到 TCP Window，如果没有特别指明，就是指接收窗口。 TCP 的下个序列号（Next Sequence Number）等于序列号和段长度之和，即 NextSeq = Seq + Len。 在途数据计算 Bytes_in_flight = latest_nextSeq - latest_ack_from_receiver 在 Statistics 下拉菜单下的 I/O Graph 工具，可以直观地展示传输速度图。 同是 Statistics 菜单下的 TCP Stream Graphs 的 Window Scaling 工具，可以直观的展示 TCP Window Full 历史曲线图。 名称  Acknowledgement Number：确认号 Next Sequence Number：下个序列号 Caculated Window Size：计算后的接收窗口 Bytes in flight：在途字节数   velocity = acked_data/RTT  TCP探测拥塞  概念  慢启动：每收到一个 ACK，拥塞窗口（CW）增加一个 MSS。 拥塞避免：策略是“和性增长乘性降低”，每一个 RTT，CW 增加一个 MSS。 快速重传：接收到 3 次或者以上的重复确认后，直接重传这个丢失的报文。 快速恢复：结合快速重传，在遇到拥塞点后，跳过慢启动阶段，进入线性增长。   Wireshark 序列号（会根据自己发送的数据量进行增加）  Acknowledgment: Ack序号 nextSeq: 下一个序号   拥塞控制算法 （命令 sysctl）  修改拥塞控制算法 sudo sysctl net.</description>
+      <description>预习 traceroute 查看路由跳转 Nginx 日志报 connection reset by peer Wireshark 抓包分析 过滤IP：ip.addr eq my_ip, ip.src eq my_ip或者ip.dst eq my_ip 找到RST报文：tcp.flags.reset eq 1 过滤序列号：tcp.ack eq my_num 过滤时间：frame.time &amp;gt;= &amp;quot;dec 01,2015 15:49:48&amp;quot; 过滤表达式前添加 ! 或者 not 表示取反 多个条件可以使用 and 或者 or 形成复合过滤器 定位防火墙问题 客户端和服务端在同一时间开始抓包 使用IP过滤 查看Wireshark的Expert Information，关注可疑的（如Warning）报文并追踪TCP流 对比两侧文件，如何找到另一端对应的TCP流：TCP序列号（裸序列号） 设置去掉 Wireshark -&amp;gt; Preferences -&amp;gt; Protocols -&amp;gt; Relative sequence numbers Wireshark 支持自定义列，在主窗口中显示。进入详情之后，右键需要在主窗口中显示的数据，选择 Apply as column 同样的服务端，在三次握手中（SYN+ACK 报文）的 TTL 是 59，在导致连接中断的 RST 包里却变成了 64！显然，这个 RST 包并不是跟我们握手的那个服务端发出的（防火墙） 长肥管道 带宽很大、RTT 很长的网络，被冠以一个特定的名词，叫做长肥网络，英文是 Long Fat Network TCP 传输的核心公式：速度 = 窗口 / 往返时间 传输速度的上限就是 window/RTT = 64KB/134ms = 478KB/s TCP Window Full 一般说到 TCP Window，如果没有特别指明，就是指接收窗口。 TCP 的下个序列号（Next Sequence Number）等于序列号和段长度之和，即 NextSeq = Seq + Len。 在途数据计算 Bytes_in_flight = latest_nextSeq - latest_ack_from_receiver 在 Statistics 下拉菜单下的 I/O Graph 工具，可以直观地展示传输速度图。 同是 Statistics 菜单下的 TCP Stream Graphs 的 Window Scaling 工具，可以直观的展示 TCP Window Full 历史曲线图。 名称 Acknowledgement Number：确认号 Next Sequence Number：下个序列号 Caculated Window Size：计算后的接收窗口 Bytes in flight：在途字节数 velocity = acked_data/RTT TCP探测拥塞 概念 慢启动：每收到一个 ACK，拥塞窗口（CW）增加一个 MSS。 拥塞避免：策略是“和性增长乘性降低”，每一个 RTT，CW 增加一个 MSS。 快速重传：接收到 3 次或者以上的重复确认后，直接重传这个丢失的报文。 快速恢复：结合快速重传，在遇到拥塞点后，跳过慢启动阶段，进入线性增长。 Wireshark 序列号（会根据自己发送的数据量进行增加） Acknowledgment: Ack序号 nextSeq: 下一个序号 拥塞控制算法 （命令 sysctl） 修改拥塞控制算法 sudo sysctl net.</description>
     </item>
-    
   </channel>
 </rss>

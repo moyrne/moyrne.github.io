@@ -1,124 +1,157 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>Moyrne&#39;Blog</title>
     <link>https://blog.moyrn.com/</link>
     <description>Recent content on Moyrne&#39;Blog</description>
-    <generator>Hugo -- gohugo.io</generator>
+    <generator>Hugo -- 0.128.0</generator>
     <language>zh-CN</language>
-    <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
-    <lastBuildDate>Fri, 29 Jan 2021 13:20:15 +0800</lastBuildDate>
-    
-	<atom:link href="https://blog.moyrn.com/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <lastBuildDate>Sat, 21 May 2022 20:18:41 +0800</lastBuildDate>
+    <atom:link href="https://blog.moyrn.com/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Etcd</title>
       <link>https://blog.moyrn.com/posts/20220521_etcd_config/</link>
       <pubDate>Sat, 21 May 2022 20:18:41 +0800</pubDate>
-      
       <guid>https://blog.moyrn.com/posts/20220521_etcd_config/</guid>
-      <description>Etcd 配置  使用apt安装etcd  sudo apt install etcd 生成证书（参考 https://www.jianshu.com/p/ba0964c41b50） 配置config文件 /etc/etcd/etcd.conf  # [Member] ETCD_NAME=&amp;quot;worker1&amp;quot; ETCD_DATA_DIR=&amp;quot;/var/lib/etcd/worker&amp;quot; ETCD_LISTEN_PEER_URLS=&amp;quot;http://yourip-1:2380&amp;quot; ETCD_LISTEN_CLIENT_URLS=&amp;quot;http://yourip-1:2379,http://127.0.0.1:2379&amp;quot; # [Clustering] ETCD_INITIAL_ADVERTISE_PEER_URLS=&amp;quot;http://yourip-1:2380&amp;quot; ETCD_ADVERTISE_CLIENT_URLS=&amp;quot;http://yourip-1:2379&amp;quot; ETCD_INITIAL_CLUSTER=&amp;quot;worker1=http://yourip-1:2380,worker2=http://yourip-2:2380&amp;quot; ETCD_INITIAL_CLUSTER_TOKEN=&amp;quot;etcd-cluster-01&amp;quot; ETCD_INITIAL_CLUSTER_STATE=&amp;quot;new&amp;quot; # [Security] ETCD_CERT_FILE=&amp;quot;/etc/etcd/cert/server.crt&amp;quot; ETCD_KEY_FILE=&amp;quot;/etc/etcd/cert/server.key&amp;quot; ETCD_TRUSTED_CA_FILE=&amp;quot;/etc/etcd/cert/ca.crt&amp;quot; ETCD_CLIENT_CERT_AUTH=true ETCD_PEER_CERT_FILE=&amp;quot;/etc/etcd/cert/server.crt&amp;quot; ETCD_PEER_KEY_FILE=&amp;quot;/etc/etcd/cert/server.key&amp;quot; ETCD_PEER_TRUSTED_CA_FILE=&amp;quot;/etc/etcd/cert/ca.crt&amp;quot; ETCD_PEER_CLIENT_CERT_AUTH=true 修改service文件 /lib/systemd/system/etcd.service  [Unit] Description=etcd - highly-available key value store Documentation=https://github.com/coreos/etcd Documentation=man:etcd After=network.target Wants=network-online.target [Service] EnvironmentFile=/etc/etcd/etcd.conf Type=notify User=etcd ExecStart=/usr/bin/etcd --name ${ETCD_NAME} \ --data-dir=${ETCD_DATA_DIR} \ --listen-peer-urls=${ETCD_LISTEN_PEER_URLS} \ --listen-client-urls=${ETCD_LISTEN_CLIENT_URLS} \ --advertise-client-urls=${ETCD_ADVERTISE_CLIENT_URLS} \ --initial-advertise-peer-urls=${ETCD_INITIAL_ADVERTISE_PEER_URLS} \ --initial-cluster=${ETCD_INITIAL_CLUSTER} \ --initial-cluster-token=${ETCD_INITIAL_CLUSTER_TOKEN} \ --initial-cluster-state=${ETCD_INITIAL_CLUSTER_STATE} \ --cert-file=${ETCD_CERT_FILE} \ --key-file=${ETCD_KEY_FILE} \ --peer-cert-file=${ETCD_PEER_CERT_FILE} \ --peer-key-file=${ETCD_PEER_KEY_FILE} \ --trusted-ca-file=${ETCD_TRUSTED_CA_FILE} \ --client-cert-auth=${ETCD_CLIENT_CERT_AUTH} \ --peer-client-cert-auth=${ETCD_PEER_CLIENT_CERT_AUTH} \ --peer-trusted-ca-file=${ETCD_PEER_TRUSTED_CA_FILE} Restart=on-abnormal LimitNOFILE=65536 [Install] WantedBy=multi-user.</description>
+      <description>Etcd 配置 使用apt安装etcd sudo apt install etcd 生成证书（参考 https://www.jianshu.com/p/ba0964c41b50） 配置config文件 /etc/etcd/etcd.conf # [Member] ETCD_NAME=&amp;#34;worker1&amp;#34; ETCD_DATA_DIR=&amp;#34;/var/lib/etcd/worker&amp;#34; ETCD_LISTEN_PEER_URLS=&amp;#34;http://yourip-1:2380&amp;#34; ETCD_LISTEN_CLIENT_URLS=&amp;#34;http://yourip-1:2379,http://127.0.0.1:2379&amp;#34; # [Clustering] ETCD_INITIAL_ADVERTISE_PEER_URLS=&amp;#34;http://yourip-1:2380&amp;#34; ETCD_ADVERTISE_CLIENT_URLS=&amp;#34;http://yourip-1:2379&amp;#34; ETCD_INITIAL_CLUSTER=&amp;#34;worker1=http://yourip-1:2380,worker2=http://yourip-2:2380&amp;#34; ETCD_INITIAL_CLUSTER_TOKEN=&amp;#34;etcd-cluster-01&amp;#34; ETCD_INITIAL_CLUSTER_STATE=&amp;#34;new&amp;#34; # [Security] ETCD_CERT_FILE=&amp;#34;/etc/etcd/cert/server.crt&amp;#34; ETCD_KEY_FILE=&amp;#34;/etc/etcd/cert/server.key&amp;#34; ETCD_TRUSTED_CA_FILE=&amp;#34;/etc/etcd/cert/ca.crt&amp;#34; ETCD_CLIENT_CERT_AUTH=true ETCD_PEER_CERT_FILE=&amp;#34;/etc/etcd/cert/server.crt&amp;#34; ETCD_PEER_KEY_FILE=&amp;#34;/etc/etcd/cert/server.key&amp;#34; ETCD_PEER_TRUSTED_CA_FILE=&amp;#34;/etc/etcd/cert/ca.crt&amp;#34; ETCD_PEER_CLIENT_CERT_AUTH=true 修改service文件 /lib/systemd/system/etcd.service [Unit] Description=etcd - highly-available key value store Documentation=https://github.com/coreos/etcd Documentation=man:etcd After=network.target Wants=network-online.target [Service] EnvironmentFile=/etc/etcd/etcd.conf Type=notify User=etcd ExecStart=/usr/bin/etcd --name ${ETCD_NAME} \ --data-dir=${ETCD_DATA_DIR} \ --listen-peer-urls=${ETCD_LISTEN_PEER_URLS} \ --listen-client-urls=${ETCD_LISTEN_CLIENT_URLS} \ --advertise-client-urls=${ETCD_ADVERTISE_CLIENT_URLS} \ --initial-advertise-peer-urls=${ETCD_INITIAL_ADVERTISE_PEER_URLS} \ --initial-cluster=${ETCD_INITIAL_CLUSTER} \ --initial-cluster-token=${ETCD_INITIAL_CLUSTER_TOKEN} \ --initial-cluster-state=${ETCD_INITIAL_CLUSTER_STATE} \ --cert-file=${ETCD_CERT_FILE} \ --key-file=${ETCD_KEY_FILE} \ --peer-cert-file=${ETCD_PEER_CERT_FILE} \ --peer-key-file=${ETCD_PEER_KEY_FILE} \ --trusted-ca-file=${ETCD_TRUSTED_CA_FILE} \ --client-cert-auth=${ETCD_CLIENT_CERT_AUTH} \ --peer-client-cert-auth=${ETCD_PEER_CLIENT_CERT_AUTH} \ --peer-trusted-ca-file=${ETCD_PEER_TRUSTED_CA_FILE} Restart=on-abnormal LimitNOFILE=65536 [Install] WantedBy=multi-user.</description>
     </item>
-    
     <item>
       <title>网络排查案例</title>
       <link>https://blog.moyrn.com/posts/20220420_network_learn/</link>
       <pubDate>Wed, 20 Apr 2022 22:03:56 +0800</pubDate>
-      
       <guid>https://blog.moyrn.com/posts/20220420_network_learn/</guid>
-      <description>预习  traceroute 查看路由跳转  Nginx 日志报 connection reset by peer  Wireshark 抓包分析  过滤IP：ip.addr eq my_ip, ip.src eq my_ip或者ip.dst eq my_ip 找到RST报文：tcp.flags.reset eq 1 过滤序列号：tcp.ack eq my_num 过滤时间：frame.time &amp;gt;= &amp;quot;dec 01,2015 15:49:48&amp;quot; 过滤表达式前添加 ! 或者 not 表示取反 多个条件可以使用 and 或者 or 形成复合过滤器    定位防火墙问题  客户端和服务端在同一时间开始抓包 使用IP过滤 查看Wireshark的Expert Information，关注可疑的（如Warning）报文并追踪TCP流 对比两侧文件，如何找到另一端对应的TCP流：TCP序列号（裸序列号）  设置去掉 Wireshark -&amp;gt; Preferences -&amp;gt; Protocols -&amp;gt; Relative sequence numbers   Wireshark 支持自定义列，在主窗口中显示。进入详情之后，右键需要在主窗口中显示的数据，选择 Apply as column 同样的服务端，在三次握手中（SYN+ACK 报文）的 TTL 是 59，在导致连接中断的 RST 包里却变成了 64！显然，这个 RST 包并不是跟我们握手的那个服务端发出的（防火墙）      长肥管道  带宽很大、RTT 很长的网络，被冠以一个特定的名词，叫做长肥网络，英文是 Long Fat Network TCP 传输的核心公式：速度 = 窗口 / 往返时间 传输速度的上限就是 window/RTT = 64KB/134ms = 478KB/s  TCP Window Full  一般说到 TCP Window，如果没有特别指明，就是指接收窗口。 TCP 的下个序列号（Next Sequence Number）等于序列号和段长度之和，即 NextSeq = Seq + Len。 在途数据计算 Bytes_in_flight = latest_nextSeq - latest_ack_from_receiver 在 Statistics 下拉菜单下的 I/O Graph 工具，可以直观地展示传输速度图。 同是 Statistics 菜单下的 TCP Stream Graphs 的 Window Scaling 工具，可以直观的展示 TCP Window Full 历史曲线图。 名称  Acknowledgement Number：确认号 Next Sequence Number：下个序列号 Caculated Window Size：计算后的接收窗口 Bytes in flight：在途字节数   velocity = acked_data/RTT  TCP探测拥塞  概念  慢启动：每收到一个 ACK，拥塞窗口（CW）增加一个 MSS。 拥塞避免：策略是“和性增长乘性降低”，每一个 RTT，CW 增加一个 MSS。 快速重传：接收到 3 次或者以上的重复确认后，直接重传这个丢失的报文。 快速恢复：结合快速重传，在遇到拥塞点后，跳过慢启动阶段，进入线性增长。   Wireshark 序列号（会根据自己发送的数据量进行增加）  Acknowledgment: Ack序号 nextSeq: 下一个序号   拥塞控制算法 （命令 sysctl）  修改拥塞控制算法 sudo sysctl net.</description>
+      <description>预习 traceroute 查看路由跳转 Nginx 日志报 connection reset by peer Wireshark 抓包分析 过滤IP：ip.addr eq my_ip, ip.src eq my_ip或者ip.dst eq my_ip 找到RST报文：tcp.flags.reset eq 1 过滤序列号：tcp.ack eq my_num 过滤时间：frame.time &amp;gt;= &amp;quot;dec 01,2015 15:49:48&amp;quot; 过滤表达式前添加 ! 或者 not 表示取反 多个条件可以使用 and 或者 or 形成复合过滤器 定位防火墙问题 客户端和服务端在同一时间开始抓包 使用IP过滤 查看Wireshark的Expert Information，关注可疑的（如Warning）报文并追踪TCP流 对比两侧文件，如何找到另一端对应的TCP流：TCP序列号（裸序列号） 设置去掉 Wireshark -&amp;gt; Preferences -&amp;gt; Protocols -&amp;gt; Relative sequence numbers Wireshark 支持自定义列，在主窗口中显示。进入详情之后，右键需要在主窗口中显示的数据，选择 Apply as column 同样的服务端，在三次握手中（SYN+ACK 报文）的 TTL 是 59，在导致连接中断的 RST 包里却变成了 64！显然，这个 RST 包并不是跟我们握手的那个服务端发出的（防火墙） 长肥管道 带宽很大、RTT 很长的网络，被冠以一个特定的名词，叫做长肥网络，英文是 Long Fat Network TCP 传输的核心公式：速度 = 窗口 / 往返时间 传输速度的上限就是 window/RTT = 64KB/134ms = 478KB/s TCP Window Full 一般说到 TCP Window，如果没有特别指明，就是指接收窗口。 TCP 的下个序列号（Next Sequence Number）等于序列号和段长度之和，即 NextSeq = Seq + Len。 在途数据计算 Bytes_in_flight = latest_nextSeq - latest_ack_from_receiver 在 Statistics 下拉菜单下的 I/O Graph 工具，可以直观地展示传输速度图。 同是 Statistics 菜单下的 TCP Stream Graphs 的 Window Scaling 工具，可以直观的展示 TCP Window Full 历史曲线图。 名称 Acknowledgement Number：确认号 Next Sequence Number：下个序列号 Caculated Window Size：计算后的接收窗口 Bytes in flight：在途字节数 velocity = acked_data/RTT TCP探测拥塞 概念 慢启动：每收到一个 ACK，拥塞窗口（CW）增加一个 MSS。 拥塞避免：策略是“和性增长乘性降低”，每一个 RTT，CW 增加一个 MSS。 快速重传：接收到 3 次或者以上的重复确认后，直接重传这个丢失的报文。 快速恢复：结合快速重传，在遇到拥塞点后，跳过慢启动阶段，进入线性增长。 Wireshark 序列号（会根据自己发送的数据量进行增加） Acknowledgment: Ack序号 nextSeq: 下一个序号 拥塞控制算法 （命令 sysctl） 修改拥塞控制算法 sudo sysctl net.</description>
     </item>
-    
     <item>
       <title>Windows Powershell 美化</title>
       <link>https://blog.moyrn.com/posts/20220209_powershell/</link>
       <pubDate>Wed, 09 Feb 2022 11:02:32 +0800</pubDate>
-      
       <guid>https://blog.moyrn.com/posts/20220209_powershell/</guid>
-      <description>原始链接 https://zhuanlan.zhihu.com/p/137595941   安装 Windows Terminal
+      <description>原始链接 https://zhuanlan.zhihu.com/p/137595941 安装 Windows Terminal
 MicroSoft 应用商店
-  安装字体 Fira Code Nerd Font
-https://github.com/ryanoasis/nerd-fonts/releases   安装新的 PowerShell
-https://github.com/PowerShell/PowerShell/releases/tag/v7.2.1   安装 PowerShell 插件
-# 1. 安装 PSReadline 包，该插件可以让命令行很好用，类似 zsh Install-Module -Name PSReadLine -Scope CurrentUser # 2. 安装 posh-git 包，让你的 git 更好用 Install-Module posh-git -Scope CurrentUser # 3. 安装 oh-my-posh 包，让你的命令行更酷炫、优雅 Install-Module oh-my-posh -Scope CurrentUser   添加 Powershell 启动参数
- 输入命令  notepad.exe $Profile 在文本框装填入以下内容  #------------------------------- Import Modules BEGIN ------------------------------- # 引入 posh-git Import-Module posh-git # 引入 oh-my-posh Import-Module oh-my-posh # 引入 ps-read-line Import-Module PSReadLine # 设置 PowerShell 主题 # Set-PoshPrompt ys Set-PoshPrompt paradox #------------------------------- Import Modules END ------------------------------- #------------------------------- Set Hot-keys BEGIN ------------------------------- # 设置预测文本来源为历史记录 Set-PSReadLineOption -PredictionSource History # 每次回溯输入历史，光标定位于输入内容末尾 Set-PSReadLineOption -HistorySearchCursorMovesToEnd # 设置 Tab 为菜单补全和 Intellisense Set-PSReadLineKeyHandler -Key &amp;#34;Tab&amp;#34; -Function MenuComplete # 设置 Ctrl+d 为退出 PowerShell Set-PSReadlineKeyHandler -Key &amp;#34;Ctrl+d&amp;#34; -Function ViExit # 设置 Ctrl+z 为撤销 Set-PSReadLineKeyHandler -Key &amp;#34;Ctrl+z&amp;#34; -Function Undo # 设置向上键为后向搜索历史记录 Set-PSReadLineKeyHandler -Key UpArrow -Function HistorySearchBackward # 设置向下键为前向搜索历史纪录 Set-PSReadLineKeyHandler -Key DownArrow -Function HistorySearchForward #------------------------------- Set Hot-keys END -------------------------------   </description>
+安装字体 Fira Code Nerd Font
+https://github.com/ryanoasis/nerd-fonts/releases 安装新的 PowerShell
+https://github.com/PowerShell/PowerShell/releases/tag/v7.2.1 安装 PowerShell 插件
+# 1. 安装 PSReadline 包，该插件可以让命令行很好用，类似 zsh Install-Module -Name PSReadLine -Scope CurrentUser # 2. 安装 posh-git 包，让你的 git 更好用 Install-Module posh-git -Scope CurrentUser # 3. 安装 oh-my-posh 包，让你的命令行更酷炫、优雅 Install-Module oh-my-posh -Scope CurrentUser 添加 Powershell 启动参数
+输入命令 notepad.exe $Profile 在文本框装填入以下内容 #------------------------------- Import Modules BEGIN ------------------------------- # 引入 posh-git Import-Module posh-git # 引入 oh-my-posh Import-Module oh-my-posh # 引入 ps-read-line Import-Module PSReadLine # 设置 PowerShell 主题 # Set-PoshPrompt ys Set-PoshPrompt paradox #------------------------------- Import Modules END ------------------------------- #------------------------------- Set Hot-keys BEGIN ------------------------------- # 设置预测文本来源为历史记录 Set-PSReadLineOption -PredictionSource History # 每次回溯输入历史，光标定位于输入内容末尾 Set-PSReadLineOption -HistorySearchCursorMovesToEnd # 设置 Tab 为菜单补全和 Intellisense Set-PSReadLineKeyHandler -Key &amp;#34;Tab&amp;#34; -Function MenuComplete # 设置 Ctrl+d 为退出 PowerShell Set-PSReadlineKeyHandler -Key &amp;#34;Ctrl+d&amp;#34; -Function ViExit # 设置 Ctrl+z 为撤销 Set-PSReadLineKeyHandler -Key &amp;#34;Ctrl+z&amp;#34; -Function Undo # 设置向上键为后向搜索历史记录 Set-PSReadLineKeyHandler -Key UpArrow -Function HistorySearchBackward # 设置向下键为前向搜索历史纪录 Set-PSReadLineKeyHandler -Key DownArrow -Function HistorySearchForward #------------------------------- Set Hot-keys END ------------------------------- </description>
     </item>
-    
     <item>
       <title>False Sharing</title>
       <link>https://blog.moyrn.com/posts/20210523_false_sharing/</link>
       <pubDate>Sun, 23 May 2021 14:25:33 +0800</pubDate>
-      
       <guid>https://blog.moyrn.com/posts/20210523_false_sharing/</guid>
-      <description>CPU-Cache 结构图  多数的CPU缓冲结构(Intel)  缓存行大小 32/64/128(现在多数为64)  解释（下面假设所有的线程都在不同的核心上）  在 不同的线程上读写某段连续的内存不同索引的值, 可能导致高速缓冲miss, 导致重复拷贝   a = [1,1,1,1,1,1] # thread 1 for {a[0]++} # thread 2 for {a[1]++} # thread 3 for {a[2]++} # thread 3 for {a[4]++}   线程写入某个值之后, 会导致其他其他的线程的缓存失效
+      <description>CPU-Cache 结构图 多数的CPU缓冲结构(Intel) 缓存行大小 32/64/128(现在多数为64) 解释（下面假设所有的线程都在不同的核心上） 在 不同的线程上读写某段连续的内存不同索引的值, 可能导致高速缓冲miss, 导致重复拷贝 a = [1,1,1,1,1,1] # thread 1 for {a[0]++} # thread 2 for {a[1]++} # thread 3 for {a[2]++} # thread 3 for {a[4]++} 线程写入某个值之后, 会导致其他其他的线程的缓存失效
 例如 thread 1 修改了a[0]
 其它线程虽然没有使用a[0], 但缓存也会失效, 需要重新获取, 会产生额外的拷贝的开销
 如果需要解决这个问题, 需要将各个元素分隔到不同的缓存行, 也就是上一个元素的开始地址到下一个元素的开始地址, 间隔32/64/128
 如 [1,x,x,x,x,2,x,x,x,x] 的形式进行填充
-  代码 package false_sharing import ( &amp;#34;runtime&amp;#34; &amp;#34;sync&amp;#34; &amp;#34;testing&amp;#34; &amp;#34;unsafe&amp;#34; ) const numCpu = 12 type increase interface { Increase(idx int) Len() int } func BenchmarkNoPadIncrease(b *testing.</description>
+代码 package false_sharing import ( &amp;#34;runtime&amp;#34; &amp;#34;sync&amp;#34; &amp;#34;testing&amp;#34; &amp;#34;unsafe&amp;#34; ) const numCpu = 12 type increase interface { Increase(idx int) Len() int } func BenchmarkNoPadIncrease(b *testing.</description>
     </item>
-    
     <item>
       <title>zsh,oh-my-zsh安装</title>
       <link>https://blog.moyrn.com/posts/20210423_ubuntu_zsh/</link>
       <pubDate>Sat, 24 Apr 2021 16:18:28 +0800</pubDate>
-      
       <guid>https://blog.moyrn.com/posts/20210423_ubuntu_zsh/</guid>
       <description># 安装zsh sudo apt-get install zsh # 将zsh切换成默认shell chsh -s /bin/zsh # 安装 oh-my-zsh sh -c &amp;#34;$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)&amp;#34; # Add powerlevel10k to the list of Oh My Zsh themes. git clone --depth=1 https://github.com/romkatv/powerlevel10k.git $ZSH_CUSTOM/themes/powerlevel10k # Replace ZSH_THEME=&amp;#34;powerlevel9k/powerlevel9k&amp;#34; with ZSH_THEME=&amp;#34;powerlevel10k/powerlevel10k&amp;#34;. sed -i.bak &amp;#39;s/powerlevel9k/powerlevel10k/g&amp;#39; ~/.zshrc # 安装插件 git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting vim ~/.zshrc # 修改文件内容 plugins=(git zsh-autosuggestions zsh-syntax-highlighting) # 保存,执行文件 source ~/.zshrc </description>
     </item>
-    
     <item>
       <title>Go特性记录</title>
       <link>https://blog.moyrn.com/posts/20210316_go_features/</link>
       <pubDate>Tue, 16 Mar 2021 11:51:54 +0800</pubDate>
-      
       <guid>https://blog.moyrn.com/posts/20210316_go_features/</guid>
-      <description>internal 包 [20210316] /go/src/xxx/package/internal   internal 包中的内容，无法在package外被导入，否则编译不通过。  </description>
+      <description>internal 包 [20210316] /go/src/xxx/package/internal internal 包中的内容，无法在package外被导入，否则编译不通过。 </description>
     </item>
-    
     <item>
       <title>Deployment 水平扩容和滚动更新</title>
       <link>https://blog.moyrn.com/posts/20210213_rollout_uptodate/</link>
       <pubDate>Sat, 13 Feb 2021 22:38:54 +0800</pubDate>
-      
       <guid>https://blog.moyrn.com/posts/20210213_rollout_uptodate/</guid>
-      <description>概念   Deployment 所管理的 Pod 的 ownerReference 就是 ReplicaSet
-  Deployment 会拥有多个ReplicaSet, 不同的 ReplicaSet 代表不同的版本
-  关系图   Deployment 状态字段
- DESIRED：用户期望的 Pod 副本个数（spec.replicas 的值）； CURRENT：当前处于 Running 状态的 Pod 的个数； UP-TO-DATE：当前处于最新版本的 Pod 的个数，所谓最新版本指的是 Pod 的 Spec 部分与 Deployment 里 Pod 模板里定义的完全一致； AVAILABLE：当前已经可用的 Pod 的个数，即：既是 Running 状态，又是最新版本，并且已经处于 Ready（健康检查正确）状态的 Pod 的个数。    ReplicaSet 状态字段 DESIRED、CURRENT 和 READY，与 Deployment 一致，Deployment 仅多出 UP-TO-DATE 状态
-  滚动更新 RollingUpdateStrategy 在“滚动更新”的过程中永远都会确保至少有 2 个 Pod 处于可用状态，至多只有 4 个 Pod 同时存在于集群中 旧版本RS的Pod数量递减，新版本RS的Pod数量递增</description>
+      <description>概念 Deployment 所管理的 Pod 的 ownerReference 就是 ReplicaSet
+Deployment 会拥有多个ReplicaSet, 不同的 ReplicaSet 代表不同的版本
+关系图 Deployment 状态字段
+DESIRED：用户期望的 Pod 副本个数（spec.replicas 的值）； CURRENT：当前处于 Running 状态的 Pod 的个数； UP-TO-DATE：当前处于最新版本的 Pod 的个数，所谓最新版本指的是 Pod 的 Spec 部分与 Deployment 里 Pod 模板里定义的完全一致； AVAILABLE：当前已经可用的 Pod 的个数，即：既是 Running 状态，又是最新版本，并且已经处于 Ready（健康检查正确）状态的 Pod 的个数。 ReplicaSet 状态字段 DESIRED、CURRENT 和 READY，与 Deployment 一致，Deployment 仅多出 UP-TO-DATE 状态
+滚动更新 RollingUpdateStrategy 在“滚动更新”的过程中永远都会确保至少有 2 个 Pod 处于可用状态，至多只有 4 个 Pod 同时存在于集群中 旧版本RS的Pod数量递减，新版本RS的Pod数量递增
+apiVersion: apps/v1kind: Deploymentmetadata: name: nginx-deployment labels: app: nginx spec: .</description>
     </item>
-    
     <item>
       <title>Pod 对象</title>
       <link>https://blog.moyrn.com/posts/20210212_pod_project/</link>
       <pubDate>Fri, 12 Feb 2021 15:07:14 +0800</pubDate>
-      
       <guid>https://blog.moyrn.com/posts/20210212_pod_project/</guid>
-      <description>Volume  Projected Volume 将预先设置好的数据投射到容器中，  Secret    volumes:- name:mysql-credprojected:sources:- secret:name:user- secret:name:pass- ConfigMap  - DownwardAPI  - ServiceAccountToken  restartPolicy livenessProbe   只要 Pod 的 restartPolicy 指定的策略允许重启异常的容器（比如：Always），那么这个 Pod 就会保持 Running 状态，并进行容器重启。否则，Pod 就会进入 Failed 状态 。
-  对于包含多个容器的 Pod，只有它里面所有的容器都进入异常状态后，Pod 才会进入 Failed 状态。在此之前，Pod 都是 Running 状态。此时，Pod 的 READY 字段会显示正常容器的个数，比如：
-$ kubectl get pod test-liveness-exec NAME READY STATUS RESTARTS AGE liveness-exec 0/1 Running 1 1m   livenessProbe HTTP Or TCP, 多用于Web服务健康检查, Web服务中暴露出健康检查URL</description>
+      <description>Volume Projected Volume 将预先设置好的数据投射到容器中， Secret volumes: - name: mysql-cred projected: sources: - secret: name: user - secret: name: pass - ConfigMap - DownwardAPI - ServiceAccountToken restartPolicy livenessProbe 只要 Pod 的 restartPolicy 指定的策略允许重启异常的容器（比如：Always），那么这个 Pod 就会保持 Running 状态，并进行容器重启。否则，Pod 就会进入 Failed 状态 。
+对于包含多个容器的 Pod，只有它里面所有的容器都进入异常状态后，Pod 才会进入 Failed 状态。在此之前，Pod 都是 Running 状态。此时，Pod 的 READY 字段会显示正常容器的个数，比如：
+$ kubectl get pod test-liveness-exec NAME READY STATUS RESTARTS AGE liveness-exec 0/1 Running 1 1m livenessProbe HTTP Or TCP, 多用于Web服务健康检查, Web服务中暴露出健康检查URL</description>
     </item>
-    
     <item>
       <title>Kubeadm 搭建K8s集群</title>
       <link>https://blog.moyrn.com/posts/20210207_kubeadm_start/</link>
       <pubDate>Sun, 07 Feb 2021 13:56:54 +0800</pubDate>
-      
       <guid>https://blog.moyrn.com/posts/20210207_kubeadm_start/</guid>
-      <description>前置操作 (每台机器上都需要操作)  使用系统 Centos 7  cat /etc/redhat-release CentOS Linux release 7.9.2009 (Core)  关闭防火墙  systemctl stop firewalld &amp;amp;&amp;amp; systemctl disable firewalld  禁用SELINUX  vim /etc/selinux/config # 或者修改/etc/sysconfig/selinux SELINUX=disabled  [注意] 开启 IP 路由转发和 NAT  # https://ccie.lol/knowledge-base/linux-centos-route-forwarding/ # 不开启会导致 Pod 无法链接外网以及 Pod 间无法通信的问题. [root@host ~]# echo &amp;#34;net.ipv4.ip_forward = 1&amp;#34; &amp;gt;&amp;gt; /etc/sysctl.conf [root@host ~]# sysctl -p [root@host ~]# sysctl -a | grep &amp;#34;ip_forward&amp;#34; net.ipv4.ip_forward = 1 # 开启NAT [root@host ~]# iptables -P FORWARD ACCEPT # 缺省允许 IP 转发 # 利用 iptables 实现 NAT MASQUERADE 共享上网，此处 eth0 需要是能够访问外部网络的网卡接口 [root@host ~]# iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE  修改 k8s.</description>
+      <description>前置操作 (每台机器上都需要操作) 使用系统 Centos 7 cat /etc/redhat-release CentOS Linux release 7.9.2009 (Core) 关闭防火墙 systemctl stop firewalld &amp;amp;&amp;amp; systemctl disable firewalld 禁用SELINUX vim /etc/selinux/config # 或者修改/etc/sysconfig/selinux SELINUX=disabled [注意] 开启 IP 路由转发和 NAT # https://ccie.lol/knowledge-base/linux-centos-route-forwarding/ # 不开启会导致 Pod 无法链接外网以及 Pod 间无法通信的问题. [root@host ~]# echo &amp;#34;net.ipv4.ip_forward = 1&amp;#34; &amp;gt;&amp;gt; /etc/sysctl.conf [root@host ~]# sysctl -p [root@host ~]# sysctl -a | grep &amp;#34;ip_forward&amp;#34; net.ipv4.ip_forward = 1 # 开启NAT [root@host ~]# iptables -P FORWARD ACCEPT # 缺省允许 IP 转发 # 利用 iptables 实现 NAT MASQUERADE 共享上网，此处 eth0 需要是能够访问外部网络的网卡接口 [root@host ~]# iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE 修改 k8s.</description>
     </item>
-    
     <item>
       <title>Kubernetes入门-基础</title>
       <link>https://blog.moyrn.com/posts/20210206_before_start/</link>
       <pubDate>Sat, 06 Feb 2021 10:13:46 +0800</pubDate>
-      
       <guid>https://blog.moyrn.com/posts/20210206_before_start/</guid>
       <description>网络设置
-# https://ccie.lol/knowledge-base/linux-centos-route-forwarding/ # 注意事项 开启 IP 路由转发和 NAT, 未开启会导致 Pod 无法访问外网以及 Pod 间无法通信. [root@host ~]# echo &amp;#34;net.ipv4.ip_forward = 1&amp;#34; &amp;gt;&amp;gt; /etc/sysctl.conf [root@host ~]# sysctl -p [root@host ~]# sysctl -a | grep &amp;#34;ip_forward&amp;#34; net.ipv4.ip_forward = 1 # 开启NAT [root@host ~]# iptables -P FORWARD ACCEPT # 缺省允许 IP 转发 # 利用 iptables 实现 NAT MASQUERADE 共享上网，此处 eth0 需要是能够访问外部网络的网卡接口 [root@host ~]# iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE   CPU</description>
+# https://ccie.lol/knowledge-base/linux-centos-route-forwarding/ # 注意事项 开启 IP 路由转发和 NAT, 未开启会导致 Pod 无法访问外网以及 Pod 间无法通信. [root@host ~]# echo &amp;#34;net.ipv4.ip_forward = 1&amp;#34; &amp;gt;&amp;gt; /etc/sysctl.conf [root@host ~]# sysctl -p [root@host ~]# sysctl -a | grep &amp;#34;ip_forward&amp;#34; net.ipv4.ip_forward = 1 # 开启NAT [root@host ~]# iptables -P FORWARD ACCEPT # 缺省允许 IP 转发 # 利用 iptables 实现 NAT MASQUERADE 共享上网，此处 eth0 需要是能够访问外部网络的网卡接口 [root@host ~]# iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE CPU</description>
     </item>
-    
+    <item>
+      <title>关于我</title>
+      <link>https://blog.moyrn.com/about/</link>
+      <pubDate>Fri, 29 Jan 2021 13:20:15 +0800</pubDate>
+      <guid>https://blog.moyrn.com/about/</guid>
+      <description>联系方式 邮箱： moyrn@qq.com gitee: https://gitee.com/moyrn </description>
+    </item>
+    <item>
+      <title>字符串拼接性能测试</title>
+      <link>https://blog.moyrn.com/posts/20210128_string_join_benchmark/</link>
+      <pubDate>Thu, 28 Jan 2021 13:31:45 +0800</pubDate>
+      <guid>https://blog.moyrn.com/posts/20210128_string_join_benchmark/</guid>
+      <description>// splicing_test.go package splicing import ( &amp;#34;strconv&amp;#34; &amp;#34;strings&amp;#34; &amp;#34;testing&amp;#34; ) func Str(str []string) string { var rst string for _, s := range str { rst += s } return rst } func BuilderStr(str []string) string { var builder strings.Builder for _, s := range str { builder.WriteString(s) } return builder.String() } func BenchmarkStr(b *testing.B) { srcStr := make([]string, 0, 100000) b.Run(&amp;#34;Append-10000&amp;#34;, func(b *testing.B) { for i := 0; i &amp;lt; 10000; i++ { srcStr = append(srcStr, strconv.</description>
+    </item>
+    <item>
+      <title>time.After() 导致内存暴涨</title>
+      <link>https://blog.moyrn.com/posts/20210127_time_after_oom/</link>
+      <pubDate>Thu, 31 Oct 2019 13:04:41 +0800</pubDate>
+      <guid>https://blog.moyrn.com/posts/20210127_time_after_oom/</guid>
+      <description>select + time.After 导致内存暴涨 func Function(notRun notRun) { for { select { case &amp;lt;-notRun.notRun: // 大多数情况都是有notRun的输入 case &amp;lt;-time.After(time.Minute): notRun.Close() continue case &amp;lt;-notRun.run: notRun.Close() return } } } notRun 发送消息频率过快，而每次select都会调用到time.After，而time.After又会NewTimer，而每次NewTimer都必须在1分钟后才能释放。 当notRun的频率很高时，会在内存中堆积非常多的无用的Timer。导致内存暴涨。 解决方法 func Function(notRun notRun) { afterTime := time.Minute after := time.NewTimer(afterTime) defer after.Stop() for { after.Reset(afterTime) select { case &amp;lt;-notRun.notRun: case &amp;lt;-after.C: notRun.Close() continue case &amp;lt;-notRun.run: notRun.Close() return } } } 自己 NewTimer 在每次 select 之前 reset，使 timer 重新计时，从而避免每次都 new timer。 </description>
+    </item>
+    <item>
+      <title>Golang 编译</title>
+      <link>https://blog.moyrn.com/posts/20191029_build/</link>
+      <pubDate>Tue, 29 Oct 2019 09:41:51 +0800</pubDate>
+      <guid>https://blog.moyrn.com/posts/20191029_build/</guid>
+      <description>编译 编译其他系统 CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build# 不能复制空格set CGO_ENABLED=0set GOOS=linuxset GOARCH=amd64go build图标制作 第一步：Windows 下载MinGW第二步：新建一个.rc文件，加入文件名为 demo.rc 输入内容 IDI_ICON1 ICON &amp;quot;cefclient.ico&amp;quot;其中 cefclient.ico 是你的ico的地址第三步:MinGW 执行windres -o demo.syso demo.rc第四步:将生成的demo.syso 放到项目目录下go build隐藏命令行 go build -i -ldflags=&amp;quot;-H windowsgui&amp;quot; </description>
+    </item>
+    <item>
+      <title>手动构建 OMNI-USDT 请求</title>
+      <link>https://blog.moyrn.com/posts/20190810_btc_usdt/</link>
+      <pubDate>Sat, 10 Aug 2019 14:01:07 +0800</pubDate>
+      <guid>https://blog.moyrn.com/posts/20190810_btc_usdt/</guid>
+      <description>手动构建 omni usdt 划转 [2021-03-09] 从有道云笔记搬运至 github pages 在实习期间写的，程序中有打印的这类问题，请忽略。（当时debug用的） package btc import ( &amp;#34;bytes&amp;#34; &amp;#34;encoding/hex&amp;#34; &amp;#34;errors&amp;#34; &amp;#34;fmt&amp;#34; &amp;#34;github.com/astaxie/beego&amp;#34; &amp;#34;github.com/btcsuite/btcd/chaincfg&amp;#34; &amp;#34;github.com/btcsuite/btcd/chaincfg/chainhash&amp;#34; &amp;#34;github.com/btcsuite/btcd/txscript&amp;#34; &amp;#34;github.com/btcsuite/btcd/wire&amp;#34; &amp;#34;github.com/btcsuite/btcutil&amp;#34; &amp;#34;github.com/ethereum/go-ethereum/common/math&amp;#34; &amp;#34;log&amp;#34; &amp;#34;math/big&amp;#34; &amp;#34;$project/db&amp;#34; &amp;#34;$project/models&amp;#34; &amp;#34;$project/node/btc&amp;#34; btc2 &amp;#34;$project/wallet/btc&amp;#34; ) var hexLength = 16 func calAmountUSDT(amount *big.Int) (amountHex string) { amountHexBef := fmt.Sprintf(&amp;#34;%x&amp;#34;, amount) amountHexLen := len(amountHexBef) var amountHexBytes []byte amountHexBytes = make([]byte, hexLength-amountHexLen) for i := range amountHexBytes { amountHexBytes[i] = &amp;#39;0&amp;#39; } for _, v := range amountHexBef { amountHexBytes = append(amountHexBytes, byte(v)) } amountHex = string(amountHexBytes) return } // 发起usdt转账前先确认usdt余额 func SendTransactionUSDT(from, to, amountUSDT, totalFee string) (txHash string, err error) { var ( //Decimal = &amp;#34;00000000&amp;#34; //omni = &amp;#34;6f6d6e69&amp;#34; minBTCTrans = &amp;#34;546&amp;#34; omni = &amp;#34;6f6d6e69&amp;#34; transactionVarsion = &amp;#34;0000&amp;#34; // 2 byte transactionType = &amp;#34;0000&amp;#34; // 2 byte currencyIdentifier = &amp;#34;0000001f&amp;#34; // 4 byte //currencyIdentifier = &amp;#34;0000001f&amp;#34; // 4 byte //amountUSDT // 8 byte ) var address models.</description>
+    </item>
+    <item>
+      <title>GORM 使用</title>
+      <link>https://blog.moyrn.com/posts/20190810_gorm/</link>
+      <pubDate>Sat, 10 Aug 2019 11:53:34 +0800</pubDate>
+      <guid>https://blog.moyrn.com/posts/20190810_gorm/</guid>
+      <description>MYSQL 悲观锁 tx := db.DB.Begin() if err := tx.Set(&amp;#34;gorm:query_option&amp;#34;, &amp;#34;FOR UPDATE&amp;#34;). Where(&amp;#34;`xx` = ? and `xxx` = ?&amp;#34;, xx, xxx). First(&amp;amp;xx).Error; err != nil { tx.Rollback() return } 在事务中使用 Set(&amp;quot;gorm:query_option&amp;quot;, &amp;quot;FOR UPDATE&amp;quot;) + first 能将查询的这条记录锁住；在事务 rollback 或 commit 后会 unlock。创建复合主键(当主键涉及自增时) gorm:&amp;#34;primary_key;AUTO_INCREMENT:false&amp;#34; 连接数据库 步骤分析 引入mysql数据库驱动 引入gorm包 读取配置文件中的数据库信息 将读取的数据生成为Open()需要的字符串 代码示例 package base import ( _ &amp;#34;github.com/go-sql-driver/mysql&amp;#34; _ &amp;#34;github.com/jinzhu/gorm/dialects/mysql&amp;#34; &amp;#34;github.com/jinzhu/gorm&amp;#34; &amp;#34;fmt&amp;#34; &amp;#34;log&amp;#34; ) var ( DB *gorm.DB user = &amp;#34;user&amp;#34; password = &amp;#34;password&amp;#34; dbname = &amp;#34;dbname&amp;#34; address = &amp;#34;address&amp;#34; port = &amp;#34;port&amp;#34; ) func DBConnect() { dsn := fmt.</description>
+    </item>
+    <item>
+      <title>Golang HTTP包传输文件</title>
+      <link>https://blog.moyrn.com/posts/20190724_http_file/</link>
+      <pubDate>Wed, 24 Jul 2019 17:02:39 +0800</pubDate>
+      <guid>https://blog.moyrn.com/posts/20190724_http_file/</guid>
+      <description>文件传输 Content-Type http://tool.oschina.net/commons?type=22013-05-17multipart/form-data：既可以提交普通键值对，也可以提交(多个)文件键值对。application/octet-stream：只能提交二进制，而且只能提交一个二进制，如果提交文件的话，只能提交一个文件,后台接收参数只能有一个，而且只能是流（或者字节数组）application/x-www-form-urlencoded不属于http content-type规范，通常用于浏览器表单提交，数据组织格式:name1=value1&amp;amp;name2=value2,post时会放入http body，get时，显示在在地址栏。// golang 实现 W.Header().Add(&amp;#34;Content-Type&amp;#34;,&amp;#34;application/octet-stream&amp;#34;) W.Header().Add(&amp;#34;Content-Disposition&amp;#34;,fmt.Sprintf(&amp;#34;attachment; filename=\&amp;#34;%s\&amp;#34;&amp;#34;, fileName)) </description>
+    </item>
+    <item>
+      <title>Nginx 反向代理</title>
+      <link>https://blog.moyrn.com/posts/20180331_nginx_proxy/</link>
+      <pubDate>Sat, 31 Mar 2018 13:34:41 +0800</pubDate>
+      <guid>https://blog.moyrn.com/posts/20180331_nginx_proxy/</guid>
+      <description>将静态文件交给nginx代理 配置文件位置 /etc/nginx/conf.d/default.confserver {listen 80;server_name www.moyrn.com;location / {root /usr/share/nginx/webmonitor;index index.html;}} 通过不同的域名，将80端口的消息转发到其他端口 server {listen 80;server_name go.moyrn.com;location / {proxy_pass http://127.0.0.1:8080;}}server {listen 80;server_name moyrn.com;location / {proxy_pass http://127.0.0.1:8086;}}server {listen 80;server_name www.moyrn.com;location / {proxy_pass http://127.0.0.1:8086;}} </description>
+    </item>
   </channel>
 </rss>

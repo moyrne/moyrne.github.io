@@ -1,25 +1,19 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
-    <title>nginx on Moyrne&#39;Blog</title>
+    <title>Nginx on Moyrne&#39;Blog</title>
     <link>https://blog.moyrn.com/tags/nginx/</link>
-    <description>Recent content in nginx on Moyrne&#39;Blog</description>
-    <generator>Hugo -- gohugo.io</generator>
+    <description>Recent content in Nginx on Moyrne&#39;Blog</description>
+    <generator>Hugo -- 0.128.0</generator>
     <language>zh-CN</language>
-    <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
     <lastBuildDate>Sat, 31 Mar 2018 13:34:41 +0800</lastBuildDate>
-    
-	<atom:link href="https://blog.moyrn.com/tags/nginx/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <atom:link href="https://blog.moyrn.com/tags/nginx/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Nginx 反向代理</title>
       <link>https://blog.moyrn.com/posts/20180331_nginx_proxy/</link>
       <pubDate>Sat, 31 Mar 2018 13:34:41 +0800</pubDate>
-      
       <guid>https://blog.moyrn.com/posts/20180331_nginx_proxy/</guid>
-      <description>将静态文件交给nginx代理 配置文件位置 /etc/nginx/conf.d/default.conf server {listen 80;server_name www.moyrn.com;location / {root /usr/share/nginx/webmonitor;index index.html;}}通过不同的域名，将80端口的消息转发到其他端口 server {listen 80;server_name go.moyrn.com;location / {proxy_pass http://127.0.0.1:8080;}}server {listen 80;server_name moyrn.com;location / {proxy_pass http://127.0.0.1:8086;}}server {listen 80;server_name www.moyrn.com;location / {proxy_pass http://127.0.0.1:8086;}}</description>
+      <description>将静态文件交给nginx代理 配置文件位置 /etc/nginx/conf.d/default.confserver {listen 80;server_name www.moyrn.com;location / {root /usr/share/nginx/webmonitor;index index.html;}} 通过不同的域名，将80端口的消息转发到其他端口 server {listen 80;server_name go.moyrn.com;location / {proxy_pass http://127.0.0.1:8080;}}server {listen 80;server_name moyrn.com;location / {proxy_pass http://127.0.0.1:8086;}}server {listen 80;server_name www.moyrn.com;location / {proxy_pass http://127.0.0.1:8086;}} </description>
     </item>
-    
   </channel>
 </rss>
