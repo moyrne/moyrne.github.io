@@ -6,7 +6,7 @@ application/octet-stream：
 只能提交二进制，而且只能提交一个二进制，如果提交文件的话，只能提交一个文件,后台接收参数只能有一个，而且只能是流（或者字节数组）
 application/x-www-form-urlencoded
 不属于http content-type规范，通常用于浏览器表单提交，数据组织格式:name1=value1&amp;name2=value2,post时会放入http body，get时，显示在在地址栏。
-// golang 实现 W.Header().Add("Content-Type","application/octet-stream") W.Header().Add("Content-Disposition",fmt.Sprintf("attachment; filename=\"%s\"", fileName))</p></div><footer class=entry-footer><span title='2019-07-24 17:02:39 +0800 CST'>2019-07-24</span>&nbsp;·&nbsp;1 分钟&nbsp;·&nbsp;18 字</footer><a class=entry-link aria-label="post link to Golang HTTP包传输文件" href=https://blog.moyrn.com/posts/20190724_http_file/></a></article><article class=post-entry><header class=entry-header><h2 class=entry-hint-parent>Nginx 反向代理</h2></header><div class=entry-content><p>将静态文件交给nginx代理 配置文件位置 /etc/nginx/conf.d/default.conf
+// golang 实现 W.Header().Add("Content-Type","application/octet-stream") W.Header().Add("Content-Disposition",fmt.Sprintf("attachment; filename=\"%s\"", fileName))</p></div><footer class=entry-footer><span title='2019-07-24 17:02:39 +0800 +0800'>2019-07-24</span>&nbsp;·&nbsp;1 分钟&nbsp;·&nbsp;18 字</footer><a class=entry-link aria-label="post link to Golang HTTP包传输文件" href=https://blog.moyrn.com/posts/20190724_http_file/></a></article><article class=post-entry><header class=entry-header><h2 class=entry-hint-parent>Nginx 反向代理</h2></header><div class=entry-content><p>将静态文件交给nginx代理 配置文件位置 /etc/nginx/conf.d/default.conf
 server {
 listen 80;
 server_name www.moyrn.com;
@@ -34,7 +34,7 @@ server_name www.moyrn.com;
 location / {
 proxy_pass http://127.0.0.1:8086;
 }
-}</p></div><footer class=entry-footer><span title='2018-03-31 13:34:41 +0800 CST'>2018-03-31</span>&nbsp;·&nbsp;1 分钟&nbsp;·&nbsp;58 字</footer><a class=entry-link aria-label="post link to Nginx 反向代理" href=https://blog.moyrn.com/posts/20180331_nginx_proxy/></a></article><footer class=page-footer><nav class=pagination><a class=prev href=https://blog.moyrn.com/page/3/>«&nbsp;上一页&nbsp;</a></nav></footer></main><footer class=footer><span>&copy; 2025 <a href=https://blog.moyrn.com/>Moyrne'Blog</a></span> ·
+}</p></div><footer class=entry-footer><span title='2018-03-31 13:34:41 +0800 +0800'>2018-03-31</span>&nbsp;·&nbsp;1 分钟&nbsp;·&nbsp;58 字</footer><a class=entry-link aria-label="post link to Nginx 反向代理" href=https://blog.moyrn.com/posts/20180331_nginx_proxy/></a></article><footer class=page-footer><nav class=pagination><a class=prev href=https://blog.moyrn.com/page/3/>«&nbsp;上一页&nbsp;</a></nav></footer></main><footer class=footer><span>&copy; 2025 <a href=https://blog.moyrn.com/>Moyrne'Blog</a></span> ·
 <span>Powered by
 <a href=https://gohugo.io/ rel="noopener noreferrer" target=_blank>Hugo</a> &
         <a href=https://github.com/adityatelange/hugo-PaperMod/ rel=noopener target=_blank>PaperMod</a></span></footer><a href=#top aria-label="go to top" title="Go to Top (Alt + G)" class=top-link id=top-link accesskey=g><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentcolor"><path d="M12 6H0l6-6z"/></svg>
