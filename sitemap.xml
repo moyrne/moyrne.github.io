@@ -2,16 +2,16 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>https://blog.moyrn.com/</loc>
+    <lastmod>2025-07-21T20:21:02+08:00</lastmod>
+  </url><url>
+    <loc>https://blog.moyrn.com/posts/</loc>
+    <lastmod>2025-07-21T20:21:02+08:00</lastmod>
+  </url><url>
     <loc>https://blog.moyrn.com/tags/etcd/</loc>
     <lastmod>2022-05-21T20:18:41+08:00</lastmod>
   </url><url>
     <loc>https://blog.moyrn.com/posts/20220521_etcd_config/</loc>
-    <lastmod>2022-05-21T20:18:41+08:00</lastmod>
-  </url><url>
-    <loc>https://blog.moyrn.com/</loc>
-    <lastmod>2022-05-21T20:18:41+08:00</lastmod>
-  </url><url>
-    <loc>https://blog.moyrn.com/posts/</loc>
     <lastmod>2022-05-21T20:18:41+08:00</lastmod>
   </url><url>
     <loc>https://blog.moyrn.com/tags/</loc>
