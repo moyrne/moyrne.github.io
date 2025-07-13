@@ -1,0 +1,183 @@
+<!doctype html><html lang=zh dir=auto><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no"><meta name=robots content="index, follow"><title>学习Linux-01启动 | Moyrne'Blog</title>
+<meta name=keywords content="linux"><meta name=description content='学习Linux-01启动 ref: https://jyywiki.cn/OS/2024/lect18.md
+src: wget -r -np -nH &ndash;cut-dirs=2 -R &ldquo;index.html*&rdquo; &ldquo;https://jyywiki.cn/os-demos/virtualization/linux/"
+1. 折腾的原因总结 linux 启动过程中报错不是那么准确，例如：执行的二进制（init）缺少了 .so，会报错 exec init failed: no such file. 例如 virtio_blk 之类的驱动，需要自己在 initramfs 中自己加载。 2. 使用的环境 kali 2024.4
+kernel 6.11.2-amd64 initrd.img 6.11.2-amd64 (被我替换了静态编译的 busybox) 不能使用 cpio 等命令解压，看起来是多个文件直接拼接起来的一个文件（使用 binwalk 能够看到），直接使用 cpio 会只能解出来里面的第一个文件； 如果需要提取完整的内容，需要使用 unmkinitramfs qemu-system-x86_64 10.0.2
+busybox 1.37.0
+3. Makefile 和 init 脚本 Makefile (unmkinitramfs 的部分没有写在里面，手动执行的) # Requires statically linked busybox in $PATH INIT := /init IMG := build/disk.'><meta name=author content><link rel=canonical href=https://blog.moyrn.com/posts/20250713_learn_linux/><meta name=msvalidate.01 content="XYZabc"><link crossorigin=anonymous href=/assets/css/stylesheet.a9130754b4e5ef2e27659d427d4412b37b2065a5d0f8c40026be2cd4c2046416.css integrity="sha256-qRMHVLTl7y4nZZ1CfUQSs3sgZaXQ+MQAJr4s1MIEZBY=" rel="preload stylesheet" as=style><link rel=icon href=https://blog.moyrn.com/favicon.ico><link rel=icon type=image/png sizes=16x16 href=https://blog.moyrn.com/favicon.ico><link rel=icon type=image/png sizes=32x32 href=https://blog.moyrn.com/favicon.ico><link rel=apple-touch-icon href=https://blog.moyrn.com/favicon.ico><link rel=mask-icon href=https://blog.moyrn.com/favicon.ico><meta name=theme-color content="#2e2e33"><meta name=msapplication-TileColor content="#2e2e33"><link rel=alternate hreflang=zh href=https://blog.moyrn.com/posts/20250713_learn_linux/><noscript><style>#theme-toggle,.top-link{display:none}</style><style>@media(prefers-color-scheme:dark){:root{--theme:rgb(29, 30, 32);--entry:rgb(46, 46, 51);--primary:rgb(218, 218, 219);--secondary:rgb(155, 156, 157);--tertiary:rgb(65, 66, 68);--content:rgb(196, 196, 197);--code-block-bg:rgb(46, 46, 51);--code-bg:rgb(55, 56, 62);--border:rgb(51, 51, 51)}.list{background:var(--theme)}.list:not(.dark)::-webkit-scrollbar-track{background:0 0}.list:not(.dark)::-webkit-scrollbar-thumb{border-color:var(--theme)}}</style></noscript><meta property="og:url" content="https://blog.moyrn.com/posts/20250713_learn_linux/"><meta property="og:site_name" content="Moyrne'Blog"><meta property="og:title" content="学习Linux-01启动"><meta property="og:description" content='学习Linux-01启动 ref: https://jyywiki.cn/OS/2024/lect18.md
+src: wget -r -np -nH –cut-dirs=2 -R “index.html*” “https://jyywiki.cn/os-demos/virtualization/linux/"
+1. 折腾的原因总结 linux 启动过程中报错不是那么准确，例如：执行的二进制（init）缺少了 .so，会报错 exec init failed: no such file. 例如 virtio_blk 之类的驱动，需要自己在 initramfs 中自己加载。 2. 使用的环境 kali 2024.4
+kernel 6.11.2-amd64 initrd.img 6.11.2-amd64 (被我替换了静态编译的 busybox) 不能使用 cpio 等命令解压，看起来是多个文件直接拼接起来的一个文件（使用 binwalk 能够看到），直接使用 cpio 会只能解出来里面的第一个文件； 如果需要提取完整的内容，需要使用 unmkinitramfs qemu-system-x86_64 10.0.2
+busybox 1.37.0
+3. Makefile 和 init 脚本 Makefile (unmkinitramfs 的部分没有写在里面，手动执行的) # Requires statically linked busybox in $PATH INIT := /init IMG := build/disk.'><meta property="og:locale" content="zh-CN"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta property="article:published_time" content="2025-07-13T21:46:45+08:00"><meta property="article:modified_time" content="2025-07-13T21:46:45+08:00"><meta property="article:tag" content="Linux"><meta name=twitter:card content="summary"><meta name=twitter:title content="学习Linux-01启动"><meta name=twitter:description content='学习Linux-01启动 ref: https://jyywiki.cn/OS/2024/lect18.md
+src: wget -r -np -nH &ndash;cut-dirs=2 -R &ldquo;index.html*&rdquo; &ldquo;https://jyywiki.cn/os-demos/virtualization/linux/"
+1. 折腾的原因总结 linux 启动过程中报错不是那么准确，例如：执行的二进制（init）缺少了 .so，会报错 exec init failed: no such file. 例如 virtio_blk 之类的驱动，需要自己在 initramfs 中自己加载。 2. 使用的环境 kali 2024.4
+kernel 6.11.2-amd64 initrd.img 6.11.2-amd64 (被我替换了静态编译的 busybox) 不能使用 cpio 等命令解压，看起来是多个文件直接拼接起来的一个文件（使用 binwalk 能够看到），直接使用 cpio 会只能解出来里面的第一个文件； 如果需要提取完整的内容，需要使用 unmkinitramfs qemu-system-x86_64 10.0.2
+busybox 1.37.0
+3. Makefile 和 init 脚本 Makefile (unmkinitramfs 的部分没有写在里面，手动执行的) # Requires statically linked busybox in $PATH INIT := /init IMG := build/disk.'><script type=application/ld+json>{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Posts","item":"https://blog.moyrn.com/posts/"},{"@type":"ListItem","position":2,"name":"学习Linux-01启动","item":"https://blog.moyrn.com/posts/20250713_learn_linux/"}]}</script><script type=application/ld+json>{"@context":"https://schema.org","@type":"BlogPosting","headline":"学习Linux-01启动","name":"学习Linux-01启动","description":"学习Linux-01启动 ref: https://jyywiki.cn/OS/2024/lect18.md\nsrc: wget -r -np -nH \u0026ndash;cut-dirs=2 -R \u0026ldquo;index.html*\u0026rdquo; \u0026ldquo;https://jyywiki.cn/os-demos/virtualization/linux/\u0026quot;\n1. 折腾的原因总结 linux 启动过程中报错不是那么准确，例如：执行的二进制（init）缺少了 .so，会报错 exec init failed: no such file. 例如 virtio_blk 之类的驱动，需要自己在 initramfs 中自己加载。 2. 使用的环境 kali 2024.4\nkernel 6.11.2-amd64 initrd.img 6.11.2-amd64 (被我替换了静态编译的 busybox) 不能使用 cpio 等命令解压，看起来是多个文件直接拼接起来的一个文件（使用 binwalk 能够看到），直接使用 cpio 会只能解出来里面的第一个文件； 如果需要提取完整的内容，需要使用 unmkinitramfs qemu-system-x86_64 10.0.2\nbusybox 1.37.0\n3. Makefile 和 init 脚本 Makefile (unmkinitramfs 的部分没有写在里面，手动执行的) # Requires statically linked busybox in $PATH INIT := /init IMG := build/disk.","keywords":["linux"],"articleBody":"学习Linux-01启动 ref: https://jyywiki.cn/OS/2024/lect18.md\nsrc: wget -r -np -nH –cut-dirs=2 -R “index.html*” “https://jyywiki.cn/os-demos/virtualization/linux/\"\n1. 折腾的原因总结 linux 启动过程中报错不是那么准确，例如：执行的二进制（init）缺少了 .so，会报错 exec init failed: no such file. 例如 virtio_blk 之类的驱动，需要自己在 initramfs 中自己加载。 2. 使用的环境 kali 2024.4\nkernel 6.11.2-amd64 initrd.img 6.11.2-amd64 (被我替换了静态编译的 busybox) 不能使用 cpio 等命令解压，看起来是多个文件直接拼接起来的一个文件（使用 binwalk 能够看到），直接使用 cpio 会只能解出来里面的第一个文件； 如果需要提取完整的内容，需要使用 unmkinitramfs qemu-system-x86_64 10.0.2\nbusybox 1.37.0\n3. Makefile 和 init 脚本 Makefile (unmkinitramfs 的部分没有写在里面，手动执行的) # Requires statically linked busybox in $PATH INIT := /init IMG := build/disk.img MOUNT := $(shell mktemp -d) K := $(shell uname -r) all: initramfs fsroot initramfs: # Copy kernel and busybox from the host system @mkdir -p build/initramfs/bin sudo bash -c \"cp /boot/vmlinuz-$K build/vmlinuz \u0026\u0026 chmod 666 build/vmlinuz\" cp init build/initramfs/ chmod 777 build/initramfs/init # Pack build/initramfs as gzipped cpio archives cd build/initramfs \u0026\u0026 find . | cpio -H newc -o | gzip \u003e ../initramfs.cpio.gz fsroot: mkdir -p fsroot/lib/modules chmod 777 fsroot/etc/init.d/rcS cp $$(find /lib/modules/$K/ -name e1000.ko.xz) fsroot/lib/modules/ dd if=/dev/zero of=$(IMG) bs=1M count=64 mkfs.ext4 -F $(IMG) sudo mount $(IMG) $(MOUNT) cd fsroot \u0026\u0026 sudo cp -r * $(MOUNT) sudo umount $(MOUNT) chmod 777 $(IMG) run: # Run QEMU with the installed kernel and generated initramfs qemu-system-x86_64 \\ -nographic \\ -drive file=$(IMG),format=raw,index=0,media=disk,if=virtio \\ -netdev user,id=net0,hostfwd=tcp:127.0.0.1:8080-:8080 -device e1000,netdev=net0 \\ -kernel build/vmlinuz \\ -initrd build/initramfs.cpio.gz \\ -machine accel=kvm:tcg \\ -m 2048 \\ -append \"console=ttyS0 quiet root=/dev/vda rdinit=$(INIT) debug\" \\ clean: rm -rf build fsroot/lib/modules .PHONY: initramfs run clean fsroot init #!/bin/busybox sh # At this point, we only have: # /bin/busybox - the binary # /dev/console - the console device /bin/busybox ls /bin/busybox echo start_init BB=/bin/busybox # Delete this file # (Yes, we can do this on UNIX! The file is \"removed\" # after the last reference, the fd, is gone.) $BB rm /init # $BB find / -type f $BB echo \"Unlimited power!!\" # $BB poweroff -f # ---------------------------------------------------- # \"Create\" command-line tools by making symbolic links # try: busybox --list # for cmd in $($BB --list); do # $BB ln -s $BB /bin/$cmd # done # Mount procfs and sysfs mkdir -p /proc \u0026\u0026 mount -t proc none /proc mkdir -p /sys \u0026\u0026 mount -t sysfs none /sys modprobe virtio_blk # Create devices mknod /dev/random c 1 8 mknod /dev/urandom c 1 9 mknod /dev/null c 1 3 mknod /dev/tty c 4 1 mknod /dev/vda b 254 0 echo -e \"\\033[31mInit OK; launch a shell (initramfs).\\033[0m\" #busybox sh # Display a countdown echo -e \"\\n\\n\" # echo -e \"\\033[31mSwitch root in...\\033[0m\" # for sec in $(seq 3 -1 1); do # echo $sec; sleep 1 # done # Switch root to /newroot (a real file system) N=/newroot mkdir -p $N mount -t ext4 /dev/vda $N chmod 777 $N mkdir -p $N/bin chmod 777 $N/bin cp $BB $N/bin/ cp $BB /init cp $BB /$N/init ls / -l ls $N -l ls $N/bin -l busybox sh exec switch_root /newroot/ /init fsroot/init #!/bin/busybox sh # Now, \"/\" is the virtual disk--for real # systems, we expect installed binaries. BB=/bin/busybox $BB echo \"init\" for cmd in $($BB --list); do $BB ln -s $BB /bin/$cmd done mkdir -p /proc \u0026\u0026 mount -t proc none /proc mkdir -p /sys \u0026\u0026 mount -t sysfs none /sys mkdir -p /tmp \u0026\u0026 mount -t tmpfs none /tmp mkdir -p /dev mknod /dev/random c 1 8 mknod /dev/urandom c 1 9 mknod /dev/null c 1 3 mknod /dev/tty c 4 1 mknod /dev/vda b 254 0 # Configure network insmod /lib/modules/e1000.ko.xz ip link set lo up ip link set eth0 up ip addr add 10.0.2.15 dev eth0 ip route add 10.0.2.0/24 dev eth0 # Prepare the terminal echo -e \"\\033[31mGoodbye, QEMU Console!\\033[0m\" echo -e \"\\033[H\\033[2J\" \u003e/dev/tty echo -e \"JYY's minimal Linux\" \u003e/dev/tty # Switch to terminal setsid /bin/sh /dev/tty 2\u003e\u00261 sync poweroff -f ","wordCount":"613","inLanguage":"zh","datePublished":"2025-07-13T21:46:45+08:00","dateModified":"2025-07-13T21:46:45+08:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://blog.moyrn.com/posts/20250713_learn_linux/"},"publisher":{"@type":"Organization","name":"Moyrne'Blog","logo":{"@type":"ImageObject","url":"https://blog.moyrn.com/favicon.ico"}}}</script></head><body id=top><script>localStorage.getItem("pref-theme")==="dark"?document.body.classList.add("dark"):localStorage.getItem("pref-theme")==="light"?document.body.classList.remove("dark"):window.matchMedia("(prefers-color-scheme: dark)").matches&&document.body.classList.add("dark")</script><header class=header><nav class=nav><div class=logo><a href=https://blog.moyrn.com/ accesskey=h title="Home (Alt + H)">Home</a><div class=logo-switches><button id=theme-toggle accesskey=t title="(Alt + T)" aria-label="Toggle theme"><svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg><svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg></button></div></div><ul id=menu><li><a href=https://blog.moyrn.com/tags/ title=Tags><span>Tags</span></a></li><li><a href=https://blog.moyrn.com/categories/ title=Categories><span>Categories</span></a></li></ul></nav></header><main class=main><article class=post-single><header class=post-header><div class=breadcrumbs><a href=https://blog.moyrn.com/>主页</a>&nbsp;»&nbsp;<a href=https://blog.moyrn.com/posts/>Posts</a></div><h1 class="post-title entry-hint-parent">学习Linux-01启动</h1><div class=post-meta><span title='2025-07-13 21:46:45 +0800 +0800'>2025-07-13</span>&nbsp;·&nbsp;3 分钟&nbsp;·&nbsp;613 字</div></header><div class=post-content><h1 id=学习linux-01启动>学习Linux-01启动<a hidden class=anchor aria-hidden=true href=#学习linux-01启动>#</a></h1><blockquote><p>ref: <a href=https://jyywiki.cn/OS/2024/lect18.md>https://jyywiki.cn/OS/2024/lect18.md</a></p><p>src: wget -r -np -nH &ndash;cut-dirs=2 -R &ldquo;index.html*&rdquo; &ldquo;<a href=https://jyywiki.cn/os-demos/virtualization/linux/%22>https://jyywiki.cn/os-demos/virtualization/linux/"</a></p></blockquote><h2 id=1-折腾的原因总结>1. 折腾的原因总结<a hidden class=anchor aria-hidden=true href=#1-折腾的原因总结>#</a></h2><ol><li>linux 启动过程中报错不是那么准确，例如：执行的二进制（init）缺少了 .so，会报错 exec init failed: no such file.</li><li>例如 virtio_blk 之类的驱动，需要自己在 initramfs 中自己加载。</li></ol><h2 id=2-使用的环境>2. 使用的环境<a hidden class=anchor aria-hidden=true href=#2-使用的环境>#</a></h2><ol><li><p>kali 2024.4</p><ol><li>kernel 6.11.2-amd64</li><li>initrd.img 6.11.2-amd64 (被我替换了静态编译的 busybox)</li></ol><pre tabindex=0><code>    不能使用 cpio 等命令解压，看起来是多个文件直接拼接起来的一个文件（使用 binwalk 能够看到），直接使用 cpio 会只能解出来里面的第一个文件；
+    如果需要提取完整的内容，需要使用 unmkinitramfs
+</code></pre></li><li><p>qemu-system-x86_64 10.0.2</p></li><li><p><a href=https://busybox.net/downloads/busybox-1.37.0.tar.bz2>busybox 1.37.0</a></p></li></ol><h2 id=3-makefile-和-init-脚本>3. Makefile 和 init 脚本<a hidden class=anchor aria-hidden=true href=#3-makefile-和-init-脚本>#</a></h2><ul><li>Makefile (unmkinitramfs 的部分没有写在里面，手动执行的)</li></ul><div class=highlight><pre tabindex=0 class=chroma><code class=language-makefile data-lang=makefile><span class=line><span class=cl><span class=c># Requires statically linked busybox in $PATH
+</span></span></span><span class=line><span class=cl><span class=c></span>
+</span></span><span class=line><span class=cl><span class=nv>INIT</span> <span class=o>:=</span> /init
+</span></span><span class=line><span class=cl><span class=nv>IMG</span> <span class=o>:=</span> build/disk.img
+</span></span><span class=line><span class=cl><span class=nv>MOUNT</span> <span class=o>:=</span> <span class=k>$(</span>shell mktemp -d<span class=k>)</span>
+</span></span><span class=line><span class=cl><span class=nv>K</span> <span class=o>:=</span> <span class=k>$(</span>shell uname -r<span class=k>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nf>all</span><span class=o>:</span> <span class=n>initramfs</span> <span class=n>fsroot</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nf>initramfs</span><span class=o>:</span>
+</span></span><span class=line><span class=cl><span class=c># Copy kernel and busybox from the host system
+</span></span></span><span class=line><span class=cl><span class=c></span>	@mkdir -p build/initramfs/bin
+</span></span><span class=line><span class=cl>	sudo bash -c <span class=s2>&#34;cp /boot/vmlinuz-</span><span class=nv>$K</span><span class=s2> build/vmlinuz &amp;&amp; chmod 666 build/vmlinuz&#34;</span>
+</span></span><span class=line><span class=cl>	cp init build/initramfs/
+</span></span><span class=line><span class=cl>	chmod <span class=m>777</span> build/initramfs/init
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c># Pack build/initramfs as gzipped cpio archives
+</span></span></span><span class=line><span class=cl><span class=c></span>	<span class=nb>cd</span> build/initramfs <span class=o>&amp;&amp;</span> find . <span class=p>|</span> cpio -H newc -o <span class=p>|</span> gzip &gt; ../initramfs.cpio.gz
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nf>fsroot</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>	mkdir -p fsroot/lib/modules
+</span></span><span class=line><span class=cl>	chmod <span class=m>777</span> fsroot/etc/init.d/rcS
+</span></span><span class=line><span class=cl>	cp <span class=nv>$$</span><span class=o>(</span>find /lib/modules/<span class=nv>$K</span>/ -name e1000.ko.xz<span class=o>)</span> fsroot/lib/modules/
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	dd <span class=k>if</span><span class=o>=</span>/dev/zero <span class=nv>of</span><span class=o>=</span><span class=k>$(</span>IMG<span class=k>)</span> <span class=nv>bs</span><span class=o>=</span>1M <span class=nv>count</span><span class=o>=</span><span class=m>64</span>
+</span></span><span class=line><span class=cl>	mkfs.ext4 -F <span class=k>$(</span>IMG<span class=k>)</span>
+</span></span><span class=line><span class=cl>	sudo mount <span class=k>$(</span>IMG<span class=k>)</span> <span class=k>$(</span>MOUNT<span class=k>)</span>
+</span></span><span class=line><span class=cl>	<span class=nb>cd</span> fsroot <span class=o>&amp;&amp;</span> sudo cp -r * <span class=k>$(</span>MOUNT<span class=k>)</span>
+</span></span><span class=line><span class=cl>	sudo umount <span class=k>$(</span>MOUNT<span class=k>)</span>
+</span></span><span class=line><span class=cl>	chmod <span class=m>777</span> <span class=k>$(</span>IMG<span class=k>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nf>run</span><span class=o>:</span>
+</span></span><span class=line><span class=cl><span class=c># Run QEMU with the installed kernel and generated initramfs 
+</span></span></span><span class=line><span class=cl><span class=c></span>	qemu-system-x86_64 <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>	  -nographic <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>	  -drive <span class=nv>file</span><span class=o>=</span><span class=k>$(</span>IMG<span class=k>)</span>,format<span class=o>=</span>raw,index<span class=o>=</span>0,media<span class=o>=</span>disk,if<span class=o>=</span>virtio <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>	  -netdev user,id<span class=o>=</span>net0,hostfwd<span class=o>=</span>tcp:127.0.0.1:8080-:8080 -device e1000,netdev<span class=o>=</span>net0 <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>	  -kernel build/vmlinuz <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>	  -initrd build/initramfs.cpio.gz <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>	  -machine <span class=nv>accel</span><span class=o>=</span>kvm:tcg <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>	  -m <span class=m>2048</span> <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>	  -append <span class=s2>&#34;console=ttyS0 quiet root=/dev/vda rdinit=</span><span class=k>$(</span>INIT<span class=k>)</span><span class=s2> debug&#34;</span> <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>
+</span></span><span class=line><span class=cl><span class=nf>clean</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>	rm -rf build fsroot/lib/modules
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nf>.PHONY</span><span class=o>:</span> <span class=n>initramfs</span> <span class=n>run</span> <span class=n>clean</span> <span class=n>fsroot</span>
+</span></span></code></pre></div><ul><li>init</li></ul><div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl><span class=cp>#!/bin/busybox sh
+</span></span></span><span class=line><span class=cl><span class=cp></span>
+</span></span><span class=line><span class=cl><span class=c1># At this point, we only have:</span>
+</span></span><span class=line><span class=cl><span class=c1>#   /bin/busybox - the binary</span>
+</span></span><span class=line><span class=cl><span class=c1>#   /dev/console - the console device</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>/bin/busybox ls
+</span></span><span class=line><span class=cl>/bin/busybox <span class=nb>echo</span> start_init
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nv>BB</span><span class=o>=</span>/bin/busybox
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Delete this file</span>
+</span></span><span class=line><span class=cl><span class=c1># (Yes, we can do this on UNIX! The file is &#34;removed&#34;</span>
+</span></span><span class=line><span class=cl><span class=c1># after the last reference, the fd, is gone.)</span>
+</span></span><span class=line><span class=cl><span class=nv>$BB</span> rm /init
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># $BB find / -type f</span>
+</span></span><span class=line><span class=cl><span class=nv>$BB</span> <span class=nb>echo</span> <span class=s2>&#34;Unlimited power!!&#34;</span>
+</span></span><span class=line><span class=cl><span class=c1># $BB poweroff -f</span>
+</span></span><span class=line><span class=cl><span class=c1># ----------------------------------------------------</span>
+</span></span><span class=line><span class=cl> 
+</span></span><span class=line><span class=cl><span class=c1># &#34;Create&#34; command-line tools by making symbolic links</span>
+</span></span><span class=line><span class=cl><span class=c1>#   try: busybox --list</span>
+</span></span><span class=line><span class=cl><span class=c1># for cmd in $($BB --list); do</span>
+</span></span><span class=line><span class=cl><span class=c1>#     $BB ln -s $BB /bin/$cmd</span>
+</span></span><span class=line><span class=cl><span class=c1># done</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Mount procfs and sysfs</span>
+</span></span><span class=line><span class=cl>mkdir -p /proc <span class=o>&amp;&amp;</span> mount -t proc  none /proc
+</span></span><span class=line><span class=cl>mkdir -p /sys  <span class=o>&amp;&amp;</span> mount -t sysfs none /sys
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>modprobe virtio_blk
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Create devices</span>
+</span></span><span class=line><span class=cl>mknod /dev/random  c <span class=m>1</span> <span class=m>8</span>
+</span></span><span class=line><span class=cl>mknod /dev/urandom c <span class=m>1</span> <span class=m>9</span>
+</span></span><span class=line><span class=cl>mknod /dev/null    c <span class=m>1</span> <span class=m>3</span>
+</span></span><span class=line><span class=cl>mknod /dev/tty     c <span class=m>4</span> <span class=m>1</span>
+</span></span><span class=line><span class=cl>mknod /dev/vda     b <span class=m>254</span> <span class=m>0</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nb>echo</span> -e <span class=s2>&#34;\033[31mInit OK; launch a shell (initramfs).\033[0m&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>#busybox sh</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Display a countdown</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nb>echo</span> -e <span class=s2>&#34;\n\n&#34;</span>
+</span></span><span class=line><span class=cl><span class=c1># echo -e &#34;\033[31mSwitch root in...\033[0m&#34;</span>
+</span></span><span class=line><span class=cl><span class=c1># for sec in $(seq 3 -1 1); do</span>
+</span></span><span class=line><span class=cl><span class=c1>#     echo $sec; sleep 1</span>
+</span></span><span class=line><span class=cl><span class=c1># done</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Switch root to /newroot (a real file system)</span>
+</span></span><span class=line><span class=cl><span class=nv>N</span><span class=o>=</span>/newroot
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>mkdir -p <span class=nv>$N</span>
+</span></span><span class=line><span class=cl>mount -t ext4 /dev/vda <span class=nv>$N</span>
+</span></span><span class=line><span class=cl>chmod <span class=m>777</span> <span class=nv>$N</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>mkdir -p <span class=nv>$N</span>/bin
+</span></span><span class=line><span class=cl>chmod <span class=m>777</span> <span class=nv>$N</span>/bin
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>cp <span class=nv>$BB</span> <span class=nv>$N</span>/bin/
+</span></span><span class=line><span class=cl>cp <span class=nv>$BB</span> /init
+</span></span><span class=line><span class=cl>cp <span class=nv>$BB</span> /<span class=nv>$N</span>/init
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>ls / -l
+</span></span><span class=line><span class=cl>ls <span class=nv>$N</span> -l
+</span></span><span class=line><span class=cl>ls <span class=nv>$N</span>/bin -l
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>busybox sh
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nb>exec</span> switch_root /newroot/ /init
+</span></span></code></pre></div><ul><li>fsroot/init</li></ul><div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl><span class=cp>#!/bin/busybox sh
+</span></span></span><span class=line><span class=cl><span class=cp></span>
+</span></span><span class=line><span class=cl><span class=c1># Now, &#34;/&#34; is the virtual disk--for real</span>
+</span></span><span class=line><span class=cl><span class=c1># systems, we expect installed binaries.</span>
+</span></span><span class=line><span class=cl><span class=nv>BB</span><span class=o>=</span>/bin/busybox
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nv>$BB</span> <span class=nb>echo</span> <span class=s2>&#34;init&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>for</span> cmd in <span class=k>$(</span><span class=nv>$BB</span> --list<span class=k>)</span><span class=p>;</span> <span class=k>do</span>
+</span></span><span class=line><span class=cl>    <span class=nv>$BB</span> ln -s <span class=nv>$BB</span> /bin/<span class=nv>$cmd</span>
+</span></span><span class=line><span class=cl><span class=k>done</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>mkdir -p /proc <span class=o>&amp;&amp;</span> mount -t proc  none /proc
+</span></span><span class=line><span class=cl>mkdir -p /sys  <span class=o>&amp;&amp;</span> mount -t sysfs none /sys
+</span></span><span class=line><span class=cl>mkdir -p /tmp  <span class=o>&amp;&amp;</span> mount -t tmpfs none /tmp
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>mkdir -p /dev
+</span></span><span class=line><span class=cl>mknod /dev/random  c <span class=m>1</span> <span class=m>8</span>
+</span></span><span class=line><span class=cl>mknod /dev/urandom c <span class=m>1</span> <span class=m>9</span>
+</span></span><span class=line><span class=cl>mknod /dev/null    c <span class=m>1</span> <span class=m>3</span>
+</span></span><span class=line><span class=cl>mknod /dev/tty     c <span class=m>4</span> <span class=m>1</span>
+</span></span><span class=line><span class=cl>mknod /dev/vda     b <span class=m>254</span> <span class=m>0</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Configure network</span>
+</span></span><span class=line><span class=cl>insmod /lib/modules/e1000.ko.xz
+</span></span><span class=line><span class=cl>ip link <span class=nb>set</span> lo up
+</span></span><span class=line><span class=cl>ip link <span class=nb>set</span> eth0 up
+</span></span><span class=line><span class=cl>ip addr add 10.0.2.15 dev eth0
+</span></span><span class=line><span class=cl>ip route add 10.0.2.0/24 dev eth0
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Prepare the terminal</span>
+</span></span><span class=line><span class=cl><span class=nb>echo</span> -e <span class=s2>&#34;\033[31mGoodbye, QEMU Console!\033[0m&#34;</span>
+</span></span><span class=line><span class=cl><span class=nb>echo</span> -e <span class=s2>&#34;\033[H\033[2J&#34;</span> &gt;/dev/tty
+</span></span><span class=line><span class=cl><span class=nb>echo</span> -e <span class=s2>&#34;JYY&#39;s minimal Linux&#34;</span> &gt;/dev/tty
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Switch to terminal</span>
+</span></span><span class=line><span class=cl>setsid /bin/sh &lt;/dev/tty &gt;/dev/tty 2&gt;<span class=p>&amp;</span><span class=m>1</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>sync
+</span></span><span class=line><span class=cl>poweroff -f
+</span></span></code></pre></div></div><footer class=post-footer><ul class=post-tags><li><a href=https://blog.moyrn.com/tags/linux/>Linux</a></li></ul><nav class=paginav><a class=next href=https://blog.moyrn.com/posts/20220521_etcd_config/><span class=title>下一页 »</span><br><span>Etcd</span></a></nav></footer></article></main><footer class=footer><span>&copy; 2025 <a href=https://blog.moyrn.com/>Moyrne'Blog</a></span> ·
+<span>Powered by
+<a href=https://gohugo.io/ rel="noopener noreferrer" target=_blank>Hugo</a> &
+        <a href=https://github.com/adityatelange/hugo-PaperMod/ rel=noopener target=_blank>PaperMod</a></span></footer><a href=#top aria-label="go to top" title="Go to Top (Alt + G)" class=top-link id=top-link accesskey=g><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentcolor"><path d="M12 6H0l6-6z"/></svg>
+</a><script>let menu=document.getElementById("menu");menu&&(menu.scrollLeft=localStorage.getItem("menu-scroll-position"),menu.onscroll=function(){localStorage.setItem("menu-scroll-position",menu.scrollLeft)}),document.querySelectorAll('a[href^="#"]').forEach(e=>{e.addEventListener("click",function(e){e.preventDefault();var t=this.getAttribute("href").substr(1);window.matchMedia("(prefers-reduced-motion: reduce)").matches?document.querySelector(`[id='${decodeURIComponent(t)}']`).scrollIntoView():document.querySelector(`[id='${decodeURIComponent(t)}']`).scrollIntoView({behavior:"smooth"}),t==="top"?history.replaceState(null,null," "):history.pushState(null,null,`#${t}`)})})</script><script>var mybutton=document.getElementById("top-link");window.onscroll=function(){document.body.scrollTop>800||document.documentElement.scrollTop>800?(mybutton.style.visibility="visible",mybutton.style.opacity="1"):(mybutton.style.visibility="hidden",mybutton.style.opacity="0")}</script><script>document.getElementById("theme-toggle").addEventListener("click",()=>{document.body.className.includes("dark")?(document.body.classList.remove("dark"),localStorage.setItem("pref-theme","light")):(document.body.classList.add("dark"),localStorage.setItem("pref-theme","dark"))})</script><script>document.querySelectorAll("pre > code").forEach(e=>{const n=e.parentNode.parentNode,t=document.createElement("button");t.classList.add("copy-code"),t.innerHTML="复制";function s(){t.innerHTML="已复制！",setTimeout(()=>{t.innerHTML="复制"},2e3)}t.addEventListener("click",t=>{if("clipboard"in navigator){navigator.clipboard.writeText(e.textContent),s();return}const n=document.createRange();n.selectNodeContents(e);const o=window.getSelection();o.removeAllRanges(),o.addRange(n);try{document.execCommand("copy"),s()}catch{}o.removeRange(n)}),n.classList.contains("highlight")?n.appendChild(t):n.parentNode.firstChild==n||(e.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName=="TABLE"?e.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(t):e.parentNode.appendChild(t))})</script></body></html>

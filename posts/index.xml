@@ -6,8 +6,20 @@
     <description>Recent content in Posts on Moyrne&#39;Blog</description>
     <generator>Hugo -- 0.128.0</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Sat, 21 May 2022 20:18:41 +0800</lastBuildDate>
+    <lastBuildDate>Sun, 13 Jul 2025 21:46:45 +0800</lastBuildDate>
     <atom:link href="https://blog.moyrn.com/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>学习Linux-01启动</title>
+      <link>https://blog.moyrn.com/posts/20250713_learn_linux/</link>
+      <pubDate>Sun, 13 Jul 2025 21:46:45 +0800</pubDate>
+      <guid>https://blog.moyrn.com/posts/20250713_learn_linux/</guid>
+      <description>学习Linux-01启动 ref: https://jyywiki.cn/OS/2024/lect18.md
+src: wget -r -np -nH &amp;ndash;cut-dirs=2 -R &amp;ldquo;index.html*&amp;rdquo; &amp;ldquo;https://jyywiki.cn/os-demos/virtualization/linux/&amp;quot;
+1. 折腾的原因总结 linux 启动过程中报错不是那么准确，例如：执行的二进制（init）缺少了 .so，会报错 exec init failed: no such file. 例如 virtio_blk 之类的驱动，需要自己在 initramfs 中自己加载。 2. 使用的环境 kali 2024.4
+kernel 6.11.2-amd64 initrd.img 6.11.2-amd64 (被我替换了静态编译的 busybox) 不能使用 cpio 等命令解压，看起来是多个文件直接拼接起来的一个文件（使用 binwalk 能够看到），直接使用 cpio 会只能解出来里面的第一个文件； 如果需要提取完整的内容，需要使用 unmkinitramfs qemu-system-x86_64 10.0.2
+busybox 1.37.0
+3. Makefile 和 init 脚本 Makefile (unmkinitramfs 的部分没有写在里面，手动执行的) # Requires statically linked busybox in $PATH INIT := /init IMG := build/disk.</description>
+    </item>
     <item>
       <title>Etcd</title>
       <link>https://blog.moyrn.com/posts/20220521_etcd_config/</link>
