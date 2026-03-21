@@ -6,8 +6,17 @@
     <description>Recent content in Posts on Moyrne&#39;Blog</description>
     <generator>Hugo -- 0.128.0</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Sat, 30 Aug 2025 15:04:45 +0800</lastBuildDate>
+    <lastBuildDate>Fri, 20 Mar 2026 19:14:44 +0800</lastBuildDate>
     <atom:link href="https://blog.moyrn.com/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>使用nerdctl</title>
+      <link>https://blog.moyrn.com/posts/20260320_nerdctl/</link>
+      <pubDate>Fri, 20 Mar 2026 19:14:44 +0800</pubDate>
+      <guid>https://blog.moyrn.com/posts/20260320_nerdctl/</guid>
+      <description> containerd 代理配置 root /etc/containerd/certs.d/docker.io/hosts.toml
+rootless /home//.config/containerd/certs.d/docker.io/hosts.toml
+# 核心：docker.io 镜像重定向到 Harbor 的 /v2/ 接口 server = &amp;#34;https://xx.xx.xx.xx&amp;#34; # 非安全配置（测试环境，生产可删除） [host.&amp;#34;https://xx.xx.xx.xx&amp;#34;] capabilities = [&amp;#34;pull&amp;#34;, &amp;#34;resolve&amp;#34;] </description>
+    </item>
     <item>
       <title>安装kubernetes</title>
       <link>https://blog.moyrn.com/posts/20250830_install_k8s/</link>
