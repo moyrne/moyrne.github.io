@@ -2,94 +2,94 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>Tags on Moyrn的技术笔记</title>
-    <link>https://blog.moyrn.com/tags/</link>
+    <link>https://moyrn.cn/tags/</link>
     <description>Recent content in Tags on Moyrn的技术笔记</description>
     <generator>Hugo -- 0.128.0</generator>
     <language>zh-CN</language>
     <lastBuildDate>Fri, 20 Mar 2026 19:14:44 +0800</lastBuildDate>
-    <atom:link href="https://blog.moyrn.com/tags/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://moyrn.cn/tags/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Kubernetes</title>
-      <link>https://blog.moyrn.com/tags/kubernetes/</link>
+      <link>https://moyrn.cn/tags/kubernetes/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://blog.moyrn.com/tags/kubernetes/</guid>
+      <guid>https://moyrn.cn/tags/kubernetes/</guid>
       <description></description>
     </item>
     <item>
       <title>Linux</title>
-      <link>https://blog.moyrn.com/tags/linux/</link>
+      <link>https://moyrn.cn/tags/linux/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://blog.moyrn.com/tags/linux/</guid>
+      <guid>https://moyrn.cn/tags/linux/</guid>
       <description></description>
     </item>
     <item>
       <title>Etcd</title>
-      <link>https://blog.moyrn.com/tags/etcd/</link>
+      <link>https://moyrn.cn/tags/etcd/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://blog.moyrn.com/tags/etcd/</guid>
+      <guid>https://moyrn.cn/tags/etcd/</guid>
       <description></description>
     </item>
     <item>
       <title>笔记</title>
-      <link>https://blog.moyrn.com/tags/%E7%AC%94%E8%AE%B0/</link>
+      <link>https://moyrn.cn/tags/%E7%AC%94%E8%AE%B0/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://blog.moyrn.com/tags/%E7%AC%94%E8%AE%B0/</guid>
+      <guid>https://moyrn.cn/tags/%E7%AC%94%E8%AE%B0/</guid>
       <description></description>
     </item>
     <item>
       <title>基础件</title>
-      <link>https://blog.moyrn.com/tags/%E5%9F%BA%E7%A1%80%E4%BB%B6/</link>
+      <link>https://moyrn.cn/tags/%E5%9F%BA%E7%A1%80%E4%BB%B6/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://blog.moyrn.com/tags/%E5%9F%BA%E7%A1%80%E4%BB%B6/</guid>
+      <guid>https://moyrn.cn/tags/%E5%9F%BA%E7%A1%80%E4%BB%B6/</guid>
       <description></description>
     </item>
     <item>
       <title>Network</title>
-      <link>https://blog.moyrn.com/tags/network/</link>
+      <link>https://moyrn.cn/tags/network/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://blog.moyrn.com/tags/network/</guid>
+      <guid>https://moyrn.cn/tags/network/</guid>
       <description></description>
     </item>
     <item>
       <title>Shell</title>
-      <link>https://blog.moyrn.com/tags/shell/</link>
+      <link>https://moyrn.cn/tags/shell/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://blog.moyrn.com/tags/shell/</guid>
+      <guid>https://moyrn.cn/tags/shell/</guid>
       <description></description>
     </item>
     <item>
       <title>Golang</title>
-      <link>https://blog.moyrn.com/tags/golang/</link>
+      <link>https://moyrn.cn/tags/golang/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://blog.moyrn.com/tags/golang/</guid>
+      <guid>https://moyrn.cn/tags/golang/</guid>
       <description></description>
     </item>
     <item>
       <title>Benchmark</title>
-      <link>https://blog.moyrn.com/tags/benchmark/</link>
+      <link>https://moyrn.cn/tags/benchmark/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://blog.moyrn.com/tags/benchmark/</guid>
+      <guid>https://moyrn.cn/tags/benchmark/</guid>
       <description></description>
     </item>
     <item>
       <title>Memory</title>
-      <link>https://blog.moyrn.com/tags/memory/</link>
+      <link>https://moyrn.cn/tags/memory/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://blog.moyrn.com/tags/memory/</guid>
+      <guid>https://moyrn.cn/tags/memory/</guid>
       <description></description>
     </item>
     <item>
       <title>Build</title>
-      <link>https://blog.moyrn.com/tags/build/</link>
+      <link>https://moyrn.cn/tags/build/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://blog.moyrn.com/tags/build/</guid>
+      <guid>https://moyrn.cn/tags/build/</guid>
       <description></description>
     </item>
     <item>
       <title>Nginx</title>
-      <link>https://blog.moyrn.com/tags/nginx/</link>
+      <link>https://moyrn.cn/tags/nginx/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://blog.moyrn.com/tags/nginx/</guid>
+      <guid>https://moyrn.cn/tags/nginx/</guid>
       <description></description>
     </item>
   </channel>
