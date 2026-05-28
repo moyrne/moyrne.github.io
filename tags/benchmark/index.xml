@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
-    <title>Benchmark on Moyrne&#39;Blog</title>
+    <title>Benchmark on Moyrn的技术笔记</title>
     <link>https://blog.moyrn.com/tags/benchmark/</link>
-    <description>Recent content in Benchmark on Moyrne&#39;Blog</description>
+    <description>Recent content in Benchmark on Moyrn的技术笔记</description>
     <generator>Hugo -- 0.128.0</generator>
     <language>zh-CN</language>
     <lastBuildDate>Thu, 28 Jan 2021 13:31:45 +0800</lastBuildDate>

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
-    <title>Nginx on Moyrne&#39;Blog</title>
+    <title>Nginx on Moyrn的技术笔记</title>
     <link>https://blog.moyrn.com/tags/nginx/</link>
-    <description>Recent content in Nginx on Moyrne&#39;Blog</description>
+    <description>Recent content in Nginx on Moyrn的技术笔记</description>
     <generator>Hugo -- 0.128.0</generator>
     <language>zh-CN</language>
     <lastBuildDate>Sat, 31 Mar 2018 13:34:41 +0800</lastBuildDate>
