@@ -2,111 +2,111 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://moyrn.cn/tags/kubernetes/</loc>
+    <loc>/tags/kubernetes/</loc>
     <lastmod>2026-03-20T19:14:44+08:00</lastmod>
   </url><url>
-    <loc>https://moyrn.cn/</loc>
+    <loc>/</loc>
     <lastmod>2026-03-20T19:14:44+08:00</lastmod>
   </url><url>
-    <loc>https://moyrn.cn/posts/</loc>
+    <loc>/posts/</loc>
     <lastmod>2026-03-20T19:14:44+08:00</lastmod>
   </url><url>
-    <loc>https://moyrn.cn/tags/</loc>
+    <loc>/tags/</loc>
     <lastmod>2026-03-20T19:14:44+08:00</lastmod>
   </url><url>
-    <loc>https://moyrn.cn/posts/20260320_nerdctl/</loc>
+    <loc>/posts/20260320_nerdctl/</loc>
     <lastmod>2026-03-20T19:14:44+08:00</lastmod>
   </url><url>
-    <loc>https://moyrn.cn/posts/20250830_install_k8s/</loc>
+    <loc>/posts/20250830_install_k8s/</loc>
     <lastmod>2025-08-30T15:04:45+08:00</lastmod>
   </url><url>
-    <loc>https://moyrn.cn/tags/linux/</loc>
+    <loc>/tags/linux/</loc>
     <lastmod>2025-07-13T21:46:45+08:00</lastmod>
   </url><url>
-    <loc>https://moyrn.cn/posts/20250713_learn_linux/</loc>
+    <loc>/posts/20250713_learn_linux/</loc>
     <lastmod>2025-07-13T21:46:45+08:00</lastmod>
   </url><url>
-    <loc>https://moyrn.cn/tags/etcd/</loc>
+    <loc>/tags/etcd/</loc>
     <lastmod>2022-05-21T20:18:41+08:00</lastmod>
   </url><url>
-    <loc>https://moyrn.cn/posts/20220521_etcd_config/</loc>
+    <loc>/posts/20220521_etcd_config/</loc>
     <lastmod>2022-05-21T20:18:41+08:00</lastmod>
   </url><url>
-    <loc>https://moyrn.cn/tags/%E7%AC%94%E8%AE%B0/</loc>
+    <loc>/tags/%E7%AC%94%E8%AE%B0/</loc>
     <lastmod>2022-05-21T20:18:41+08:00</lastmod>
   </url><url>
-    <loc>https://moyrn.cn/tags/%E5%9F%BA%E7%A1%80%E4%BB%B6/</loc>
+    <loc>/tags/%E5%9F%BA%E7%A1%80%E4%BB%B6/</loc>
     <lastmod>2022-05-21T20:18:41+08:00</lastmod>
   </url><url>
-    <loc>https://moyrn.cn/tags/network/</loc>
+    <loc>/tags/network/</loc>
     <lastmod>2022-04-20T22:03:56+08:00</lastmod>
   </url><url>
-    <loc>https://moyrn.cn/posts/20220420_network_learn/</loc>
+    <loc>/posts/20220420_network_learn/</loc>
     <lastmod>2022-04-20T22:03:56+08:00</lastmod>
   </url><url>
-    <loc>https://moyrn.cn/tags/shell/</loc>
+    <loc>/tags/shell/</loc>
     <lastmod>2022-02-09T11:02:32+08:00</lastmod>
   </url><url>
-    <loc>https://moyrn.cn/posts/20220209_powershell/</loc>
+    <loc>/posts/20220209_powershell/</loc>
     <lastmod>2022-02-09T11:02:32+08:00</lastmod>
   </url><url>
-    <loc>https://moyrn.cn/posts/20210523_false_sharing/</loc>
+    <loc>/posts/20210523_false_sharing/</loc>
     <lastmod>2021-05-23T14:25:33+08:00</lastmod>
   </url><url>
-    <loc>https://moyrn.cn/tags/golang/</loc>
+    <loc>/tags/golang/</loc>
     <lastmod>2021-05-23T14:25:33+08:00</lastmod>
   </url><url>
-    <loc>https://moyrn.cn/posts/20210423_ubuntu_zsh/</loc>
+    <loc>/posts/20210423_ubuntu_zsh/</loc>
     <lastmod>2021-04-24T16:18:28+08:00</lastmod>
   </url><url>
-    <loc>https://moyrn.cn/posts/20210316_go_features/</loc>
+    <loc>/posts/20210316_go_features/</loc>
     <lastmod>2021-03-16T11:51:54+08:00</lastmod>
   </url><url>
-    <loc>https://moyrn.cn/posts/20210213_rollout_uptodate/</loc>
+    <loc>/posts/20210213_rollout_uptodate/</loc>
     <lastmod>2021-02-13T22:38:54+08:00</lastmod>
   </url><url>
-    <loc>https://moyrn.cn/posts/20210212_pod_project/</loc>
+    <loc>/posts/20210212_pod_project/</loc>
     <lastmod>2021-02-12T15:07:14+08:00</lastmod>
   </url><url>
-    <loc>https://moyrn.cn/posts/20210207_kubeadm_start/</loc>
+    <loc>/posts/20210207_kubeadm_start/</loc>
     <lastmod>2021-02-07T13:56:54+08:00</lastmod>
   </url><url>
-    <loc>https://moyrn.cn/posts/20210206_before_start/</loc>
+    <loc>/posts/20210206_before_start/</loc>
     <lastmod>2021-02-06T10:13:46+08:00</lastmod>
   </url><url>
-    <loc>https://moyrn.cn/about/</loc>
+    <loc>/about/</loc>
     <lastmod>2021-01-29T13:20:15+08:00</lastmod>
   </url><url>
-    <loc>https://moyrn.cn/tags/benchmark/</loc>
+    <loc>/tags/benchmark/</loc>
     <lastmod>2021-01-28T13:31:45+08:00</lastmod>
   </url><url>
-    <loc>https://moyrn.cn/posts/20210128_string_join_benchmark/</loc>
+    <loc>/posts/20210128_string_join_benchmark/</loc>
     <lastmod>2021-01-28T13:31:45+08:00</lastmod>
   </url><url>
-    <loc>https://moyrn.cn/tags/memory/</loc>
+    <loc>/tags/memory/</loc>
     <lastmod>2019-10-31T13:04:41+08:00</lastmod>
   </url><url>
-    <loc>https://moyrn.cn/posts/20210127_time_after_oom/</loc>
+    <loc>/posts/20210127_time_after_oom/</loc>
     <lastmod>2019-10-31T13:04:41+08:00</lastmod>
   </url><url>
-    <loc>https://moyrn.cn/tags/build/</loc>
+    <loc>/tags/build/</loc>
     <lastmod>2019-10-29T09:41:51+08:00</lastmod>
   </url><url>
-    <loc>https://moyrn.cn/posts/20191029_build/</loc>
+    <loc>/posts/20191029_build/</loc>
     <lastmod>2019-10-29T09:41:51+08:00</lastmod>
   </url><url>
-    <loc>https://moyrn.cn/posts/20190810_gorm/</loc>
+    <loc>/posts/20190810_gorm/</loc>
     <lastmod>2019-08-10T11:53:34+08:00</lastmod>
   </url><url>
-    <loc>https://moyrn.cn/posts/20190724_http_file/</loc>
+    <loc>/posts/20190724_http_file/</loc>
     <lastmod>2019-07-24T17:02:39+08:00</lastmod>
   </url><url>
-    <loc>https://moyrn.cn/tags/nginx/</loc>
+    <loc>/tags/nginx/</loc>
     <lastmod>2018-03-31T13:34:41+08:00</lastmod>
   </url><url>
-    <loc>https://moyrn.cn/posts/20180331_nginx_proxy/</loc>
+    <loc>/posts/20180331_nginx_proxy/</loc>
     <lastmod>2018-03-31T13:34:41+08:00</lastmod>
   </url><url>
-    <loc>https://moyrn.cn/categories/</loc>
+    <loc>/categories/</loc>
   </url>
 </urlset>

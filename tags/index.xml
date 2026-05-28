@@ -2,94 +2,94 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>Tags on Moyrn的技术笔记</title>
-    <link>https://moyrn.cn/tags/</link>
+    <link>/tags/</link>
     <description>Recent content in Tags on Moyrn的技术笔记</description>
     <generator>Hugo -- 0.128.0</generator>
     <language>zh-CN</language>
     <lastBuildDate>Fri, 20 Mar 2026 19:14:44 +0800</lastBuildDate>
-    <atom:link href="https://moyrn.cn/tags/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Kubernetes</title>
-      <link>https://moyrn.cn/tags/kubernetes/</link>
+      <link>/tags/kubernetes/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://moyrn.cn/tags/kubernetes/</guid>
+      <guid>/tags/kubernetes/</guid>
       <description></description>
     </item>
     <item>
       <title>Linux</title>
-      <link>https://moyrn.cn/tags/linux/</link>
+      <link>/tags/linux/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://moyrn.cn/tags/linux/</guid>
+      <guid>/tags/linux/</guid>
       <description></description>
     </item>
     <item>
       <title>Etcd</title>
-      <link>https://moyrn.cn/tags/etcd/</link>
+      <link>/tags/etcd/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://moyrn.cn/tags/etcd/</guid>
+      <guid>/tags/etcd/</guid>
       <description></description>
     </item>
     <item>
       <title>笔记</title>
-      <link>https://moyrn.cn/tags/%E7%AC%94%E8%AE%B0/</link>
+      <link>/tags/%E7%AC%94%E8%AE%B0/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://moyrn.cn/tags/%E7%AC%94%E8%AE%B0/</guid>
+      <guid>/tags/%E7%AC%94%E8%AE%B0/</guid>
       <description></description>
     </item>
     <item>
       <title>基础件</title>
-      <link>https://moyrn.cn/tags/%E5%9F%BA%E7%A1%80%E4%BB%B6/</link>
+      <link>/tags/%E5%9F%BA%E7%A1%80%E4%BB%B6/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://moyrn.cn/tags/%E5%9F%BA%E7%A1%80%E4%BB%B6/</guid>
+      <guid>/tags/%E5%9F%BA%E7%A1%80%E4%BB%B6/</guid>
       <description></description>
     </item>
     <item>
       <title>Network</title>
-      <link>https://moyrn.cn/tags/network/</link>
+      <link>/tags/network/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://moyrn.cn/tags/network/</guid>
+      <guid>/tags/network/</guid>
       <description></description>
     </item>
     <item>
       <title>Shell</title>
-      <link>https://moyrn.cn/tags/shell/</link>
+      <link>/tags/shell/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://moyrn.cn/tags/shell/</guid>
+      <guid>/tags/shell/</guid>
       <description></description>
     </item>
     <item>
       <title>Golang</title>
-      <link>https://moyrn.cn/tags/golang/</link>
+      <link>/tags/golang/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://moyrn.cn/tags/golang/</guid>
+      <guid>/tags/golang/</guid>
       <description></description>
     </item>
     <item>
       <title>Benchmark</title>
-      <link>https://moyrn.cn/tags/benchmark/</link>
+      <link>/tags/benchmark/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://moyrn.cn/tags/benchmark/</guid>
+      <guid>/tags/benchmark/</guid>
       <description></description>
     </item>
     <item>
       <title>Memory</title>
-      <link>https://moyrn.cn/tags/memory/</link>
+      <link>/tags/memory/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://moyrn.cn/tags/memory/</guid>
+      <guid>/tags/memory/</guid>
       <description></description>
     </item>
     <item>
       <title>Build</title>
-      <link>https://moyrn.cn/tags/build/</link>
+      <link>/tags/build/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://moyrn.cn/tags/build/</guid>
+      <guid>/tags/build/</guid>
       <description></description>
     </item>
     <item>
       <title>Nginx</title>
-      <link>https://moyrn.cn/tags/nginx/</link>
+      <link>/tags/nginx/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://moyrn.cn/tags/nginx/</guid>
+      <guid>/tags/nginx/</guid>
       <description></description>
     </item>
   </channel>

@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>Linux on Moyrn的技术笔记</title>
-    <link>https://moyrn.cn/tags/linux/</link>
+    <link>/tags/linux/</link>
     <description>Recent content in Linux on Moyrn的技术笔记</description>
     <generator>Hugo -- 0.128.0</generator>
     <language>zh-CN</language>
     <lastBuildDate>Sun, 13 Jul 2025 21:46:45 +0800</lastBuildDate>
-    <atom:link href="https://moyrn.cn/tags/linux/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="/tags/linux/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>学习Linux-01启动</title>
-      <link>https://moyrn.cn/posts/20250713_learn_linux/</link>
+      <link>/posts/20250713_learn_linux/</link>
       <pubDate>Sun, 13 Jul 2025 21:46:45 +0800</pubDate>
-      <guid>https://moyrn.cn/posts/20250713_learn_linux/</guid>
+      <guid>/posts/20250713_learn_linux/</guid>
       <description>学习Linux-01启动 ref: https://jyywiki.cn/OS/2024/lect18.md
 src: wget -r -np -nH &amp;ndash;cut-dirs=2 -R &amp;ldquo;index.html*&amp;rdquo; &amp;ldquo;https://jyywiki.cn/os-demos/virtualization/linux/&amp;quot;
 1. 折腾的原因总结 linux 启动过程中报错不是那么准确，例如：执行的二进制（init）缺少了 .so，会报错 exec init failed: no such file. 例如 virtio_blk 之类的驱动，需要自己在 initramfs 中自己加载。 2. 使用的环境 kali 2024.4
