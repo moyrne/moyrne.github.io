@@ -140,7 +140,7 @@ $ kubectl get pod test-liveness-exec NAME READY STATUS RESTARTS AGE liveness-exe
       <link>/about/</link>
       <pubDate>Fri, 29 Jan 2021 13:20:15 +0800</pubDate>
       <guid>/about/</guid>
-      <description>联系方式 邮箱： moyrn@qq.com gitee: https://gitee.com/moyrn </description>
+      <description>联系方式 邮箱： moyrn@qq.com github: https://github.com/moyrne </description>
     </item>
     <item>
       <title>字符串拼接性能测试</title>
